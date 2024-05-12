@@ -294,6 +294,8 @@
                   <thead>
                   <tr>
                     <th>Date Paid</th>
+                    <th>Type Transaction</th>
+                    <th>Remarks</th>
                     <th>OR #</th>
                     <th>Amount</th>
                     <th>Balance</th>
@@ -303,6 +305,17 @@
                    
                     <tr>
                       <td>06/01/2023</td>
+                      <td>Over the Counter</td>
+                      <td>Done</td>
+                      <td>#01011</td>
+                      <td class="text-right">2,150.00</td>
+                      <td class="text-right">13,760.00</td>
+                    </tr>
+
+                    <tr>
+                      <td>07/15/2023</td>
+                      <td>Online - GCASH</td>
+                      <td>PENDING</td>
                       <td>#01011</td>
                       <td class="text-right">2,150.00</td>
                       <td class="text-right">13,760.00</td>
