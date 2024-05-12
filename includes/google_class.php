@@ -4,8 +4,7 @@ require 'vendor/autoload.php';
 
 class GoogleClient
 {
-    protected $client_id = '538691118774-50b5ak993tc510dlrmoishso1pi8qv2q.apps.googleusercontent.com';
-    protected $client_secret = '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';
+   
     protected $redirect_uri = redirectUri;
     protected $scopes = array(
         'https://www.googleapis.com/auth/calendar.events',

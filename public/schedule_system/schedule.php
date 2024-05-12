@@ -7,7 +7,7 @@
 	else {
 
 		if(!isset($_GET["action"])):
-			render("public/schedule_system/studentList.php",[
+			render("public/schedule_system/scheduleList.php",[
 			]);
 		else:
 			if($_GET["action"] == "specific"):

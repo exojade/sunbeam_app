@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Students</h1>
+            <h1>Schedule</h1>
           </div>
         
         </div>
@@ -53,6 +53,16 @@
                           <option selected disabled value="">Filter Section</option>
                           <option value="">Section Apple</option>
                           <option value="">Section Orange</option>
+                          <option value="">Section Grapes</option>
+                         
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <select required name="gender" class="form-control select2">
+                          <option selected disabled value="">Filter Teacher</option>
+                          <option value="">Victor Magtanggol</option>
+                          <option value="">Maris J. Racal</option>
                           <option value="">Section Grapes</option>
                          
                         </select>
