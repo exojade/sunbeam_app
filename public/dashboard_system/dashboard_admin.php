@@ -75,18 +75,29 @@
           <div class="card card-danger">
               <div class="card-header">
                 <h3 class="card-title">Student Population</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
               </div>
               <div class="card-body">
                 <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+
+
+
+           
+            <!-- Default box -->
+           
+          </div>
+
+          <div class="col-6">
+
+          <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Teacher's Grade Remarks for this Quarter</h3>
+              </div>
+              <div class="card-body">
+                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
               </div>
               <!-- /.card-body -->
             </div>
@@ -140,10 +151,30 @@
         }
       ]
     }
+
+    var donutData2        = {
+      labels: [
+        'Not Submitted',
+        'Submitted',
+      ],
+      datasets: [
+        {
+          data: [2,8],
+          backgroundColor : ['#f56954', '#00a65a'],
+        }
+      ]
+    }
     var donutOptions     = {
       maintainAspectRatio : false,
       responsive : true,
     }
+
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+ new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData2,
+      options: donutOptions
+    })
 
 var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
     var pieData        = donutData;
