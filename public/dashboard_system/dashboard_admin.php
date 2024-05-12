@@ -72,6 +72,25 @@
         <div class="row">
           <div class="col-6">
 
+          <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Student Population</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
 
 
 
@@ -99,9 +118,46 @@
 <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+<script src="AdminLTE_new/plugins/chart.js/Chart.min.js"></script>
+
 
   <!-- <script src="vector_maps/tests/assets/jquery-jvectormap-world-mill-en.js"></script> -->
   <script>
+
+    var donutData        = {
+      labels: [
+        'Grade 1',
+          'Grade 2',
+          'Grade 3',
+          'Grade 4',
+          'Grade 5',
+          'Grade 6',
+      ],
+      datasets: [
+        {
+          data: [30,40,30,25,45,20],
+          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+
+var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = donutData;
+    var pieOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    })
     // jQuery.noConflict();
     jQuery(function(){
       // var $ = jQuery;
