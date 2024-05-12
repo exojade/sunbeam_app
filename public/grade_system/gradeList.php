@@ -79,35 +79,37 @@
             <div class="col-md-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Student Information</h3>
+                <h3 class="card-title">Subject Information</h3>
               </div>
               <!-- /.card-header -->
               
               <!-- form start -->
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-md-2 text-center">
+                    <!-- <div class="col-md-2 text-center">
                     <img class="profile-user-img img-fluid img-circle"
                        src="resources/default.jpg"
                        alt="User profile picture">
-                    </div>
-                    <div class="col-md-10">
+                    </div> -->
+                    <div class="col-md-12">
                     <table class="table" id="sectionTable">
                     <tr>
-                      <th>Student Name:</th>
-                      <td>ILLEST J. MORENA</td>
-                      <th>Adviser:</th>
-                      <td>Victor Magtanggol</td>
+                      <th>Subject Code:</th>
+                      <td>Math 1</td>
+                      <th>Description:</th>
+                      <td>Intro to Geometry</td>
                     </tr>
                     <tr>
                       <th>Grade Level:</th>
-                      <td>Grade 2</td>
+                      <td>Grade 3</td>
                       <th>School Year:</th>
                       <td>2023-2024</td>
                     </tr>
                     <tr>
                       <th>Section:</th>
                       <td>Section Apple</td>
+                      <th>Schedule:</th>
+                      <td>09:30 - 10:30 AM</td>
                     </tr>
                   </table>
                     </div>
@@ -127,8 +129,7 @@
               <!-- /.card-header -->
                  
 
-                  <hr>
-                  <br>
+         
               <!-- /.card-body -->
         
             <!-- /.card -->
@@ -142,9 +143,9 @@
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
                   <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Subjects / Grades</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Record History</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li>
+                  <!-- <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Record History</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li> -->
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -155,62 +156,38 @@
                   <thead>
                   <tr>
                     <th>Code</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Teacher</th>
-                    <th>Schedule</th>
+                    <th>Student Name</th>
                     <th>Q1</th>
                     <th>Q2</th>
                     <th>Q3</th>
                     <th>Q4</th>
-                    <th>Final Grade</th>
                   </tr>
                   </thead>
                   <tbody>
                     <tr>
-                
-                      <td>SUB2010-501</td>
-                      <td>Math 1</td>
-                      <td>Introduction to Algebra</td>
-                      <td>Mr. Victor T. Magtanggol</td>
-                      <td>07:30 - 08:30 AM</td>
+                      <td>ST2020-091XN</td>
+                      <td>Illest J. Morena</td>
                       <td>95</td>
-                      <td>93</td>
-                      <td></td>
+                      <td><a class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;93</td>
                       <td></td>
                       <td></td>
                     </tr>
                     <tr>
-                      <td>SUB2010-502</td>
-                      <td>Eng 1</td>
-                      <td>Introduction to English</td>
-                      <td>Ms. Cynthia Soliman</td>
-                      <td>08:30 - 09:30 AM</td>
-                      <td>91</td>
+                      <td>ST2020-092XN</td>
+                      <td>Skusta J. Clee</td>
                       <td>92</td>
-                      <td></td>
+                      <td><a class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;93</td>
                       <td></td>
                       <td></td>
                     </tr>
-
                     <tr>
-                  
-                      <td>SUB2010-503</td>
-                      <td>FIL 1</td>
-                      <td>Filipino to the Moon</td>
-                      <td>Ms. Brenda Mage</td>
-                      <td>09:30 - 10:30 AM</td>
-                      <td>94</td>
-                      <td>91</td>
-                      <td></td>
+                      <td>ST2020-090XN</td>
+                      <td>Jessie McCartney</td>
+                      <td>92</td>
+                      <td><a class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;</td>
                       <td></td>
                       <td></td>
                     </tr>
-                   
-                  
-                
-                   
-                 
                   </tbody>
               
                 </table>

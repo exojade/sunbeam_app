@@ -25,12 +25,11 @@
               <div class="info-box-content">
                
                 <span class="info-box-number">
-                  10
-                  <small>%</small>
+                  200
                 </span>
-                <span class="info-box-text">APPOINTMENTS</span>
+                <span class="info-box-text">Students Enrolled</span>
               </div>
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-briefcase"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-graduation-cap"></i></span>
 
             </div>
           </div>

@@ -94,10 +94,10 @@
   </li>
 
   <li class="nav-item">
-      <a href="patient" class="nav-link">
+      <a href="enrollment" class="nav-link">
         <i class="nav-icon fas fa-receipt"></i>
         <p>
-          Transaction
+          Enrollment
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -114,37 +114,15 @@
   </li>
 
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "student"): ?>
-
   <li class="nav-item">
-      <a href="index" class="nav-link">
-        <i class="nav-icon fas fa-home"></i>
+      <a href="student?action=specific" class="nav-link">
+        <i class="nav-icon fas fa-user"></i>
         <p>
-          Dashboard
+          Profile
           <span class="right badge badge-danger"></span>
         </p>
       </a>
   </li>
-
-  <li class="nav-item">
-      <a href="patient?action=specific&id=<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>" class="nav-link">
-        <i class="nav-icon fas fa-book"></i>
-        <p>
-          Subjects
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
-
-  <li class="nav-item">
-      <a href="myAppointments" class="nav-link">
-        <i class="nav-icon fas fa-receipt"></i>
-        <p>
-          SOA
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
-
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "teacher"): ?>
 
 <li class="nav-item">
@@ -158,7 +136,7 @@
 </li>
 
 <li class="nav-item">
-    <a href="myAppointments" class="nav-link">
+    <a href="schedule" class="nav-link">
       <i class="nav-icon fas fa-calendar"></i>
       <p>
         Class Schedule

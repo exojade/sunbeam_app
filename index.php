@@ -32,8 +32,12 @@
 				require 'public/teacher_system/teacher.php';
 			else if ($request == 'schedule')
 				require 'public/schedule_system/schedule.php';
+			else if ($request == 'enrollment')
+				require 'public/enrollment_system/enrollment.php';
 			else if ($request == 'section')
 				require 'public/section_system/section.php';
+			else if ($request == 'grade')
+				require 'public/grade_system/grade.php';
 			else if ($request == 'static')
 				require 'public/static_system/index.php';
 			else if ($request == 'logout'){

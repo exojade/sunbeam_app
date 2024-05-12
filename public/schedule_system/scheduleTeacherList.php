@@ -11,13 +11,10 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Schedule</h1>
+            <small>Current SY: 2023 - 2024</small>
           </div>
 
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSchedule">Add Schedule</button>
-            </ol>
-          </div>
+        
         
         </div>
       </div><!-- /.container-fluid -->
@@ -106,54 +103,22 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter School Year</option>
-                          <option value="">2023-2024</option>
-                        </select>
+                      <select required name="gender" class="form-control select2">
+                        <option selected disabled value="">Please Grade Level</option>
+                        <option value="Grade 1">Grade 1 - Section Orange</option>
+                        <option value="Grade 1">Grade 1 - Section Sunflower</option>
+                        <option value="Grade 1">Grade 2 - Section Apple</option>
+                        <option value="Grade 1">Grade 3 - Section Rose</option>
+                        <option value="Grade 1">Grade 4 - Section Moon</option>
+                        <option value="Grade 1">Grade 5 - Section Honey Bee</option>
+                        <option value="Grade 1">Grade 6 - Section Carnation</option>
+                      </select>
                       </div>
                     </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Grade Level</option>
-                          <option value="">Grade 1</option>
-                          <option value="">Grade 2</option>
-                          <option value="">Grade 3</option>
-                          <option value="">Grade 4</option>
-                          <option value="">Grade 5</option>
-                          <option value="">Grade 6</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Section</option>
-                          <option value="">Section Apple</option>
-                          <option value="">Section Orange</option>
-                          <option value="">Section Grapes</option>
-                         
-                        </select>
-                      </div>
-                  
-                    </div>
-
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Teacher</option>
-                          <option value="">Victor Magtanggol</option>
-                          <option value="">Maris Racal</option>
-                          <option value="">Henry Canlas</option>
-                         
-                        </select>
-                      </div>
-                  
-                    </div>
-                </div>
+                </div> -->
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -167,55 +132,48 @@
                     <th>Section</th>
                     <th>Subject</th>
                     <th>Description</th>
-                    <th>Teacher</th>
                     <th>Schedule</th>
                   </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-warning">Update</button>
-                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                      </div>
+                      <!-- <div class="btn-group"> -->
+                        <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
+                      <!-- </div> -->
                       </td>
                       <td>2023-2024</td>
                       <td>Grade 1</td>
                       <td>Section Apple</td>
                       <td>Math 1</td>
                       <td>Intro to Algebra</td>
-                      <td>Mr. Victor Magtanggol</td>
                       <td>08:30 - 09:30 AM</td>
                     </tr>
                     <tr>
                       <td>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-warning">Update</button>
-                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                      </div>
+                      <!-- <div class="btn-group"> -->
+                      <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
+                      <!-- </div> -->
                       </td>
                       <td>2023-2024</td>
                       <td>Grade 5</td>
-                      <td>Section Orange</td>
-                      <td>Math 5</td>
+                      <td>Section Apple</td>
+                      <td>Math 1</td>
                       <td>Geometry</td>
-                      <td>Mr. Victor Magtanggol</td>
-                      <td>09:30 - 10:30 AM</td>
+                      <td>09:30 - 09:30 AM</td>
                     </tr>
                     <tr>
                       <td>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-warning">Update</button>
-                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                      </div>
+                      <!-- <div class="btn-group"> -->
+                      <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
+                      <!-- </div> -->
                       </td>
                       <td>2023-2024</td>
                       <td>Grade 3</td>
-                      <td>Section Grapes</td>
-                      <td>Math 3</td>
+                      <td>Section Apple</td>
+                      <td>Math 1</td>
                       <td>Intro to Trigo</td>
-                      <td>Mr. Victor Magtanggol</td>
-                      <td>10:30 - 11:30 AM</td>
+                      <td>12:30 - 01:30 PM</td>
                     </tr>
                    
                   
