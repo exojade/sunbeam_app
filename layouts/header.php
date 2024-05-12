@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PET SYSTEM</title>
+
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
+  <link rel="stylesheet" href="AdminLTE_new/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="AdminLTE_new/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <link rel="icon" href="public/static_system/uploads/logo.png">
+</head>
+<style>
+  .content-wrapper{
+    background-color: #fff !important;
+  } 
+  .navbar-light{
+    border-bottom: none !important;
+    background-color: #fff !important;
+  }
+  .color-red{
+    color:red;
+  }
+</style>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-light navbar-light" >
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+
+    <h5 style="
+    padding: .5rem 1rem !important; margin: 0 !important;">Welcome <?php echo($_SESSION["sunbeam_app"]["fullname"]); ?></h5>
+    <!-- <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+   
+    </ul> -->
+  </nav>
+<script src="AdminLTE_new/plugins/jquery/jquery.min.js"></script>
+<script src="AdminLTE_new/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="AdminLTE_new/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="AdminLTE_new/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="AdminLTE_new/dist/js/adminlte.min.js"></script>
+<!-- <script src="AdminLTE/bower_components/jquery-ui/jquery-ui.min.js"></script> -->
+<!-- AdminLTE for demo purposes -->
+
+

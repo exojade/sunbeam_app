@@ -1,0 +1,51 @@
+<?php
+    require("includes/config.php");
+    require("includes/uuid.php");
+    require("includes/checkhit.php");
+	ini_set('max_execution_time', '300');
+		$request = $_SERVER['REQUEST_URI'];
+	
+		$constants = get_defined_constants();
+		$request = explode('/sunbeam_app',$request);
+		// dump($request);
+		$request = $request[1];
+		$request = explode('?',$request);
+		$request = $request[0];
+		$request = explode('/',$request);
+		$request = $request[1];
+		$countering = array("login", "register");
+		// dump($_SESSION);
+		if (!in_array($request, $countering)){
+			if(empty($_SESSION["sunbeam_app"]["userid"]) && empty($_SESSION["sunbeam_app"]["application"])){
+				require 'public/login_system/login.php';
+			}
+			else{
+			if($request == 'index' || $request == '/' || $request== "")
+				require 'public/dashboard_system/main.php';
+			else if ($request == 'users')
+				require 'public/users_system/users.php';
+			else if ($request == 'subjects')
+				require 'public/subjects_system/subjects.php';
+			else if ($request == 'student')
+				require 'public/student_system/student.php';
+			else if ($request == 'teacher')
+				require 'public/teacher_system/teacher.php';
+			else if ($request == 'schedule')
+				require 'public/schedule_system/schedule.php';
+			else if ($request == 'section')
+				require 'public/section_system/section.php';
+			else if ($request == 'static')
+				require 'public/static_system/index.php';
+			else if ($request == 'logout'){
+			require 'logout.php';
+		}
+			else
+				require 'public/404_system/404.php';
+			
+			}
+		}
+		else{
+			if ($request == 'login')
+				require 'public/login_system/login.php';
+		}
+?>
