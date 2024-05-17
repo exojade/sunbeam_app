@@ -31,29 +31,20 @@
             <div class="modal-body">
               <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
               <input type="hidden" name="action" value="addSubject">
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Subject Code</label>
+                <input required type="text" name="subject_code" class="form-control" id="exampleInputEmail1" placeholder="---">
+              </div>
+
               <div class="form-group">
                 <label for="exampleInputEmail1">Subject Name</label>
-                <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
+                <input required type="text" name="subject_name" class="form-control" id="exampleInputEmail1" placeholder="---">
               </div>
 
               <div class="form-group">
                 <label for="exampleInputEmail1">Description</label>
-                <input required type="text" name="fullname" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
-
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Grade Level</label>
-                <select required name="gender" class="form-control select2">
-                  <option selected disabled value="">Please Grade Level</option>
-                  <option value="Grade 1">Grade 1</option>
-                  <option value="Grade 1">Grade 2</option>
-                  <option value="Grade 1">Grade 3</option>
-                  <option value="Grade 1">Grade 4</option>
-                  <option value="Grade 1">Grade 5</option>
-                  <option value="Grade 1">Grade 6</option>
-              
-                </select>
+                <input required type="text" name="description" class="form-control" id="exampleInputEmail1" placeholder="---">
               </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -77,44 +68,13 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="ajax_datatable" class="table table-bordered table-striped">
                   <thead>
-                  <tr>
                     <th>Action</th>
                     <th>Subject</th>
                     <th>Description</th>
                     <th>Grade Level</th>
-                  </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                        <a href="#" class="btn btn-warning">Update</a>
-                      </td>
-                      <td>English 1</td>
-                      <td>Introduction to English</td>
-                      <td>Grade 1</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                        <a href="#" class="btn btn-warning">Update</a>
-                      </td>
-                      <td>Math 6</td>
-                      <td>Introduction to Algebra</td>
-                      <td>Grade 5</td>
-                    </tr>
-               
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Grade Level</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -127,14 +87,72 @@
     <!-- /.content -->
   </div>
 
-  <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <!-- <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script> -->
+  <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/jszip/jszip.min.js"></script>
+  <script src="AdminLTE_new/plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="AdminLTE_new/plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script>
-            function preview() {
-                frame.src = URL.createObjectURL(event.target.files[0]);
-            }
-            function clearImage() {
-                document.getElementById('formFile').value = null;
-                frame.src = "";
-            }
+     
+
+var datatable = 
+            $('#ajax_datatable').DataTable({
+                // "searching": false,
+                "pageLength": 10,
+                language: {
+                    searchPlaceholder: "Search Subject"
+                },
+                "bLengthChange": true,
+                "ordering": false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                
+                'ajax': {
+                    'url':'subjects',
+                     'type': "POST",
+                     "data": function (data){
+                        data.action = "subjectsList";
+                     }
+                },
+                'columns': [
+                    { data: 'action', "orderable": false },
+                    { data: 'subject_code', "orderable": false  },
+                    { data: 'subject_title', "orderable": false  },
+                    { data: 'subject_description', "orderable": false  },
+                ],
+                "footerCallback": function (row, data, start, end, display) {
+                    // var api = this.api(), data;
+                    
+
+                    // Remove the formatting to get integer data for summation
+                    // var intVal = function (i) {
+                    //     return typeof i === 'string' ?
+                    //         i.replace(/[\$,]/g, '') * 1 :
+                    //         typeof i === 'number' ?
+                    //             i : 0;
+                    // };
+
+                    // // Total over all pages
+                    // received = api
+                    //     .column(5)
+                    //     .data()
+                    //     .reduce(function (a, b) {
+                    //         return intVal(a) + intVal(b);
+                    //     }, 0);
+                    //     console.log(received);
+
+                    // $('#currentTotal').html('$ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                }
+            });
         </script>
   <?php require("layouts/footer.php") ?>
