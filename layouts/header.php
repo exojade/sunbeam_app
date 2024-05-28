@@ -46,6 +46,26 @@
       </li>
    
     </ul> -->
+
+    <?php 
+    $school_year = query("select * from school_year where active_status = 'ACTIVE'");
+    $sy = $school_year[0];
+    ?>
+
+
+
+
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      <li class="nav-item">
+      <h5 style="
+    padding: .5rem 1rem !important; margin: 0 !important;"><b>Active School Year:</b> <?php echo($sy["school_year"]); ?></h5>
+      </li>
+
+   
+    </ul>
+
+
   </nav>
 <script src="AdminLTE_new/plugins/jquery/jquery.min.js"></script>
 <script src="AdminLTE_new/plugins/jquery-ui/jquery-ui.min.js"></script>

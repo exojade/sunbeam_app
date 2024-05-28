@@ -1,34 +1,28 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] === "POST") {
-		if($_POST["action"] == "teacherAdd"):
-			// dump($_POST);
-			$teacherId = create_trackid("T");
-				query("insert INTO teacher (teacher_id, teacher_firstname, teacher_middlename, teacher_lastname, teacher_extension,
-												teacher_region, teacher_province, teacher_citymun, teacher_barangay, teacher_address,
-													college_course, post_graduate_course, teacher_birthdate, teacher_gender,
-														teacher_emailaddress, teacher_contactNumber) 
-				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
-				$teacherId,
-				$_POST["firstname"], $_POST["middlename"], $_POST["lastname"], $_POST["nameExtension"],
-				$_POST["region"], $_POST["province"], $_POST["cityMun"], $_POST["barangay"], $_POST["address"],
-				$_POST["undergrad_course"], $_POST["postgraduate_course"], $_POST["birthDate"], $_POST["gender"],
-				$_POST["email"], $_POST["contactNumber"]
-			);
+		if($_POST["action"] == "advisoryAdd"):
+			// dump($sy);
 
-				query("insert INTO users (id, username, password, role, active_remarks ,fullname) 
-				VALUES(?,?,?,?,?,?)", 
-				$teacherId, $_POST["email"], $hashed_password = password_hash("p@55word", PASSWORD_DEFAULT), "teacher", "active" , $_POST["firstname"] . " " . $_POST["lastname"] . "");
+			$currSY = query("select * from school_year where active_status = 'ACTIVE'");
+			$currSY = $currSY[0]["syid"];
+			
+			$advisoryId = create_trackid("ADV");
+				query("insert INTO advisory (advisory_id, section_id, grade_level, school_year, teacher_id) 
+				VALUES(?,?,?,?,?)", 
+				$advisoryId,
+				$_POST["section"], $_POST["grade_level"], $currSY, $_POST["teacher"]
+			);
 
 				$res_arr = [
 					"result" => "success",
 					"title" => "Success",
 					"message" => "Success on updating data",
-					"link" => "teacher",
+					"link" => "advisory",
 					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 					];
 					echo json_encode($res_arr); exit();
 			
-		elseif($_POST["action"] == "teacherList"):
+		elseif($_POST["action"] == "advisoryList"):
 
 			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
             $offset = $_POST["start"];
@@ -40,12 +34,22 @@
 			$offsetString = " offset " . $offset;
 		
 
+			$where = " where sy.active_status = 'ACTIVE'";
+			$baseQuery = "select ad.*, sy.school_year as sy from advisory ad left join school_year sy on sy.syid = ad.school_year " . $where;
+
+			$teacher = query("select * from teacher");
+			$Teacher = [];
+			foreach($teacher as $row):
+				$Teacher[$row["teacher_id"]] = $row;
+			endforeach;
+
+			$section = query("select * from section");
+			$Section = [];
+			foreach($section as $row):
+				$Section[$row["section_id"]] = $row;
+			endforeach;
 
 
-			$where = " where 1=1";
-
-
-			$baseQuery = "select * from teacher " . $where;
 
 
 			if($search == ""):
@@ -61,8 +65,9 @@
 
 			$i = 0;
 			foreach($data as $row):
-				$data[$i]["action"] = '<a href="teacher?action=specific&id='.$row["teacher_id"].'" class="btn btn-block btn-sm btn-success">View</a>';
-				$data[$i]["teacher_name"] = $row["teacher_firstname"] . ", " . $row["teacher_lastname"];
+				$data[$i]["action"] = '<a href="advisory?action=specific&id='.$row["advisory_id"].'" class="btn btn-block btn-sm btn-success">View</a>';
+				$data[$i]["section"] = $Section[$row["section_id"]]["section"];
+				$data[$i]["teacher"] = $Teacher[$row["teacher_id"]]["teacher_lastname"] . ", " . $Teacher[$row["teacher_id"]]["teacher_firstname"];
                 $i++;
             endforeach;
             $json_data = array(
@@ -79,11 +84,11 @@
 	else {
 
 		if(!isset($_GET["action"])):
-			render("public/teacher_system/teacherList.php",[
+			render("public/advisory_system/advisoryList.php",[
 			]);
 		else:
 			if($_GET["action"] == "specific"):
-				render("public/teacher_system/teacherSpecific.php",[
+				render("public/advisory_system/advisorySpecific.php",[
 				]);
 			endif;
 		endif;

@@ -3,6 +3,19 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+
+<?php
+
+$teacher = query("select * from teacher where teacher_id = ?", $_GET["id"]);
+$teacher = $teacher[0];
+
+?>
+
+
+
+
+
 <style>
   #sectionTable td{
     border: 0px;
@@ -219,13 +232,53 @@
             <!-- Profile Image -->
          
               <!-- /.card-header -->
-                  <table class="table" id="sectionTable">
+              <div class="card card-info">
+              <div class="card-header p-2">
+              <h3 class="card-title">Teacher's Information</h3>
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2 text-center">
+                    <img class="profile-user-img img-fluid img-circle"
+                       src="resources/default.jpg"
+                       alt="User profile picture">
+                    </div>
+                    <div class="col-md-10">
+                    <table class="table" id="sectionTable">
                     <tr>
-                      <th width="20%">Teacher Name:</th>
-                      <td>Victor Magtanggol</td>
-                      <td>&#09;&#09;&#09;&#09;&#09;&#09;</td>
+                      <th>Teacher's Code:</th>
+                      <td><?php echo($teacher["teacher_id"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Teacher's Name:</th>
+                      <td><?php echo($teacher["teacher_firstname"] . " " . $teacher["teacher_middlename"] . " " . $teacher["teacher_lastname"] . " " . $teacher["teacher_extension"]); ?></td>
+                      <th>Address:</th>
+                      <td><?php echo($teacher["teacher_citymun"] . ", " . $teacher["teacher_barangay"] . ", " . $teacher["teacher_address"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Birth Date:</th>
+                      <td><?php echo($teacher["teacher_birthdate"]); ?></td>
+                      <th>Gender:</th>
+                      <td><?php echo($teacher["teacher_gender"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Undergraduate Course:</th>
+                      <td><?php echo($teacher["college_course"]); ?></td>
+                      <th>Post Graduate Course:</th>
+                      <td><?php echo($teacher["post_graduate_course"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Contact Number:</th>
+                      <td><?php echo($teacher["teacher_contactNumber"]); ?></td>
+                      <th>Username:</th>
+                      <td><?php echo($teacher["teacher_emailaddress"]); ?></td>
                     </tr>
                   </table>
+                    </div>
+                  </div>
+                
+                </div>
+                </div>
 
                   <hr>
                   <br>
@@ -243,7 +296,6 @@
                 <ul class="nav nav-pills">
                   <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Subjects / Grades</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#profile" data-toggle="tab">Profile</a></li>
                   <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">History</a></li>
                 </ul>
               </div><!-- /.card-header -->

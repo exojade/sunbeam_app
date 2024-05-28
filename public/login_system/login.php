@@ -7,7 +7,7 @@ require("includes/google_class.php");
         if (count($rows) == 1)
         {
             $row = $rows[0];
-			if (crypt($_POST["password"], $row["password"]) == $row["password"]){
+			if (password_verify($_POST["password"], $row["password"])){
 				// dump($row);
 				$_SESSION["sunbeam_app"] = [
 					"userid" => $row["id"],

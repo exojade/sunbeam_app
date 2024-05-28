@@ -57,7 +57,17 @@
       <a href="section" class="nav-link">
         <i class="nav-icon fas fa-school"></i>
         <p>
-          Grade Sections
+          Sections
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="advisory" class="nav-link">
+        <i class="nav-icon fas fa-school"></i>
+        <p>
+          Advisory
           <span class="right badge badge-danger"></span>
         </p>
       </a>

@@ -12,11 +12,7 @@
           <div class="col-sm-6">
             <h1>Sections</h1>
           </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSection">Add Section</button>
-            </ol>
-          </div>
+    
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -33,8 +29,8 @@
               </button>
             </div>
             <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
-              <input type="hidden" name="action" value="addSubject">
+              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="section">
+              <input type="hidden" name="action" value="addSection">
               <div class="form-group">
                 <label for="exampleInputEmail1">Section Name</label>
                 <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
@@ -79,6 +75,7 @@
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+</form>
           </div>
           <!-- /.modal-content -->
         </div>
@@ -89,11 +86,10 @@
 
       <div class="container-fluid">
         <div class="row">
-          <div class="col-12">
+          <div class="col-8">
             <!-- Default box -->
             <div class="card">
-              <div class="card-header">
-              </div>
+          
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -101,86 +97,62 @@
                   <tr>
                     <th>Action</th>
                     <th>Section Name</th>
-                    <th>Adviser</th>
-                    <th>Grade Level</th>
-                    <th>School Year</th>
+                    <th>Status</th>
                   </tr>
                   </thead>
                   <tbody>
+
+                  <?php 
+                   $section = query("select * from section");
+                   foreach($section as $row):
+                   ?>
                     <tr>
                       <td>
                         <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
                       </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
+                      <td><?php echo($row["section"]); ?></td>
+                      <td><?php echo($row["status"]); ?></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
-                      <td>Sample Section Name</td>
-                      <td>Ms. Teacher 1</td>
-                      <td>Grade 1</td>
-                      <td>2023-2024</td>
-                    </tr>
+                    <?php endforeach; ?>
 
                     
               
                
                   </tbody>
-                  <tfoot>
-                  <tr>
-                  <th>Action</th>
-                    <th>Section Name</th>
-                    <th>Adviser</th>
-                    <th>Grade Level</th>
-                    <th>School Year</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>
+
+
+          <div class="col-4">
+
+          <div class="card">
+          
+              <!-- /.card-header -->
+              <div class="card-body">
+
+              <form class="generic_form_files_trigger" role="form" data-url="section">
+              <input type="hidden" name="action" value="addSection">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Section Name</label>
+                <input required type="text" name="section" class="form-control" id="exampleInputEmail1" placeholder="---">
+              </div>
+
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>
