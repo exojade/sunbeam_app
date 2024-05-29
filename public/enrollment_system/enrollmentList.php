@@ -15,7 +15,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <a href="enrollment?action=new" class="btn btn-primary">Create New</a>
+            <a href="enrollment?action=new" class="btn btn-primary">New Enrollee</a> &nbsp;&nbsp;
+            <a href="enrollment?action=new" class="btn btn-warning">Re-Enroll</a>
             </ol>
           </div>
         </div>

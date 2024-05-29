@@ -1,5 +1,27 @@
 <?php
     require_once("constants.php");
+
+
+    function hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days) {
+        // Check for conflicts based on the selected days
+        // Implement this according to your conflict checking logic
+        foreach ($existingSchedules as $schedule) {
+            foreach ($days as $day => $selected) {
+                if ($selected && $schedule[$day] == 1 &&
+                    ($schedule['teacher_id'] == $teacher_id || $schedule['advisory_id'] == $advisory_id) &&
+                    ($start_time < $schedule['to_time'] && $end_time > $schedule['from_time'])
+                ) {
+                    return $schedule;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
      function to_peso($number){
         if($number != ""){
             return("₱ " .number_format($number, 2, '.', ','));
