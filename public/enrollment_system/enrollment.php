@@ -97,7 +97,7 @@
 			$_POST["middlename"],
 			$currentSY,
 			$student_id,
-			$_POST["grade_level_id"],
+			$_POST["grade_level"],
 			""
 		);
 

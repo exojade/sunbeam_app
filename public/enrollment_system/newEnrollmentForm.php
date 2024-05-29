@@ -132,6 +132,25 @@
                         </select>
                         </div>
                       </div>
+
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Grade Level</span></label>
+                        <div class="col-sm-8">
+                        <select required name="grade_level" class="form-control select2">
+                          <option selected disabled value="">Please select Grade Level</option>
+                          <option value="Kindergarten 1">Kindergarten 1</option>
+                          <option value="Kindergarten 2">Kindergarten 2</option>
+                          <option value="Grade 1">Grade 1</option>
+                          <option value="Grade 2">Grade 2</option>
+                          <option value="Grade 3">Grade 3</option>
+                          <option value="Grade 4">Grade 4</option>
+                          <option value="Grade 5">Grade 5</option>
+                          <option value="Grade 6">Grade 6</option>
+                        
+                        </select>
+                        </div>
+                      </div>
                    
                       
                     </div>
@@ -354,6 +373,27 @@
                         <input disabled id="balance" type="text numberic" class="form-control" placeholder="0.00">
                       </div>
                     </div>
+                 
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label>Paid By</label>
+                        <input name="paid_by" required type="text" class="form-control" placeholder="Paid By">
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Down Payment</label>
+                        <input name="or_number" required type="text" class="form-control"  placeholder="Enter OR NUMBER">
+                      </div>
+                    </div>
+
+                
                  
                   </div>
 
