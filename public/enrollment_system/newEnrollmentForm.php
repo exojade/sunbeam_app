@@ -43,8 +43,6 @@
               <!-- form start -->
               <form class="form-horizontal generic_form_trigger" data-url="enrollment">
                 <input type="hidden" name="action" value="newEnrollment">
-
-                  <input type="hidden" name="action" value="doctorAdd">
                   <input type="hidden" name="region" id="true_region" value="">
                   <input type="hidden" name="province" id="true_province" value="">
                   <input type="hidden" name="cityMun" id="true_city_mun" value="">
@@ -241,7 +239,7 @@
                           <input placeholder="Enter Contact Info (Mobile)" name="mother_contact" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-5">
-                          <input placeholder="Enter Facebook Account" name="mother_occupation" type="text" class="form-control" id="inputEmail3" >
+                          <input placeholder="Enter Facebook Account" name="mother_fb" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
                   
@@ -308,25 +306,29 @@
                     <h3>Add-ons: (optional)</h3>
                     </div>
                     <div class="col-md-6 text-right">
-                      <button type="button" class="btn btn-primary" style="float-right;">Add - On</button>
+                      <button type="button" id="add-on-btn" class="btn btn-primary">Add - On</button>
                     </div>
                  
                   </div>
                   <br>
 
-                  
 
-                  <div class="row">
-                    <div class="col-md-6">
-                    <input placeholder="Place Name of Account Here" type="text" class="form-control" id="inputEmail3" >
-                    </div>
-                    <div class="col-md-5">
-                    <input placeholder="Place Amount here" type="text" class="form-control" id="inputEmail3" >
-                    </div>
-                    <div class="col-md-1">
-                      <button type="button" class="btn btn-danger">Remove</button>
-                    </div>
-                  </div>
+
+
+
+                  <div id="addon-container">
+            <div class="row addon-row">
+                <div class="col-md-6">
+                    <input name="account[]" required placeholder="Place Name of Account Here" type="text" class="form-control name-field">
+                </div>
+                <div class="col-md-5">
+                    <input name="amount[]" required placeholder="Place Amount here" type="text" class="form-control numberic amount-field costing">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                </div>
+            </div>
+        </div>
 
 
                   <hr>
@@ -342,7 +344,7 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label>Down Payment</label>
-                        <input type="text" class="form-control numberic costing" id="downpayment" placeholder="Enter ...">
+                        <input name="downpayment" type="text" class="form-control numberic costing" id="downpayment" placeholder="Enter ...">
                       </div>
                     </div>
 
@@ -401,13 +403,49 @@
 
 
 
+            // Function to initialize AutoNumeric on new amount fields
+            function initializeAutoNumeric(element) {
+                autoNumericElements.push(new AutoNumeric(element, {
+                    currencySymbol: '₱',
+                    digitGroupSeparator: ',',
+                    decimalCharacter: '.',
+                    decimalPlaces: 2,
+                    minimumValue: '0'
+                }));
+            }
+
+            
+
+            // Add-on button click handler
+            $('#add-on-btn').click(function() {
+                const clone = $('.addon-row:first').clone();
+                clone.find('input').val(''); // Clear the cloned inputs
+                clone.find('.numberic').removeAttr('id').removeData('autonumeric'); // Remove old AutoNumeric instance
+                $('#addon-container').append(clone);
+                initializeAutoNumeric(clone.find('.numberic')); // Initialize AutoNumeric on the new amount field
+            });
+
+            // Remove button click handler
+            $(document).on('click', '.remove-btn', function() {
+                if ($('.addon-row').length > 1) {
+                    $(this).closest('.addon-row').remove();
+                } else {
+                    // Reset the first row
+                    $(this).closest('.addon-row').find('input').val('');
+                }
+                computeCosting();
+            });
+   
+
+
+
     // var sum = 0;
     function convertCurrencyToDouble(value) {
             return parseFloat(value.replace(/[^0-9.-]+/g,""));
         }
 
-        $(document).on("keyup", ".numberic", function() {
-            var total = 0;
+        function computeCosting(){
+          var total = 0;
             var sum = 0;
 
             $("input[class*='costing']").each(function(){
@@ -426,6 +464,10 @@
 
             $("#total").val(total.toFixed(2));
             $("#balance").val(sum.toFixed(2));
+        }
+
+        $(document).on("keyup", ".numberic", function() {
+          computeCosting();
         });
 
 

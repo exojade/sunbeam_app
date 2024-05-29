@@ -1,6 +1,12 @@
 <?php
     require_once("constants.php");
 
+    function filterize($value){
+        $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC);
+        $value = str_replace(',', '', $value);
+        $value = (double) $value;
+        return $value;
+    }
 
     function hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days) {
         // Check for conflicts based on the selected days
