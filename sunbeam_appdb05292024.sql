@@ -28,6 +28,13 @@ CREATE TABLE `advisory` (
   `teacher_id` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `advisory` */
+
+insert  into `advisory`(`advisory_id`,`section_id`,`grade_level`,`school_year`,`teacher_id`) values 
+('ADV1C40A26E5FDFA','SEC668082EFCE2E5','Grade 1','SY1','TDEC9218A0D6B5'),
+('ADV166E9C96EBEE0','SECCEDE107BB83B7','Grade 1','SY1','TE73F9F3CE2494'),
+('ADVD8965A9662B2C','SEC070F73C456932','Grade 5','SY1','TDEC9218A0D6B5');
+
 /*Table structure for table `enrollment` */
 
 DROP TABLE IF EXISTS `enrollment`;
@@ -42,6 +49,8 @@ CREATE TABLE `enrollment` (
   `balance` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `enrollment` */
+
 /*Table structure for table `enrollment_fees` */
 
 DROP TABLE IF EXISTS `enrollment_fees`;
@@ -54,6 +63,8 @@ CREATE TABLE `enrollment_fees` (
   `fee_id` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `enrollment_fees` */
+
 /*Table structure for table `grade_level` */
 
 DROP TABLE IF EXISTS `grade_level`;
@@ -63,6 +74,8 @@ CREATE TABLE `grade_level` (
   `grade_level` varchar(100) DEFAULT NULL,
   KEY `grade_level_id` (`grade_level_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `grade_level` */
 
 /*Table structure for table `payment` */
 
@@ -80,6 +93,8 @@ CREATE TABLE `payment` (
   `paid_by` varchar(100) DEFAULT NULL,
   `proof_of_payment` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `payment` */
 
 /*Table structure for table `schedule` */
 
@@ -101,6 +116,13 @@ CREATE TABLE `schedule` (
   `friday` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `schedule` */
+
+insert  into `schedule`(`schedule_id`,`syid`,`advisory_id`,`subject_id`,`teacher_id`,`from_time`,`to_time`,`minutes`,`monday`,`tuesday`,`wednesday`,`thursday`,`friday`) values 
+('SCHEDD4BB2A9E711D9','SY1','ADV1C40A26E5FDFA','SUBJ1801B5A461CAB','TDEC9218A0D6B5','7:30 AM','8:20 AM',NULL,'1','1','1','1','1'),
+('SCHED3707B34EAEB63','SY1','ADV166E9C96EBEE0','SUBJ48D57B440739C','TE73F9F3CE2494','8:00 AM','8:45 AM',NULL,'1','1','1','1','1'),
+('SCHEDF385955F64373','SY1','ADVD8965A9662B2C','SUBJ1801B5A461CAB','TE73F9F3CE2494','1:00 PM','2:00 PM',NULL,'1','1','1','1','1');
+
 /*Table structure for table `school_year` */
 
 DROP TABLE IF EXISTS `school_year`;
@@ -110,6 +132,11 @@ CREATE TABLE `school_year` (
   `school_year` varchar(100) DEFAULT NULL,
   `active_status` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `school_year` */
+
+insert  into `school_year`(`syid`,`school_year`,`active_status`) values 
+('SY1','2023-2024','ACTIVE');
 
 /*Table structure for table `section` */
 
@@ -121,6 +148,14 @@ CREATE TABLE `section` (
   `grade_level` varchar(100) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `section` */
+
+insert  into `section`(`section_id`,`section`,`grade_level`,`status`) values 
+('SEC668082EFCE2E5','SECTION APPLE',NULL,'ACTIVE'),
+('SEC03ACF136A866F','SECTION ORANGE',NULL,'ACTIVE'),
+('SECCEDE107BB83B7','SECTION GRAPES',NULL,'ACTIVE'),
+('SEC070F73C456932','SECTION ABACA',NULL,'ACTIVE');
 
 /*Table structure for table `student` */
 
@@ -165,6 +200,8 @@ CREATE TABLE `student` (
   PRIMARY KEY (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `student` */
+
 /*Table structure for table `student_schedules` */
 
 DROP TABLE IF EXISTS `student_schedules`;
@@ -180,6 +217,8 @@ CREATE TABLE `student_schedules` (
   `remarks` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `student_schedules` */
+
 /*Table structure for table `subjects` */
 
 DROP TABLE IF EXISTS `subjects`;
@@ -190,6 +229,12 @@ CREATE TABLE `subjects` (
   `subject_title` varchar(100) DEFAULT NULL,
   `subject_description` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `subjects` */
+
+insert  into `subjects`(`subject_id`,`subject_code`,`subject_title`,`subject_description`) values 
+('SUBJ1801B5A461CAB','MATH101','Intro to Mathematics','Introduction to basic Mathematics'),
+('SUBJ48D57B440739C','ENG101','English 101','Intro to Grammar');
 
 /*Table structure for table `teacher` */
 
@@ -214,6 +259,12 @@ CREATE TABLE `teacher` (
   `teacher_contactNumber` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Data for the table `teacher` */
+
+insert  into `teacher`(`teacher_id`,`teacher_firstname`,`teacher_middlename`,`teacher_lastname`,`teacher_extension`,`teacher_region`,`teacher_province`,`teacher_citymun`,`teacher_barangay`,`teacher_address`,`college_course`,`post_graduate_course`,`teacher_birthdate`,`teacher_gender`,`teacher_emailaddress`,`teacher_contactNumber`) values 
+('TDEC9218A0D6B5','SHELDON','','COOPER','','REGION XI (DAVAO REGION)','DAVAO DEL NORTE','CITY OF PANABO','J.P. Laurel','PUROK 2','BSIT','MIT','1990-05-05','Male','tradebryant@gmail.com','(+63) 9912021547'),
+('TE73F9F3CE2494','LEONARD','','HOFTSTADTER','','REGION XI (DAVAO REGION)','DAVAO DEL NORTE','CITY OF PANABO','Cacao','PUROK 5','BS Education Major in English','Master in Secondary Education','1990-01-01','Male','keylower930@gmail.com','(+63) 9912021547');
+
 /*Table structure for table `users` */
 
 DROP TABLE IF EXISTS `users`;
@@ -227,6 +278,15 @@ CREATE TABLE `users` (
   `fullname` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `users` */
+
+insert  into `users`(`id`,`username`,`password`,`role`,`active_remarks`,`fullname`) values 
+('1','admin','$2y$10$/IQUBLgWzYqQ3f.McUCBWeOw/697fyTx3ZehWh6Yds.CP7fp96WPK','admin','active','ADMIN'),
+('2','teacher','$2y$10$/IQUBLgWzYqQ3f.McUCBWeOw/697fyTx3ZehWh6Yds.CP7fp96WPK','teacher','active','TEACHER T. TEACHER'),
+('3','student','$2y$10$/IQUBLgWzYqQ3f.McUCBWeOw/697fyTx3ZehWh6Yds.CP7fp96WPK','student','active','STUDENT S. STUDENT'),
+('TDEC9218A0D6B5','tradebryant@gmail.com','$2y$10$/IQUBLgWzYqQ3f.McUCBWeOw/697fyTx3ZehWh6Yds.CP7fp96WPK','teacher','active','SHELDON COOPER'),
+('TE73F9F3CE2494','keylower930@gmail.com','$2y$10$orztpllakLvLF6TYdCnq.OTO3hjzHo9QAONfauHlWRzJI39BZhYpO','teacher','active','LEONARD HOFTSTADTER');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
