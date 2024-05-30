@@ -1,5 +1,12 @@
 <?php
 // dump($_POST);
+use PhpOffice\PhpSpreadsheet\{Spreadsheet, IOFactory}; 
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx; 
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+
 
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 		if($_POST["action"] == "newEnrollment"):
@@ -48,12 +55,16 @@
 					father_contact,
 					father_fb,
 					mother_contact,
-					mother_fb
+					mother_fb,
+					father_occupation,
+					father_education,
+					mother_occupation,
+					mother_education
 					) 
 				VALUES(
 					?,?,?,?,?,?,?,?,?,?,
 					?,?,?,?,?,?,?,?,?,?,
-					?,?,?,?,?
+					?,?,?,?,?,?,?,?,?
 					)", 
 				$student_id,
 				$_POST["firstname"],
@@ -79,7 +90,11 @@
 				$_POST["father_contact"],
 				$_POST["father_fb"],
 				$_POST["mother_contact"],
-				$_POST["mother_fb"]
+				$_POST["mother_fb"],
+				$_POST["father_occupation"],
+				$_POST["father_education"],
+				$_POST["mother_occupation"],
+				$_POST["mother_education"],
 			);
 
 			$enrollmentId = create_trackid("ENR");
@@ -273,8 +288,25 @@
             );
             echo json_encode($json_data);
 
+		elseif($_POST["action"] == "printEnrollmentForm"):
+			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load("reports/enrollment_form.xlsx");
+			$sheet = $spreadsheet->getActiveSheet();
+			$sheet->setCellValue('Rectangle 27' ,"A");
 
-
+			// Get all drawings (shapes) in the sheet
+		
+	
+			$writer = new Xlsx($spreadsheet);
+			$filename = "report.xlsx";
+			$path = 'reports/'.$filename;
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => "enrollment?action=specific&id=".$_POST["enrollmentId"],
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
 		endif;
 		
     }

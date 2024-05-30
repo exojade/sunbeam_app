@@ -42,6 +42,12 @@ $student = $student[0];
     <section class="content">
       <div class="container-fluid">
 
+      <form class="generic_form_trigger" data-url="enrollment">
+        <input type="hidden" name="action" value="printEnrollmentForm">
+        <input type="hidden" name="enrollmentId" value="<?php echo($_GET["id"]); ?>">
+        <button class="btn btn-info">Print Enrollment Form</button>
+      </form>
+      <br>
 
       <div class="modal fade" id="modalPayment">
         <div class="modal-dialog ">
@@ -155,8 +161,8 @@ $student = $student[0];
                 <ul class="nav nav-pills">
                   <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
                   <li class="nav-item"><a class="nav-link active" href="#learner_info" data-toggle="tab">Learner's Information</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Parent's Information</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Subject Schedule / Grades</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#parent_info" data-toggle="tab">Parent's Information</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#grades" data-toggle="tab">Subject Schedule / Grades</a></li>
                   <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
                 </ul>
               </div><!-- /.card-header -->
@@ -272,56 +278,160 @@ $student = $student[0];
                     <!-- /.post -->
                   </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="history">
+                  <div class="tab-pane" id="parent_info">
                     <!-- The timeline -->
+                    <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Name</span></label>
+                        <div class="col-sm-3">
+                          <input readonly value="<?php echo($student["father_firstname"]); ?>" placeholder="First Name" name="father_firstname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-3">
+                          <input readonly value="<?php echo($student["father_middlename"]); ?>" placeholder="Middle Name" name="father_middlename" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-4">
+                          <input readonly value="<?php echo($student["father_lastname"]); ?>" placeholder="Last Name" name="father_lastname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Occupation</span></label>
+                        <div class="col-sm-10">
+                          <input readonly value="<?php echo($student["father_occupation"]); ?>" placeholder="---" name="father_occupation" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+                    
+
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Educational Attainment</span></label>
+                        <div class="col-sm-10">
+                          <input readonly value="<?php echo($student["father_education"]); ?>" placeholder="---" name="father_education" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Contact Info</span></label>
+                        <div class="col-sm-5">
+                          <input readonly value="<?php echo($student["father_contact"]); ?>" placeholder="Enter Contact Info (Mobile)" name="father_contact" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-5">
+                          <input readonly value="<?php echo($student["father_fb"]); ?>" placeholder="Enter Facebook Account" name="father_fb" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+                      <hr>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Mother's Maiden Name</span></label>
+                        <div class="col-sm-3">
+                          <input readonly value="<?php echo($student["mother_firstname"]); ?>" required placeholder="First Name" name="mother_firstname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-3">
+                          <input readonly value="<?php echo($student["mother_middlename"]); ?>" placeholder="Middle Name" name="mother_middlename" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-4">
+                          <input readonly value="<?php echo($student["mother_lastname"]); ?>" placeholder="Last Name" name="mother_lastname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Mother's Occupation</span></label>
+                        <div class="col-sm-10">
+                          <input readonly value="<?php echo($student["mother_occupation"]); ?>" placeholder="---" name="mother_occupation" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Educational Attainment</span></label>
+                        <div class="col-sm-10">
+                          <input readonly value="<?php echo($student["mother_education"]); ?>" placeholder="---" name="mother_education" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Contact Info</span></label>
+                        <div class="col-sm-5">
+                          <input readonly value="<?php echo($student["mother_contact"]); ?>" placeholder="Enter Contact Info (Mobile)" name="mother_contact" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-5">
+                          <input readonly value="<?php echo($student["mother_fb"]); ?>" placeholder="Enter Facebook Account" name="mother_fb" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+
+                  <div class="tab-pane" id="grades">
+
+                  <?php $grades = query("select g.*, s.*, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
+                                          sub.subject_code
+                                          from student_grades g
+                                          left join schedule s
+                                          on s.schedule_id = g.schedule_id
+                                          left join subjects sub
+                                          on sub.subject_id = s.subject_id
+                                          left join teacher t
+                                          on t.teacher_id = s.teacher_id
+                                          where g.student_id = ?
+                                          order by from_time asc
+                                          ", $student["student_id"]); 
+                                          // dump($grades);
+                                          
+                                          ?>
                   <table id="" class="table exampleDatatable table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Code</th>
                     <th>Subject</th>
-                    <th>Description</th>
-                    <th>Level</th>
-                    <th>SY</th>
-                    <th>Final Grade</th>
+                    <th>Schedule</th>
+                    <th>Teacher</th>
+                    <th>1st</th>
+                    <th>2nd</th>
+                    <th>3rd</th>
+                    <th>4th</th>
+                    <th>Ave</th>
+                    <th>Remarks</th>
                   </tr>
                   </thead>
                   <tbody>
+                  <?php foreach($grades as $row): 
+                      $days_string = '';
+                      if ($row["monday"] == 1) {
+                        $days_string .= 'M,';
+                      }
+                      if ($row["tuesday"] == 1) {
+                        $days_string .= 'T,';
+                      }
+                      if ($row["wednesday"] == 1) {
+                        $days_string .= 'W,';
+                      }
+                      if ($row["thursday"] == 1) {
+                        $days_string .= 'TH,';
+                      }
+                      if ($row["friday"] == 1) {
+                        $days_string .= 'F,';
+                      }
+                    
+                      // Remove the trailing comma
+                      $days_string = rtrim($days_string, ',');
+                    ?>
                     <tr>
-                      <td>SUB2010-101</td>
-                      <td>Eng101</td>
-                      <td>Grammars</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>99</td>
+                      <td><?php echo($row["subject_code"]); ?></td>
+                      <td><?php echo($row["from_time"] . "-" . $row["to_time"] . "|" . $days_string); ?></td>
+                      <td><?php echo($row["teacher"]); ?></td>
+                      <td><?php echo($row["first_grading"]); ?></td>
+                      <td><?php echo($row["second_grading"]); ?></td>
+                      <td><?php echo($row["third_grading"]); ?></td>
+                      <td><?php echo($row["fourth_grading"]); ?></td>
+                      <td><?php echo($row["average"]); ?></td>
+                      <td><?php echo($row["remarks"]); ?></td>
                     </tr>
-                    <tr>
-                      <td>SUB2010-102</td>
-                      <td>CIV01</td>
-                      <td>History of the Philippines</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>94</td>
-                    </tr>
-                    <tr>
-                      <td>SUB2010-103</td>
-                      <td>PE1</td>
-                      <td>Chess</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>99</td>
-                    </tr>
-               
-
-           
-                  
-                
-                   
-                 
+                  <?php endforeach; ?>
                   </tbody>
               
                 </table>
                   </div>
-                  <!-- /.tab-pane -->
+
+
 
                   <div class="tab-pane" id="soa">
 

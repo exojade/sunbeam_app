@@ -8,6 +8,8 @@
 			$existingSchedules = query("select * from schedule where syid = ?", $sy["syid"]);
 			// dump($_POST);
 
+			
+
 
 			$advisory_id = $_POST['advisory_id'];
 			$subject_id = $_POST['subject'];
@@ -22,6 +24,16 @@
 				'friday' => isset($_POST['friday'])
 			);
 
+			if($start_time == $end_time):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "Time should be not be same!",
+					"link" => "schedule",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			endif;
 
 			$conflict = hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days);
 			if ($conflict) {

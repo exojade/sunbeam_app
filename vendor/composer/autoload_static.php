@@ -10,6 +10,7 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '1f87db08236948d07391152dccb70f04' => __DIR__ . '/..' . '/google/apiclient-services/autoload.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
@@ -32,12 +33,18 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
             'mikehaertl\\shellcommand\\' => 24,
             'mikehaertl\\pdftk\\' => 17,
         ),
+        'Z' => 
+        array (
+            'ZipStream\\' => 10,
+        ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
+            'PhpOffice\\PhpSpreadsheet\\' => 25,
             'ParagonIE\\ConstantTime\\' => 23,
             'PHPJasper\\' => 10,
         ),
@@ -47,6 +54,7 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
             'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
             'Monolog\\' => 8,
+            'Matrix\\' => 7,
         ),
         'G' => 
         array (
@@ -64,6 +72,10 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         'D' => 
         array (
             'DeepCopy\\' => 9,
+        ),
+        'C' => 
+        array (
+            'Complex\\' => 8,
         ),
     );
 
@@ -88,14 +100,22 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         array (
             0 => __DIR__ . '/..' . '/mikehaertl/php-pdftk/src',
         ),
+        'ZipStream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -104,6 +124,10 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'PhpOffice\\PhpSpreadsheet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
         'ParagonIE\\ConstantTime\\' => 
         array (
@@ -128,6 +152,10 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Matrix\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -161,6 +189,20 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'Complex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
     );
 
     public static $classMap = array (
@@ -193,6 +235,7 @@ class ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit67eec93e842538f6df4b96e7eefc7b98::$classMap;
 
         }, null, ClassLoader::class);

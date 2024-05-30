@@ -78,6 +78,34 @@
             );
             echo json_encode($json_data);
 
+		elseif($_POST["action"] == "addClass"):
+				
+			// dump($_POST);
+			$schedules = query("select * from schedule where advisory_id = ?", $_POST["advisory_id"]);
+			
+			foreach($schedules as $row):
+				query("insert INTO student_grades (schedule_id, student_id, advisory_id) 
+				VALUES(?,?,?)", 
+				$row["schedule_id"],
+				$_POST["student_id"], $_POST["advisory_id"]
+			);
+			endforeach;
+
+			query("update enrollment set advisory_id = ? where student_id = ?", $_POST["advisory_id"], $_POST["student_id"]);
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => "advisory?action=specific&id=".$_POST["advisory_id"],
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+		
+
+
+
+
 
 		endif;
     }

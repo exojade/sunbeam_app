@@ -3,6 +3,8 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 
 <?php $advisory = query("select sy.school_year as sy, a.*,s.section, CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS teacher from advisory a
                           left join section s 
@@ -18,13 +20,15 @@
                           left join student s
                           on s.student_id = e.student_id
                           where advisory_id = ?", $_GET["id"]);
-
       $students = query("select e.*, CONCAT(s.lastname, ', ', s.firstname) AS student,
           s.sex from enrollment e
           left join student s
           on s.student_id = e.student_id
           where advisory_id = ?", $_GET["id"]);
-
+      $unenrolled = query("select * from enrollment e left join student s
+                            on s.student_id = e.student_id
+                            where advisory_id is null
+                            and syid = ? and grade_level = ?",$sy["syid"], $advisory["grade_level"]);
                           ?>
 
                           
@@ -54,67 +58,6 @@
 
     <!-- Main content -->
     <section class="content">
-    <div class="modal fade" id="addSection">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add Section</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
-              <input type="hidden" name="action" value="addSubject">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Section Name</label>
-                <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Adviser</label>
-                <select required name="gender" class="form-control select2">
-                  <option selected disabled value="">Select Adviser Here!</option>
-                  <option value="Mr. Tanggol Cardo">Mr. Tanggol Cardo</option>
-                  <option value="Mr. Tanggol Cardo">Mr. Ross Geller</option>
-                  <option value="Mr. Tanggol Cardo">Mr. Chandler Bing</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Grade Level</label>
-                <select required name="gender" class="form-control select2">
-                  <option selected disabled value="">Please Grade Level</option>
-                  <option value="Grade 1">Grade 1</option>
-                  <option value="Grade 1">Grade 2</option>
-                  <option value="Grade 1">Grade 3</option>
-                  <option value="Grade 1">Grade 4</option>
-                  <option value="Grade 1">Grade 5</option>
-                  <option value="Grade 1">Grade 6</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">School Year</label>
-                <select required name="gender" class="form-control select2">
-                  <option selected disabled value="">Select School Year Here!</option>
-                  <option value="2023-2024">2023-2024</option>
-                  
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-
-
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
@@ -161,7 +104,7 @@
                
 
                   <hr>
-                  <br>
+               
               <!-- /.card-body -->
         
             <!-- /.card -->
@@ -171,6 +114,31 @@
      
           <!-- /.col -->
           <div class="col-md-12">
+          <?php if(!empty($unenrolled)): ?>
+          <form class="generic_form_trigger" data-url="advisory">
+            <input type="hidden" name="action" value="addClass">
+            <input type="hidden" name="advisory_id" value="<?php echo($_GET["id"]); ?>">
+          <div class="row">
+            <div class="col-3">
+            <div class="form-group">
+              <select required name="student_id" class="form-control select2">
+                <option selected disabled value="">Please select Learner</option>
+                <?php foreach($unenrolled as $row): ?>
+                  <option value="<?php echo($row["student_id"]); ?>"><?php echo($row["lastname"] . ", " . $row["firstname"]); ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+
+            </div>
+            <div class="col-2">
+              <button class="btn btn-primary btn-block">Submit</button>
+              
+            </div>
+          </div>
+          </form>
+          <?php endif; ?>
+
+
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
@@ -204,71 +172,60 @@
                     </tr>
                     <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                  <th >Action</th>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                  </tr>
-                  </tfoot>
+                 
                 </table>
                     <!-- /.post -->
                   </div>
-                  <!-- /.tab-pane -->
                   <div class="tab-pane" id="timeline">
-                    <!-- The timeline -->
-                    <table id="" class="table exampleDatatable table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th width="15%">Action</th>
-                    <th>Code</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Teacher</th>
-                    <th>Schedule</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>SUB2010-501</td>
-                      <td>Math 1</td>
-                      <td>Introduction to Algebra</td>
-                      <td>Mr. Victor T. Magtanggol</td>
-                      <td>07:30 - 08:30 AM</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>SUB2010-502</td>
-                      <td>Eng 1</td>
-                      <td>Introduction to English</td>
-                      <td>Ms. Cynthia Soliman</td>
-                      <td>08:30 - 09:30 AM</td>
-                    </tr>
+                  <table id="" class="table exampleDatatable table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Code</th>
+                          <th>Subject</th>
+                          <th>Teacher</th>
+                          <th>Schedule</th>
+                        </tr>
+                      </thead>
+                    <tbody>
+                      <?php $schedules = query("select * from schedule s left join subjects sub
+                                                on sub.subject_id = s.subject_id
+                                                left join teacher t
+                                                on s.teacher_id = t.teacher_id
+                                                where s.advisory_id = ?
+                                                order by from_time asc", $_GET["id"]); ?>
 
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>SUB2010-503</td>
-                      <td>FIL 1</td>
-                      <td>Filipino to the Moon</td>
-                      <td>Ms. Brenda Mage</td>
-                      <td>09:30 - 10:30 AM</td>
-                    </tr>
-                   
+                      <?php foreach($schedules as $row): 
+                        
+                        $days_string = '';
+                        if ($row["monday"] == 1) {
+                          $days_string .= 'M,';
+                        }
+                        if ($row["tuesday"] == 1) {
+                          $days_string .= 'T,';
+                        }
+                        if ($row["wednesday"] == 1) {
+                          $days_string .= 'W,';
+                        }
+                        if ($row["thursday"] == 1) {
+                          $days_string .= 'TH,';
+                        }
+                        if ($row["friday"] == 1) {
+                          $days_string .= 'F,';
+                        }
+                      
+                        // Remove the trailing comma
+                        $days_string = rtrim($days_string, ',');
+                        
+                        ?>
+                        <tr>
+                          <td><?php echo($row["subject_code"]); ?></td>
+                          <td><?php echo($row["subject_title"]); ?></td>
+                          <td><?php echo($row["teacher_lastname"] . ", " . $row["teacher_firstname"]); ?></td>
+                          <td><?php echo($row["from_time"] . " - " . $row["to_time"] . " | " . $days_string); ?></td>
+                        </tr>
+                      <?php endforeach; ?>
                   
-                
-                   
-                 
-                  </tbody>
+                    </tbody>
               
                 </table>
                   </div>
@@ -349,10 +306,13 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
   <script>
 
+$('.select2').select2({});
+
 $('.exampleDatatable').DataTable({
-     
+  "ordering": false,
     });
 
 
