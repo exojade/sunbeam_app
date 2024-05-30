@@ -122,9 +122,6 @@
 			endforeach;
 
 		
-
-
-
 			if($search == ""):
                 $data = query($baseQuery . " " . $limitString . " " . $offsetString);
                 $all_data = query($baseQuery);

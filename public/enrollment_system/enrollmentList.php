@@ -59,34 +59,19 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>#</th>
                     <th>Code</th>
                     <th>Student Name</th>
                     <th>Grade Level</th>
-                    <th>School Year</th>
                     <th>Section</th>
                     <th>Adviser</th>
+                    <th>Balance</th>
                   </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="#" class="btn btn-info btn-sm btn-block">Print</a>
-                      </td>
-                      <td>ST2020-5401</td>
-                      <td>ILLEST J. MORENA</td>
-                      <td>Grade 2</td>
-                      <td>2023-2024</td>
-                      <td>SAMPLE SECTION NAME</td>
-                      <td>Mr. Victor Magtanggol</td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-             
-                  </tfoot>
+              
                 </table>
               </div>
               <!-- /.card-body -->
@@ -114,9 +99,59 @@
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
 
-$('#example1').DataTable({
-     
-    });
+var datatable = 
+            $('#ajaxDatatable').DataTable({
+                "searching": false,
+                "pageLength": 10,
+                language: {
+                    searchPlaceholder: "Search Teacher's Name"
+                },
+                "bLengthChange": true,
+                "ordering": false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                
+                'ajax': {
+                    'url':'enrollment',
+                     'type': "POST",
+                     "data": function (data){
+                        data.action = "enrollmentList";
+                     }
+                },
+                'columns': [
+                    { data: 'action', "orderable": false },
+                    { data: 'student_id', "orderable": false  },
+                    { data: 'student', "orderable": false  },
+                    { data: 'grade_level', "orderable": false  },
+                    { data: 'section', "orderable": false  },
+                    { data: 'teacher', "orderable": false  },
+                    { data: 'balance', "orderable": false  },
+                ],
+                "footerCallback": function (row, data, start, end, display) {
+                    // var api = this.api(), data;
+                    
+
+                    // Remove the formatting to get integer data for summation
+                    // var intVal = function (i) {
+                    //     return typeof i === 'string' ?
+                    //         i.replace(/[\$,]/g, '') * 1 :
+                    //         typeof i === 'number' ?
+                    //             i : 0;
+                    // };
+
+                    // // Total over all pages
+                    // received = api
+                    //     .column(5)
+                    //     .data()
+                    //     .reduce(function (a, b) {
+                    //         return intVal(a) + intVal(b);
+                    //     }, 0);
+                    //     console.log(received);
+
+                    // $('#currentTotal').html('$ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                }
+            });
 
 
             function preview() {

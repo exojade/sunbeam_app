@@ -3,6 +3,33 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+<?php $advisory = query("select sy.school_year as sy, a.*,s.section, CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS teacher from advisory a
+                          left join section s 
+                          on s.section_id = a.section_id
+                          left join teacher t
+                          on t.teacher_id = a.teacher_id
+                          left join school_year sy
+                          on sy.syid = a.school_year
+                          where advisory_id = ?", $_GET["id"]);
+      $advisory = $advisory[0];
+      $students = query("select e.*, CONCAT(s.lastname, ', ', s.firstname) AS student,
+                          s.sex from enrollment e
+                          left join student s
+                          on s.student_id = e.student_id
+                          where advisory_id = ?", $_GET["id"]);
+
+      $students = query("select e.*, CONCAT(s.lastname, ', ', s.firstname) AS student,
+          s.sex from enrollment e
+          left join student s
+          on s.student_id = e.student_id
+          where advisory_id = ?", $_GET["id"]);
+
+                          ?>
+
+                          
+
+
 <style>
   #sectionTable td{
     border: 0px;
@@ -43,9 +70,6 @@
                 <label for="exampleInputEmail1">Section Name</label>
                 <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
               </div>
-
-             
-
 
               <div class="form-group">
                 <label for="exampleInputEmail1">Adviser</label>
@@ -95,23 +119,46 @@
         <div class="row">
           <div class="col-md-12">
 
-            <!-- Profile Image -->
-         
-              <!-- /.card-header -->
-                  <table class="table" id="sectionTable">
+          <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Advisory Class Information</h3>
+              </div>
+                <div class="card-body">
+                  <div class="row">
+                 
+                    <div class="col-md-12">
+                    <table class="table" id="sectionTable">
                     <tr>
                       <th>Section:</th>
-                      <td>SAMPLE SECTION NAME</td>
+                      <td><?php echo($advisory["section"]); ?></td>
                       <th>Adviser:</th>
-                      <td>Victor Magtanggol</td>
+                      <td><?php echo($advisory["teacher"]); ?></td>
                     </tr>
                     <tr>
                       <th>Grade Level:</th>
-                      <td>Grade 1</td>
+                      <td><?php echo($advisory["grade_level"]); ?></td>
                       <th>School Year:</th>
-                      <td>2023-2024</td>
+                      <td><?php echo($advisory["sy"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Male Learners:</th>
+                      <td><?php echo($advisory["grade_level"]); ?></td>
+                      <th>Female Learners:</th>
+                      <td><?php echo($advisory["sy"]); ?></td>
                     </tr>
                   </table>
+                    </div>
+                  </div>
+                
+                </div>
+               
+            </div>
+
+
+            <!-- Profile Image -->
+         
+              <!-- /.card-header -->
+               
 
                   <hr>
                   <br>
@@ -141,36 +188,21 @@
                     <th width="15%">Action</th>
                     <th>Student ID</th>
                     <th>Student Name</th>
+                    <th>Sex</th>
                   </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>2020-1540</td>
-                      <td>BON S. JOVI</td>
+                    <?php foreach($students as $row): ?>
+                      <tr>
+                        <td>
+                          <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
+                          <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
+                        </td>
+                        <td><?php echo($row["student_id"]); ?></td>
+                        <td><?php echo($row["student"]); ?></td>
+                        <td><?php echo($row["sex"]); ?></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>2020-1541</td>
-                      <td>ILLEST J. MORENA</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                        <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                      </td>
-                      <td>2020-1542</td>
-                      <td>SKUSTA D. CLEE</td>
-                    </tr>
-                   
-                
-                 
+                    <?php endforeach; ?>
                   </tbody>
                   <tfoot>
                   <tr>
