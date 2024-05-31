@@ -146,16 +146,39 @@ $schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as g
                   </tr>
                   </thead>
                   <tbody>
-                      <?php foreach($schedules as $row): ?>
+                      <?php foreach($schedules as $row): 
+         
+                        
+                          $days_string = '';
+                          if ($row["monday"] == 1) {
+                            $days_string .= 'M,';
+                          }
+                          if ($row["tuesday"] == 1) {
+                            $days_string .= 'T,';
+                          }
+                          if ($row["wednesday"] == 1) {
+                            $days_string .= 'W,';
+                          }
+                          if ($row["thursday"] == 1) {
+                            $days_string .= 'TH,';
+                          }
+                          if ($row["friday"] == 1) {
+                            $days_string .= 'F,';
+                          }
+                        
+                          // Remove the trailing comma
+                          $days_string = rtrim($days_string, ',');
+                        
+                        ?>
                         <tr>
                           <td>
-                            <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
+                            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>" class="btn btn-block btn-sm btn-info">Grade</a>
                           </td>
                           <td><?php echo($sy["school_year"]); ?></td>
                           <td><?php echo($row["gradeLevel"]); ?></td>
                           <td><?php echo($row["section"]); ?></td>
                           <td><?php echo($row["subject_code"]); ?></td>
-                          <td><?php echo($row["subject_code"]); ?></td>
+                          <td><?php echo($row["from_time"] . "-" . $row["to_time"] . " | " . $days_string); ?></td>
                         </tr>
                       <?php endforeach; ?>
                   </tbody>

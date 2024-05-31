@@ -220,6 +220,9 @@
 			if($_GET["action"] == "specific"):
 				render("public/student_system/studentSpecific.php",[
 				]);
+			elseif($_GET["action"] == "gradeTeacher"):
+				render("public/student_system/studentSpecific.php",[
+				]);
 			endif;
 		endif;
 	}
