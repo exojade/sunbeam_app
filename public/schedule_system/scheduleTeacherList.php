@@ -3,7 +3,21 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
+<?php
+// dump($_SESSION);
+$schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
+                    left join advisory a
+                    on a.advisory_id = s.advisory_id
+                    left join subjects sub
+                    on sub.subject_id = s.subject_id
+                    left join section sec
+                    on sec.section_id = a.section_id     
+                    where s.teacher_id = ?
+                    and syid = ?
+                  ", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
+// dump($schedules);
+?>
+5
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -13,9 +27,6 @@
             <h1>Schedule</h1>
             <small>Current SY: 2023 - 2024</small>
           </div>
-
-        
-        
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -131,56 +142,22 @@
                     <th>Level</th>
                     <th>Section</th>
                     <th>Subject</th>
-                    <th>Description</th>
                     <th>Schedule</th>
                   </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                      <!-- <div class="btn-group"> -->
-                        <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
-                      <!-- </div> -->
-                      </td>
-                      <td>2023-2024</td>
-                      <td>Grade 1</td>
-                      <td>Section Apple</td>
-                      <td>Math 1</td>
-                      <td>Intro to Algebra</td>
-                      <td>08:30 - 09:30 AM</td>
-                    </tr>
-                    <tr>
-                      <td>
-                      <!-- <div class="btn-group"> -->
-                      <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
-                      <!-- </div> -->
-                      </td>
-                      <td>2023-2024</td>
-                      <td>Grade 5</td>
-                      <td>Section Apple</td>
-                      <td>Math 1</td>
-                      <td>Geometry</td>
-                      <td>09:30 - 09:30 AM</td>
-                    </tr>
-                    <tr>
-                      <td>
-                      <!-- <div class="btn-group"> -->
-                      <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
-                      <!-- </div> -->
-                      </td>
-                      <td>2023-2024</td>
-                      <td>Grade 3</td>
-                      <td>Section Apple</td>
-                      <td>Math 1</td>
-                      <td>Intro to Trigo</td>
-                      <td>12:30 - 01:30 PM</td>
-                    </tr>
-                   
-                  
-
-                    
-              
-               
+                      <?php foreach($schedules as $row): ?>
+                        <tr>
+                          <td>
+                            <a href="grade" class="btn btn-block btn-sm btn-info">Grade</a>
+                          </td>
+                          <td><?php echo($sy["school_year"]); ?></td>
+                          <td><?php echo($row["gradeLevel"]); ?></td>
+                          <td><?php echo($row["section"]); ?></td>
+                          <td><?php echo($row["subject_code"]); ?></td>
+                          <td><?php echo($row["subject_code"]); ?></td>
+                        </tr>
+                      <?php endforeach; ?>
                   </tbody>
                   <tfoot>
              
