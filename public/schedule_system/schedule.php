@@ -221,7 +221,7 @@
 				render("public/student_system/studentSpecific.php",[
 				]);
 			elseif($_GET["action"] == "gradeTeacher"):
-				render("public/student_system/studentSpecific.php",[
+				render("public/schedule_system/gradeTeacherList.php",[
 				]);
 			endif;
 		endif;
