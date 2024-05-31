@@ -292,18 +292,12 @@ $student = $student[0];
                           <input readonly value="<?php echo($student["father_lastname"]); ?>" placeholder="Last Name" name="father_lastname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
-
-
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Occupation</span></label>
                         <div class="col-sm-10">
                           <input readonly value="<?php echo($student["father_occupation"]); ?>" placeholder="---" name="father_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
-
-                    
-
-
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Educational Attainment</span></label>
                         <div class="col-sm-10">
@@ -320,9 +314,7 @@ $student = $student[0];
                           <input readonly value="<?php echo($student["father_fb"]); ?>" placeholder="Enter Facebook Account" name="father_fb" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
-
                       <hr>
-
                     <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Mother's Maiden Name</span></label>
                         <div class="col-sm-3">
@@ -358,11 +350,7 @@ $student = $student[0];
                         </div>
                       </div>
                   </div>
-                  <!-- /.tab-pane -->
-
-
                   <div class="tab-pane" id="grades">
-
                   <?php $grades = query("select g.*, s.*, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
                                           sub.subject_code
                                           from student_grades g
@@ -376,7 +364,6 @@ $student = $student[0];
                                           order by from_time asc
                                           ", $student["student_id"]); 
                                           // dump($grades);
-                                          
                                           ?>
                   <table id="" class="table exampleDatatable table-bordered table-striped">
                   <thead>
