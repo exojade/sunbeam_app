@@ -95,9 +95,10 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Action</th>
                     <th>Section Name</th>
                     <th>Status</th>
+                    <th>Action</th>
+
                   </tr>
                   </thead>
                   <tbody>
@@ -107,11 +108,15 @@
                    foreach($section as $row):
                    ?>
                     <tr>
-                      <td>
-                        <a href="section?action=specific" class="btn btn-info btn-sm btn-block">Visit</a>
-                      </td>
+                    
                       <td><?php echo($row["section"]); ?></td>
                       <td><?php echo($row["status"]); ?></td>
+                      <td width="10%">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                        <button type="button" class="btn btn-sm btn-warning">Update</button>
+                      </div>
+                      </td>
                     </tr>
                     <?php endforeach; ?>
 

@@ -6,29 +6,49 @@
 <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
 <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 
-<?php $advisory = query("select sy.school_year as sy, a.*,s.section, CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS teacher from advisory a
-                          left join section s 
-                          on s.section_id = a.section_id
-                          left join teacher t
-                          on t.teacher_id = a.teacher_id
-                          left join school_year sy
-                          on sy.syid = a.school_year
-                          where advisory_id = ?", $_GET["id"]);
-      $advisory = $advisory[0];
-      $students = query("select e.*, CONCAT(s.lastname, ', ', s.firstname) AS student,
-                          s.sex from enrollment e
-                          left join student s
-                          on s.student_id = e.student_id
-                          where advisory_id = ?", $_GET["id"]);
-      $students = query("select e.*, CONCAT(s.lastname, ', ', s.firstname) AS student,
-          s.sex from enrollment e
-          left join student s
-          on s.student_id = e.student_id
-          where advisory_id = ?", $_GET["id"]);
-      $unenrolled = query("select * from enrollment e left join student s
-                            on s.student_id = e.student_id
-                            where advisory_id is null
-                            and syid = ? and grade_level = ?",$sy["syid"], $advisory["grade_level"]);
+<?php
+$schedule = query("select a.grade_level,sched.*,s.section, sub.subject_code, sub.subject_title,
+                  CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS adviser
+                  from schedule sched
+                  left join advisory a
+                  on a.advisory_id = sched.advisory_id
+                  left join teacher t
+                  on t.teacher_id = a.teacher_id
+                  left join section s
+                  on s.section_id = a.section_id
+                  left join subjects sub
+                  on sub.subject_id = sched.subject_id
+                  where schedule_id = ?", $_GET["id"]);
+  $schedule = $schedule[0];
+
+  $days_string = '';
+                          if ($schedule["monday"] == 1) {
+                            $days_string .= 'M,';
+                          }
+                          if ($schedule["tuesday"] == 1) {
+                            $days_string .= 'T,';
+                          }
+                          if ($schedule["wednesday"] == 1) {
+                            $days_string .= 'W,';
+                          }
+                          if ($schedule["thursday"] == 1) {
+                            $days_string .= 'TH,';
+                          }
+                          if ($schedule["friday"] == 1) {
+                            $days_string .= 'F,';
+                          }
+                        
+                          // Remove the trailing comma
+                          $days_string = rtrim($days_string, ',');
+
+
+$teacher = query("select * from teacher where teacher_id = ?", $_SESSION["sunbeam_app"]["userid"]);  
+$teacher = $teacher[0];
+$grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_name from student_grades g
+                  left join student s
+                  on s.student_id = g.student_id
+                  where schedule_id = ?", $schedule["schedule_id"]);
+// dump($grades);
                           ?>
 
                           
@@ -45,26 +65,42 @@
   }
 </style>
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
           </div>
-     
         </div>
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
-
-    <!-- Main content -->
     <section class="content">
+    <div class="modal fade" id="modalUpdateGrades">
+          <div class="modal-dialog">
+            <div class="modal-content ">
+              <div class="modal-header bg-warning">
+					    <h3 class="modal-title text-center">Update Grade</h3>
+              </div>
+              <div class="modal-body" style="-webkit-user-select: none;  /* Chrome all / Safari all */
+              -moz-user-select: none;     /* Firefox all */
+              -ms-user-select: none;  ">
+                  <form class="generic_form_trigger" data-url="schedule" autocomplete="off">
+                    <div class="fetched-data"></div>
+                    <br>
+                      <div class="box-footer">
+                        <button type="button" class=" btn btn-primary btn-flat pull-right" data-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="submit" class="btn btn-primary btn-flat pull-right">Submit</button>
+                      </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-
           <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Advisory Class Information</h3>
+                <h3 class="card-title">Schedule Information</h3>
               </div>
                 <div class="card-body">
                   <div class="row">
@@ -73,46 +109,28 @@
                     <table class="table" id="sectionTable">
                     <tr>
                       <th>Section:</th>
-                      <td><?php echo($advisory["section"]); ?></td>
+                      <td><?php echo($schedule["grade_level"]. " - " . $schedule["section"]); ?></td>
                       <th>Adviser:</th>
-                      <td><?php echo($advisory["teacher"]); ?></td>
+                      <td><?php echo($schedule["adviser"]); ?></td>
                     </tr>
                     <tr>
-                      <th>Grade Level:</th>
-                      <td><?php echo($advisory["grade_level"]); ?></td>
-                      <th>School Year:</th>
-                      <td><?php echo($advisory["sy"]); ?></td>
+                      <th>Subject:</th>
+                      <td><?php echo($schedule["subject_code"]. " - " . $schedule["subject_title"]); ?></td>
+                      <th>Teacher:</th>
+                      <td><?php echo($teacher["teacher_lastname"]. ", " . $teacher["teacher_firstname"]); ?></td>
                     </tr>
                     <tr>
-                      <th>Male Learners:</th>
-                      <td><?php echo($advisory["grade_level"]); ?></td>
-                      <th>Female Learners:</th>
-                      <td><?php echo($advisory["sy"]); ?></td>
+                      <th>Time Schedule:</th>
+                      <td><?php echo($schedule["from_time"] . " - " . $schedule["to_time"]); ?></td>
+                      <th>Day:</th>
+                      <td><?php echo($days_string); ?></td>
                     </tr>
                   </table>
                     </div>
                   </div>
-                
                 </div>
-               
             </div>
-
-
-            <!-- Profile Image -->
-         
-              <!-- /.card-header -->
-               
-
                   <hr>
-               
-              <!-- /.card-body -->
-        
-            <!-- /.card -->
-
-            <!-- About Me Box -->
-           
-     
-          <!-- /.col -->
           <div class="col-md-12">
           <?php if(!empty($unenrolled)): ?>
           <form class="generic_form_trigger" data-url="advisory">
@@ -141,10 +159,54 @@
 
             <div class="card">
               <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Classroom Schedule</a></li>
-                </ul>
+              
+              <?php
+              $settings = query("select * from settings");
+              ?>
+              <?php foreach($settings as $row): ?>
+                <?php
+                  if($row["grading_period"] == "first_grading"): ?>
+                  <?php if($row["active_status"] == "active"): ?>
+                  <a href="#" data-toggle="modal" 
+                      data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
+                      data-grading="first_grading"
+                      data-target="#modalUpdateGrades" class="btn btn-warning">Update 1st Grading</a>
+                  <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if($row["grading_period"] == "second_grading"): ?>
+                  <?php if($row["active_status"] == "active"): ?>
+                    <a href="#" data-toggle="modal" 
+                      data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
+                      data-grading="second_grading"
+                      data-target="#modalUpdateGrades" class="btn btn-warning">Update 2nd Grading</a>
+                  <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if($row["grading_period"] == "third_grading"): ?>
+                  <?php if($row["active_status"] == "active"): ?>
+                    <a href="#" data-toggle="modal" 
+                      data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
+                      data-grading="third_grading"
+                      data-target="#modalUpdateGrades" class="btn btn-warning">Update 3rd Grading</a>
+                  <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if($row["grading_period"] == "fourth_grading"): ?>
+                  <?php if($row["active_status"] == "active"): ?>
+                    <a href="#" data-toggle="modal" 
+                      data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
+                      data-grading="fourth_grading"
+                      data-target="#modalUpdateGrades" class="btn btn-warning">Update 4th Grading</a>
+                  <?php endif; ?>
+                <?php endif; ?>
+              <?php endforeach; ?>
+
+
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content">
@@ -153,22 +215,27 @@
                   <table id="" class="table exampleDatatable table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th width="15%">Action</th>
                     <th>Student ID</th>
                     <th>Student Name</th>
-                    <th>Sex</th>
+                    <th>1st</th>
+                    <th>2nd</th>
+                    <th>3rd</th>
+                    <th>4th</th>
+                    <th>Ave</th>
+                    <th>Remarks</th>
                   </tr>
                   </thead>
                   <tbody>
-                    <?php foreach($students as $row): ?>
+                    <?php foreach($grades as $row): ?>
                       <tr>
-                        <td>
-                          <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                          <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
-                        </td>
                         <td><?php echo($row["student_id"]); ?></td>
-                        <td><?php echo($row["student"]); ?></td>
-                        <td><?php echo($row["sex"]); ?></td>
+                        <td><?php echo($row["student_name"]); ?></td>
+                        <td><?php echo($row["first_grading"]); ?></td>
+                        <td><?php echo($row["second_grading"]); ?></td>
+                        <td><?php echo($row["third_grading"]); ?></td>
+                        <td><?php echo($row["fourth_grading"]); ?></td>
+                        <td><?php echo($row["average"]); ?></td>
+                        <td><?php echo($row["remarks"]); ?></td>
                     </tr>
                     <?php endforeach; ?>
                   </tbody>
@@ -310,6 +377,29 @@
   <script>
 
 $('.select2').select2({});
+
+
+$('#modalUpdateGrades').on('show.bs.modal', function (e) {
+        var schedule_id = $(e.relatedTarget).data('schedule');
+        var teacher_id = $(e.relatedTarget).data('teacher');
+        var grading = $(e.relatedTarget).data('grading');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'schedule', //Here you will fetch records 
+            data: {
+              schedule_id: schedule_id,
+              teacher_id: teacher_id,
+              grading: grading,
+               action: "updateGradesModal"
+            },
+            success : function(data){
+                $('#modalUpdateGrades .fetched-data').html(data);
+                Swal.close();
+                // $(".select2").select2();//Show fetched data from database
+            }
+        });
+     });
 
 $('.exampleDatatable').DataTable({
   "ordering": false,

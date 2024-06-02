@@ -123,7 +123,7 @@
                       <td><?php echo($u["username"]); ?></td>
                       <td><?php echo(strtoupper($u["role"])); ?></td>
                       <td><?php echo(strtoupper($u["fullname"])); ?></td>
-                      <td><?php echo(strtoupper($u["status"])); ?></td>
+                      <td><?php echo(strtoupper($u["active_remarks"])); ?></td>
 
                     </tr>
                   <?php endforeach; ?>

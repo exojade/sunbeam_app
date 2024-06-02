@@ -23,7 +23,7 @@ $schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as g
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Schedule</h1>
+            <h1>My Classrooms</h1>
             <small>Current SY: 2023 - 2024</small>
           </div>
         </div>
@@ -104,93 +104,56 @@ $schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as g
         </div>
         <!-- /.modal-dialog -->
       </div>
-
-
-
-
-        <div class="row">
-          <div class="col-12">
-            <!-- Default box -->
-            <div class="card">
-              <div class="card-header">
-                <!-- <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                      <select required name="gender" class="form-control select2">
-                        <option selected disabled value="">Please Grade Level</option>
-                        <option value="Grade 1">Grade 1 - Section Orange</option>
-                        <option value="Grade 1">Grade 1 - Section Sunflower</option>
-                        <option value="Grade 1">Grade 2 - Section Apple</option>
-                        <option value="Grade 1">Grade 3 - Section Rose</option>
-                        <option value="Grade 1">Grade 4 - Section Moon</option>
-                        <option value="Grade 1">Grade 5 - Section Honey Bee</option>
-                        <option value="Grade 1">Grade 6 - Section Carnation</option>
-                      </select>
-                      </div>
+      <div class="row">
+          <?php foreach($schedules as $row): 
+            $days_string = '';
+            if ($row["monday"] == 1) {
+              $days_string .= 'M , ';
+            }
+            if ($row["tuesday"] == 1) {
+              $days_string .= 'T , ';
+            }
+            if ($row["wednesday"] == 1) {
+              $days_string .= 'W , ';
+            }
+            if ($row["thursday"] == 1) {
+              $days_string .= 'TH , ';
+            }
+            if ($row["friday"] == 1) {
+              $days_string .= 'F';
+            }
+          
+            // Remove the trailing comma
+            $days_string = rtrim($days_string, ',');
+            ?>
+            <div class="col-md-4">
+            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>">
+            <div class="card card-widget widget-user">
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+              <div class="widget-user-header bg-info">
+                <h3 class="widget-user-username"><?php echo($row["subject_code"]); ?></h3>
+                <h5 class="widget-user-desc"><?php echo($row["gradeLevel"]); ?> - 
+                         <?php echo($row["section"]); ?></h5>
+                <h5 class="widget-user-desc"></h5>
+              </div>
+           
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="description-block">
+                      <h5 class="description-header"><?php echo($row["from_time"] . " - " . $row["to_time"]); ?></h5>
+                      <span class="description-text"><?php echo($days_string); ?></span>
                     </div>
-                </div> -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th width="8%">Action</th>
-                    <th>SY</th>
-                    <th>Level</th>
-                    <th>Section</th>
-                    <th>Subject</th>
-                    <th>Schedule</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                      <?php foreach($schedules as $row): 
-         
-                        
-                          $days_string = '';
-                          if ($row["monday"] == 1) {
-                            $days_string .= 'M,';
-                          }
-                          if ($row["tuesday"] == 1) {
-                            $days_string .= 'T,';
-                          }
-                          if ($row["wednesday"] == 1) {
-                            $days_string .= 'W,';
-                          }
-                          if ($row["thursday"] == 1) {
-                            $days_string .= 'TH,';
-                          }
-                          if ($row["friday"] == 1) {
-                            $days_string .= 'F,';
-                          }
-                        
-                          // Remove the trailing comma
-                          $days_string = rtrim($days_string, ',');
-                        
-                        ?>
-                        <tr>
-                          <td>
-                            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>" class="btn btn-block btn-sm btn-info">Grade</a>
-                          </td>
-                          <td><?php echo($sy["school_year"]); ?></td>
-                          <td><?php echo($row["gradeLevel"]); ?></td>
-                          <td><?php echo($row["section"]); ?></td>
-                          <td><?php echo($row["subject_code"]); ?></td>
-                          <td><?php echo($row["from_time"] . "-" . $row["to_time"] . " | " . $days_string); ?></td>
-                        </tr>
-                      <?php endforeach; ?>
-                  </tbody>
-                  <tfoot>
+                    <!-- /.description-block -->
+                  </div>
              
-                  </tfoot>
-                </table>
+                </div>
+                <!-- /.row -->
               </div>
-              <!-- /.card-body -->
+            </div></a>
             </div>
-            <!-- /.card -->
-          </div>
-        </div>
+          <?php endforeach; ?>
+      </div>
       </div>
     </section>
     <!-- /.content -->

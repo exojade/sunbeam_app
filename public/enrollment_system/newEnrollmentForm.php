@@ -64,10 +64,13 @@
                           <input required placeholder="First Name" name="firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
-                          <input required placeholder="Middle Name" name="middlename" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="Middle Name" name="middlename" type="text" class="form-control" id="inputEmail3" >
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                           <input required placeholder="Last Name" name="lastname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-1">
+                          <input placeholder="Jr, I, II" name="nameExtension" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
                     </div>
@@ -183,7 +186,7 @@
                           <input required placeholder="First Name" name="father_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
-                          <input required placeholder="Middle Name" name="father_middlename" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="Middle Name" name="father_middlename" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-4">
                           <input required placeholder="Last Name" name="father_lastname" type="text" class="form-control" id="inputEmail3" >
@@ -226,7 +229,7 @@
                           <input required placeholder="First Name" name="mother_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
-                          <input required placeholder="Middle Name" name="mother_middlename" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="Middle Name" name="mother_middlename" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-4">
                           <input required placeholder="Last Name" name="mother_lastname" type="text" class="form-control" id="inputEmail3" >
@@ -337,10 +340,10 @@
                   <div id="addon-container">
             <div class="row addon-row">
                 <div class="col-md-6">
-                    <input name="account[]" required placeholder="Place Name of Account Here" type="text" class="form-control name-field">
+                    <input name="account[]"  placeholder="Place Name of Account Here" type="text" class="form-control name-field">
                 </div>
                 <div class="col-md-5">
-                    <input name="amount[]" required placeholder="Place Amount here" type="text" class="form-control numberic amount-field costing">
+                    <input name="amount[]"  placeholder="Place Amount here" type="text" class="form-control numberic amount-field costing">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-danger remove-btn">Remove</button>
@@ -362,7 +365,7 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label>Down Payment</label>
-                        <input name="downpayment" type="text" class="form-control numberic costing" id="downpayment" placeholder="Enter ...">
+                        <input required name="downpayment" type="text" class="form-control numberic costing" id="downpayment" placeholder="Enter ...">
                       </div>
                     </div>
 

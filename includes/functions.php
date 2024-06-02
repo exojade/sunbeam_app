@@ -28,7 +28,18 @@
 
 
 
-
+    function calculateAge($birthDate) {
+        $birthDate = new DateTime($birthDate);
+        $currentDate = new DateTime();
+        $age = $currentDate->diff($birthDate);
+    
+        // Check if the birthday has occurred this year
+        if ($currentDate < $birthDate->add(new DateInterval('P'.$age->y.'Y'))) {
+            $age->y -= 1;
+        }
+    
+        return $age->y;
+    }
      function to_peso($number){
         if($number != ""){
             return("₱ " .number_format($number, 2, '.', ','));

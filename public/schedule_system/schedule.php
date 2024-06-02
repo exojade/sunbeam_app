@@ -196,8 +196,61 @@
             );
             echo json_encode($json_data);
 
+		elseif($_POST["action"] == "updateGradesModal"):
+			
+			$grading = $_POST["grading"];
+			$grades = query("select concat(s.lastname, ', ', s.firstname ) as student,
+								g.student_id, $grading from student_grades g
+								left join student s
+								on s.student_id = g.student_id
+								where g.schedule_id = ?
+								order by s.lastname, s.firstname
+								", $_POST["schedule_id"]);
+			$hint = "";
+			$hint.='
+			
+			<input type="hidden" name="action" value="updateGrades"> 
+			<input type="hidden" name="schedule_id" value="'.$_POST["schedule_id"].'"> 
+			<input type="hidden" name="grading" value="'.$grading.'"> 
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th colspan="2">'.strtoupper($grading).'</th>
+					</tr>
+					<th>Student</th>
+					<th>Grade</th>
+				</thead>
+				<tbody>';
+				foreach($grades as $row):
+					$hint.='<tr>';
+						$hint.='<td>'.$row["student"].'</td>';
+						$hint.='<td><input placeholder="Enter Grade Here" type="number" class="form-control" name="'.$row["student_id"].'" value="'.$row[$grading].'"></td>';
+					$hint.='</tr>';
+				endforeach;
+			$hint.='</tbody>
+			</table>
+			';
 
+			echo($hint);
+		elseif($_POST["action"] == "updateGrades"):
+			// dump($_POST);
+			$grades = query("select * from student_grades where schedule_id = ?", $_POST["schedule_id"]);
+			$grading = $_POST["grading"];
+			foreach($grades as $row):
+				query("update student_grades set $grading = ?
+							where student_id = ?
+							and schedule_id = ?", $_POST[$row["student_id"]], $row["student_id"],
+							$_POST["schedule_id"]);
+			endforeach;
 
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => "schedule?action=gradeTeacher&id=".$_POST["schedule_id"],
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
 
 		endif;
 

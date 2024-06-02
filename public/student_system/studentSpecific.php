@@ -16,9 +16,51 @@
     padding: 0px;
   }
 </style>
+
+<?php
+$enrollment = query("select * from enrollment where student_id = ? and syid = ?", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
+?>
+
+
+
+
+
 <div class="content-wrapper">
+
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
+    <?php if(empty($enrollment)): ?>
+  <div class="alert alert-danger alert-dismissible">
+    <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+    Currently not Enrolled in this School Year
+  </div>
+
+
+<?php else: 
+  
+  $student = query("select * from student where student_id = ?", $_SESSION["sunbeam_app"]["userid"]);
+  $student = $student[0];
+  $advisory = query("select a.*, s.section, 
+                      concat(t.teacher_lastname, ', ', t.teacher_firstname) as adviser from advisory a
+                      left join section s
+                      on s.section_id = a.section_id
+                      left join teacher t
+                      on t.teacher_id = a.teacher_id
+                      where a.advisory_id = ?", $enrollment[0]["advisory_id"]);
+
+  $grades = query("select g.*, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
+                  sub.subject_code, sched.*
+                  from student_grades g
+                  left join schedule sched
+                  on sched.schedule_id = g.schedule_id
+                  left join subjects sub
+                  on sub.subject_id = sched.subject_id
+                  left join teacher t
+                  on t.teacher_id = sched.teacher_id
+                  where g.student_id = ? and g.advisory_id = ?", $_SESSION["sunbeam_app"]["userid"], $advisory[0]["advisory_id"]);
+$advisory = $advisory[0];
+  ?>
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -33,111 +75,7 @@
       <div class="container-fluid">
 
 
-      <div class="modal fade" id="modalPayment">
-        <div class="modal-dialog ">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add Payment</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
-              <div class="form-group">
-                    <label for="exampleInputEmail1">Balance</label>
-                    <input type="text" readonly value="13,760.00" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                  </div>
 
-              <div class="form-group">
-                    <label for="exampleInputEmail1">Date</label>
-                    <input type="date" readonly value="<?php echo(date("Y-m-d")); ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">OR Number</label>
-                    <input type="text"  class="form-control" id="exampleInputEmail1" placeholder="---">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Amount</label>
-                    <input type="text"  class="form-control" id="exampleInputEmail1" placeholder="0.00">
-                  </div>
-        
-        
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-
-
-      <div class="modal fade" id="modalPaymentStudent">
-        <div class="modal-dialog ">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add Payment (Student Module)</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
-              <div class="form-group">
-                    <label for="exampleInputEmail1">Balance</label>
-                    <input type="text" readonly value="13,760.00" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                  </div>
-
-              <div class="form-group">
-                    <label for="exampleInputEmail1">Date</label>
-                    <input type="date" readonly value="<?php echo(date("Y-m-d")); ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Mode of Payment</label>
-                    <input type="text" readonly value="ONLINE" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Bank Name</label>
-                    <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Bank</option>
-                          <option value="">GCash</option>
-                          <option value="">BDO</option>
-                          <option value="">BPI</option>
-                        </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Amount</label>
-                    <input type="text"  class="form-control" id="exampleInputEmail1" placeholder="0.00">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                    </div>
-                  </div>
-        
-        
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
 
 
 
@@ -163,19 +101,15 @@
                     <table class="table" id="sectionTable">
                     <tr>
                       <th>Student Name:</th>
-                      <td>ILLEST J. MORENA</td>
+                      <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
                       <th>Adviser:</th>
-                      <td>Victor Magtanggol</td>
+                      <td><?php echo($advisory["adviser"]); ?></td>
                     </tr>
                     <tr>
                       <th>Grade Level:</th>
-                      <td>Grade 2</td>
+                      <td><?php echo($enrollment[0]["grade_level"] . " - " . $advisory["section"]); ?></td>
                       <th>School Year:</th>
-                      <td>2023-2024</td>
-                    </tr>
-                    <tr>
-                      <th>Section:</th>
-                      <td>Section Apple</td>
+                      <td><?php echo($sy["school_year"]); ?></td>
                     </tr>
                   </table>
                     </div>
@@ -211,7 +145,7 @@
                 <ul class="nav nav-pills">
                   <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Subjects / Grades</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Record History</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#profile" data-toggle="tab">Profile</a></li>
                   <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
                 </ul>
               </div><!-- /.card-header -->
@@ -222,187 +156,107 @@
                     <table id="" class="table exampleDatatable table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Code</th>
                     <th>Subject</th>
-                    <th>Description</th>
                     <th>Teacher</th>
                     <th>Schedule</th>
-                    <th>Q1</th>
-                    <th>Q2</th>
-                    <th>Q3</th>
-                    <th>Q4</th>
-                    <th>Final Grade</th>
+                    <th>G1</th>
+                    <th>G2</th>
+                    <th>G3</th>
+                    <th>G4</th>
+                    <th>Average</th>
+                    <th>Remarks</th>
                   </tr>
                   </thead>
                   <tbody>
+                  <?php foreach($grades as $row): 
+                    // dump($row);
+                    ?>
                     <tr>
-                
-                      <td>SUB2010-501</td>
-                      <td>Math 1</td>
-                      <td>Introduction to Algebra</td>
-                      <td>Mr. Victor T. Magtanggol</td>
-                      <td>07:30 - 08:30 AM</td>
-                      <td>95</td>
-                      <td>93</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>SUB2010-502</td>
-                      <td>Eng 1</td>
-                      <td>Introduction to English</td>
-                      <td>Ms. Cynthia Soliman</td>
-                      <td>08:30 - 09:30 AM</td>
-                      <td>91</td>
-                      <td>92</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
+                      <td><?php echo($row["subject_code"]); ?></td>
+                      <td><?php echo($row["teacher"]); ?></td>
+                      <td><?php echo($row["from_time"] . " - " . $row["to_time"]); ?></td>
+                      <td><?php echo($row["first_grading"]); ?></td>
+                      <td><?php echo($row["second_grading"]); ?></td>
+                      <td><?php echo($row["third_grading"]); ?></td>
+                      <td><?php echo($row["fourth_grading"]); ?></td>
+                      <td><?php echo($row["average"]); ?></td>
+                      <td><?php echo($row["remarks"]); ?></td>
 
-                    <tr>
-                  
-                      <td>SUB2010-503</td>
-                      <td>FIL 1</td>
-                      <td>Filipino to the Moon</td>
-                      <td>Ms. Brenda Mage</td>
-                      <td>09:30 - 10:30 AM</td>
-                      <td>94</td>
-                      <td>91</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
                     </tr>
-                   
-                  
-                
-                   
-                 
+                  <?php endforeach; ?>
                   </tbody>
               
                 </table>
                     <!-- /.post -->
                   </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="history">
-                    <!-- The timeline -->
-                  <table id="" class="table exampleDatatable table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Code</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Level</th>
-                    <th>SY</th>
-                    <th>Final Grade</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>SUB2010-101</td>
-                      <td>Eng101</td>
-                      <td>Grammars</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>99</td>
-                    </tr>
-                    <tr>
-                      <td>SUB2010-102</td>
-                      <td>CIV01</td>
-                      <td>History of the Philippines</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>94</td>
-                    </tr>
-                    <tr>
-                      <td>SUB2010-103</td>
-                      <td>PE1</td>
-                      <td>Chess</td>
-                      <td>Grade 1</td>
-                      <td>2022-2023</td>
-                      <td>99</td>
-                    </tr>
-               
+                  <div class="tab-pane" id="profile">
 
-           
-                  
-                
-                   
-                 
-                  </tbody>
-              
-                </table>
+
+                  <table class="table" id="sectionTable">
+                    <tr>
+                      <th>Student Name:</th>
+                      <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
+                      <th>Grade Level:</th>
+                      <td><?php echo($enrollment[0]["grade_level"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Address:</th>
+                      <td><?php echo($student["province"] . " , " . $student["city_mun"] . " , " . $student["barangay"] . " , " . $student["address"]); ?></td>
+                      <th>Sex:</th>
+                      <td><?php echo($student["sex"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Birth Date:</th>
+                      <td><?php echo($student["birthDate"]); ?></td>
+                      <th>Birth Place:</th>
+                      <td><?php echo($student["birthPlace"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Religion:</th>
+                      <td><?php echo($student["religion"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th colspan="4">-</th>
+                    </tr>
+
+                    <tr>
+                      <th>Father:</th>
+                      <td><?php echo($student["father_lastname"] . ", " . $student["father_firstname"]); ?></td>
+                      <th>Contact / FB:</th>
+                      <td><?php echo($student["father_contact"] . " / " . $student["father_fb"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Occupation:</th>
+                      <td><?php echo($student["father_occupation"]); ?></td>
+                      <th>Educational Attainment:</th>
+                      <td><?php echo($student["father_education"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th colspan="4">-</th>
+                    </tr>
+
+                    <tr>
+                      <th>Mother:</th>
+                      <td><?php echo($student["mother_lastname"] . ", " . $student["mother_firstname"]); ?></td>
+                      <th>Contact / FB:</th>
+                      <td><?php echo($student["mother_contact"] . " / " . $student["mother_fb"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Occupation:</th>
+                      <td><?php echo($student["mother_occupation"]); ?></td>
+                      <th>Educational Attainment:</th>
+                      <td><?php echo($student["mother_education"]); ?></td>
+                    </tr>
+                  </table>
+                  <hr>
                   </div>
-                  <!-- /.tab-pane -->
-
                   <div class="tab-pane" id="soa">
-
-                  <div class="row">
-                    <div class="col-md-3">
-                    <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter School Year</option>
-                          <option value="">2023-2024</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                    
-                    </div>
-                    <div class="col-md-4">
-                    <div class="form-group">
-                      <?php if($_SESSION["sunbeam_app"]["role"] == "admin"): ?>
-                        <a href="#" data-toggle="modal" data-target="#modalPayment" class="btn btn-info ">Add Payment</a>
-                      <?php else: ?>
-                        <a href="#" data-toggle="modal" data-target="#modalPaymentStudent" class="btn btn-info ">Add Payment</a>
-                      <?php endif; ?>
-                        <a href="#" data-toggle="modal" data-target="modalPayment" class="btn btn-success ">View SoA</a>
-                      </div>
-                    </div>
-                  </div>
-                    
-                  <table id="" class="table exampleDatatable table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Date Paid</th>
-                    <th>Type Transaction</th>
-                    <th>Remarks</th>
-                    <th>OR #</th>
-                    <th>Amount</th>
-                    <th>Balance</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                   
-                    <tr>
-                      <td>06/01/2023</td>
-                      <td>Over the Counter</td>
-                      <td>Done</td>
-                      <td>#01011</td>
-                      <td class="text-right">2,150.00</td>
-                      <td class="text-right">13,760.00</td>
-                    </tr>
-
-                    <tr>
-                      <td>07/15/2023</td>
-                      <td>Online - GCASH</td>
-                      <td>PENDING</td>
-                      <td>#01011</td>
-                      <td class="text-right">2,150.00</td>
-                      <td class="text-right">13,760.00</td>
-                    </tr>
-                  
-               
-
-           
-                  
-                
-                   
-                 
-                  </tbody>
-              
-                </table>
+                  <form class="generic_form_trigger" data-url="enrollment">
+                          <input type="hidden" name="action" value="printSOA">
+                          <input type="hidden" name="enrollment_id" value="<?php echo($enrollment[0]["enrollment_id"]); ?>">
+                          <button type="submit"class="btn btn-info">Print Statement of Account</button>
+                        </form>
                   </div>
                   <!-- /.tab-pane -->
                 </div>
@@ -414,9 +268,13 @@
           <!-- /.col -->
         </div>
       </div>
+
+      <?php endif; ?>
     </section>
+
     <!-- /.content -->
   </div>
+
 
   <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

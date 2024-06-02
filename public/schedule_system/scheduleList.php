@@ -220,13 +220,14 @@
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th width="8%">Action</th>
                     <th>SY</th>
                     <th>Level</th>
                     <th>Section</th>
                     <th>Subject</th>
                     <th>Teacher</th>
                     <th>Schedule</th>
+                    <th width="8%">Action</th>
+
                   </tr>
                   </thead>
                 </table>
@@ -282,13 +283,14 @@ $('.select2').select2({
                      }
                 },
                 'columns': [
-                    { data: 'action', "orderable": false },
                     { data: 'school_year', "orderable": false  },
                     { data: 'grade_level', "orderable": false  },
                     { data: 'section', "orderable": false  },
                     { data: 'subject', "orderable": false  },
                     { data: 'teacher', "orderable": false  },
                     { data: 'time_schedule', "orderable": false  },
+                    { data: 'action', "orderable": false },
+
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;

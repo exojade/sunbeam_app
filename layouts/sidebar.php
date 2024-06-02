@@ -6,15 +6,13 @@
 
 .sidebar-dark-primary{
 
-  background-color: #712F79 !important;
+  background-color: #42a1ff !important;
   color: #fff;
 }
 .sidebar-dark-primary a{
   color: #fff !important;
 }
 </style>
-
-
 <aside class="main-sidebar sidebar-dark-primary elevation-4" >
     <!-- Brand Logo -->
     <div class="user-panel mt-3 pb-3 mb-3 text-center">
@@ -44,24 +42,45 @@
   </li>
 
   <li class="nav-item">
-      <a href="subjects" class="nav-link">
-        <i class="nav-icon fas fa-book"></i>
-        <p>
-          Subjects
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Data Entry Lib
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="subjects" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Subjects</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="section" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sections</p>
+                </a>
+              </li>
 
-  <li class="nav-item">
-      <a href="section" class="nav-link">
-        <i class="nav-icon fas fa-school"></i>
-        <p>
-          Sections
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
+              <li class="nav-item">
+                <a href="teacher" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Teachers</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="student" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Student Masterlist File</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+
+
 
   <li class="nav-item">
       <a href="advisory" class="nav-link">
@@ -73,25 +92,6 @@
       </a>
   </li>
 
-  <li class="nav-item">
-      <a href="student" class="nav-link">
-        <i class="nav-icon fas fa-graduation-cap"></i>
-        <p>
-          Students
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
-
-  <li class="nav-item">
-      <a href="teacher" class="nav-link">
-        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-        <p>
-          Teachers
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
 
   <li class="nav-item">
       <a href="schedule" class="nav-link">
@@ -108,6 +108,16 @@
         <i class="nav-icon fas fa-receipt"></i>
         <p>
           Enrollment
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="users" class="nav-link">
+        <i class="nav-icon fas fa-users"></i>
+        <p>
+          Users
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -133,6 +143,7 @@
         </p>
       </a>
   </li>
+
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "teacher"): ?>
 
 <li class="nav-item">
@@ -149,7 +160,7 @@
     <a href="schedule" class="nav-link">
       <i class="nav-icon fas fa-calendar"></i>
       <p>
-        Class Schedule
+        Classrooms
         <span class="right badge badge-danger"></span>
       </p>
     </a>

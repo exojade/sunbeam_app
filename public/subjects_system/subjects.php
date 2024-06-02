@@ -21,7 +21,13 @@
 				endif;
 				$i = 0;
 				foreach($data as $row):
-					$data[$i]["action"] = '<a href="#" data-toggle="modal" data-target="#medicalRecordModal" data-id="'.$row["subject_id"].'" class="btn btn-block btn-sm btn-success">Open Record</a>';
+					$data[$i]["action"] = '
+					<div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                        <button type="button" class="btn btn-sm btn-warning">Update</button>
+                      </div>
+					
+					';
 					$i++;
 				endforeach;
 				$json_data = array(

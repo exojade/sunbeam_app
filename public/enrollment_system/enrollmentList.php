@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-
+<link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
+<link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -31,27 +31,31 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
-                <div class="row">
-                    <div class="col-md-3">
+              <div class="row">
+                    <!-- <div class="col-md-3">
                       <div class="form-group">
                         <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Grade Level</option>
-                          <option value="">Grade 1</option>
-                          <option value="">Grade 2</option>
-                          <option value="">Grade 3</option>
-                          <option value="">Grade 4</option>
-                          <option value="">Grade 5</option>
-                          <option value="">Grade 6</option>
+                          <option selected disabled value="">Filter School Year</option>
+                          <option value="">2023-2024</option>
                         </select>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-3">
                       <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Section</option>
-                          <option value="">Section Apple</option>
-                          <option value="">Section Orange</option>
-                          <option value="">Section Grapes</option>
+                        <select required id="studentSelect" class="form-control select2 selectFilter">
+                          <option selected value="">Search Student</option>
+                          <?php
+                          // dump($sy);
+                          $student = query("select s.student_id, concat(lastname, ', ' , firstname) as student_name from enrollment e
+                                            left join student s
+                                            on s.student_id = e.student_id
+                                            where e.syid = ?
+                                            ", $sy["syid"]);
+                          // dump($student);
+                          ?>
+                          <?php foreach($student as $row): ?>
+                            <option value="<?php echo($row["student_id"]); ?>"><?php echo($row["student_name"]); ?></option>
+                          <?php endforeach; ?>
                         </select>
                       </div>
                     </div>
@@ -62,13 +66,13 @@
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>#</th>
                     <th>Code</th>
                     <th>Student Name</th>
                     <th>Grade Level</th>
                     <th>Section</th>
                     <th>Adviser</th>
                     <th>Balance</th>
+                    <th>Action</th>
                   </tr>
                   </thead>
               
@@ -83,7 +87,7 @@
     </section>
     <!-- /.content -->
   </div>
-
+  <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -98,6 +102,10 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
+
+
+$('.select2').select2({
+    });
 
 var datatable = 
             $('#ajaxDatatable').DataTable({
@@ -120,13 +128,14 @@ var datatable =
                      }
                 },
                 'columns': [
-                    { data: 'action', "orderable": false },
                     { data: 'student_id', "orderable": false  },
                     { data: 'student', "orderable": false  },
                     { data: 'grade_level', "orderable": false  },
                     { data: 'section', "orderable": false  },
                     { data: 'teacher', "orderable": false  },
                     { data: 'balance', "orderable": false  },
+                    { data: 'action', "orderable": false },
+
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;
@@ -151,7 +160,10 @@ var datatable =
                 }
             });
 
-
+            $('.selectFilter').on('change', function() {
+              var student_id = $('#studentSelect').val() || "";
+              datatable.ajax.url('enrollment?action=enrollmentList&student_id='+student_id).load();
+              });
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }

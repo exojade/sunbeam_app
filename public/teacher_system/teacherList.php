@@ -18,7 +18,6 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTeacher">Add Teacher</button>
             </ol>
           </div>
-        
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -230,9 +229,9 @@
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th width="10%">Action</th>
                     <th>Code</th>
                     <th>Teacher Name</th>
+                    <th width="10%">Action</th>
                   </tr>
                   </thead>
                
@@ -289,9 +288,10 @@ var datatable =
                      }
                 },
                 'columns': [
-                    { data: 'action', "orderable": false },
                     { data: 'teacher_id', "orderable": false  },
                     { data: 'teacher_name', "orderable": false  },
+                    { data: 'action', "orderable": false },
+
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;

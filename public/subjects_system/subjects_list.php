@@ -70,10 +70,11 @@
               <div class="card-body">
                 <table id="ajax_datatable" class="table table-bordered table-striped">
                   <thead>
-                    <th>Action</th>
                     <th>Subject</th>
                     <th>Description</th>
                     <th>Grade Level</th>
+                    <th>Action</th>
+
                   </thead>
                 </table>
               </div>
@@ -125,10 +126,11 @@ var datatable =
                      }
                 },
                 'columns': [
-                    { data: 'action', "orderable": false },
                     { data: 'subject_code', "orderable": false  },
                     { data: 'subject_title', "orderable": false  },
                     { data: 'subject_description', "orderable": false  },
+                    { data: 'action', "orderable": false },
+
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;

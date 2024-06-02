@@ -2,7 +2,6 @@
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 
 		if($_POST["action"] == "addUser"){
-
 			// dump($_FILES);
 			$fullname = $_POST["username"];
 			$fullname = str_replace(' ', '_', $fullname);
@@ -20,8 +19,6 @@
                     }
 			
 			}
-
-
 			$user_id = create_uuid("USR");
 			if (query("insert INTO users (user_id, username, password, role, 
 						fullname,status, gender,address) 
@@ -51,16 +48,11 @@
 
 			
 		}
-		
     }
 	else {
-
-
-		if($_GET["action"] == "users_list"){
 			$users = query("select * from users");
 			render("public/users_system/users_list.php",[
 				"users" => $users,
 			]);
-		}
 	}
 ?>
