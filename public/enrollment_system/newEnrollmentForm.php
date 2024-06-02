@@ -214,7 +214,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Contact Info</span></label>
                         <div class="col-sm-5">
-                          <input placeholder="Enter Contact Info (Mobile)" name="father_contact" type="text" class="form-control" id="inputEmail3" >
+                          <input placeholder="Enter Contact Info (Mobile)"  data-inputmask='"mask": "(+63) 9999999999"' data-mask name="father_contact" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-5">
                           <input placeholder="Enter Facebook Account" name="father_fb" type="text" class="form-control" id="inputEmail3" >
@@ -257,10 +257,45 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Contact Info</span></label>
                         <div class="col-sm-5">
-                          <input placeholder="Enter Contact Info (Mobile)" name="mother_contact" type="text" class="form-control" id="inputEmail3" >
+                          <input  data-inputmask='"mask": "(+63) 9999999999"' data-mask placeholder="Enter Contact Info (Mobile)" name="mother_contact" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-5">
                           <input placeholder="Enter Facebook Account" name="mother_fb" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+                      <hr>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Name</span></label>
+                        <div class="col-sm-3">
+                          <input required placeholder="First Name" name="guardian_firstname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-3">
+                          <input  placeholder="Middle Name" name="guardian_middlename" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                        <div class="col-sm-4">
+                          <input  placeholder="Last Name" name="guardian_lastname" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                      </div>
+
+
+
+                    
+
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Contact Info</span></label>
+                        <div class="col-sm-10">
+                          <input  data-inputmask='"mask": "(+63) 9999999999"' data-mask placeholder="Enter Contact Info (Mobile)" name="guardian_contact" type="text" class="form-control" id="inputEmail3" >
+                        </div>
+                   
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Occupation</span></label>
+                        <div class="col-sm-10">
+                          <input required placeholder="---" name="guardian_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
                   
@@ -435,6 +470,7 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script src="AdminLTE_new/plugins/inputmask/jquery.inputmask.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script type="text/javascript" src="node_modules/philippine-location-json-for-geer/build/phil.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.1.0/autoNumeric.min.js"></script>
@@ -442,7 +478,7 @@
 
 
   <script>
-
+  $('[data-mask]').inputmask()
 
 
             // Function to initialize AutoNumeric on new amount fields

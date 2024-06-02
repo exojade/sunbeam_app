@@ -58,12 +58,18 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					father_occupation,
 					father_education,
 					mother_occupation,
-					mother_education
+					mother_education,
+					guardian_firstname,
+					guardian_middlename,
+					guardian_lastname,
+					guardian_phone,
+					guardian_occupation
 					) 
 				VALUES(
 					?,?,?,?,?,?,?,?,?,?,
 					?,?,?,?,?,?,?,?,?,?,
-					?,?,?,?,?,?,?,?,?
+					?,?,?,?,?,?,?,?,?,
+					?,?,?,?,?
 					)", 
 				$student_id,
 				$_POST["firstname"],
@@ -94,6 +100,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$_POST["father_education"],
 				$_POST["mother_occupation"],
 				$_POST["mother_education"],
+				$_POST["guardian_firstname"],
+				$_POST["guardian_middlename"],
+				$_POST["guardian_lastname"],
+				$_POST["guardian_contact"],
+				$_POST["guardian_occupation"]
 			);
 
 			$enrollmentId = create_trackid("ENR");
@@ -374,6 +385,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$sheet->setCellValue("G48", strtoupper($student["mother_education"]));
 			$sheet->setCellValue("B49", strtoupper($student["father_contact"]));
 			$sheet->setCellValue("B50", strtoupper($student["father_fb"]));
+
+			$sheet->setCellValue("A52", strtoupper($student["guardian_lastname"]));
+			$sheet->setCellValue("C52", strtoupper($student["guardian_firstname"]));
+			$sheet->setCellValue("E52", strtoupper($student["guardian_middlename"]));
+			$sheet->setCellValue("H52", strtoupper($student["guardian_occupation"]));
+			$sheet->setCellValue("H53", strtoupper($student["guardian_phone"]));
 
 
 			if($student["sex"] == "Male"):
