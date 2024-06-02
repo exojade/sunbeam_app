@@ -87,7 +87,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                     <div class="fetched-data"></div>
                     <br>
                       <div class="box-footer">
-                        <button type="button" class=" btn btn-primary btn-flat pull-right" data-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="button" class=" btn btn-danger btn-flat pull-right" data-dismiss="modal" aria-label="Close">Close</button>
                         <button type="submit" class="btn btn-primary btn-flat pull-right">Submit</button>
                       </div>
                   </form>

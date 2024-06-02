@@ -48,18 +48,22 @@ $enrollment = query("select * from enrollment where student_id = ? and syid = ?"
                       left join teacher t
                       on t.teacher_id = a.teacher_id
                       where a.advisory_id = ?", $enrollment[0]["advisory_id"]);
+  $grades = [];
+  if(!empty($advisory)):
+    $grades = query("select g.*, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
+    sub.subject_code, sched.*
+    from student_grades g
+    left join schedule sched
+    on sched.schedule_id = g.schedule_id
+    left join subjects sub
+    on sub.subject_id = sched.subject_id
+    left join teacher t
+    on t.teacher_id = sched.teacher_id
+    where g.student_id = ? and g.advisory_id = ?", $_SESSION["sunbeam_app"]["userid"], $advisory[0]["advisory_id"]);
+  $advisory = $advisory[0];
+  endif;
 
-  $grades = query("select g.*, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
-                  sub.subject_code, sched.*
-                  from student_grades g
-                  left join schedule sched
-                  on sched.schedule_id = g.schedule_id
-                  left join subjects sub
-                  on sub.subject_id = sched.subject_id
-                  left join teacher t
-                  on t.teacher_id = sched.teacher_id
-                  where g.student_id = ? and g.advisory_id = ?", $_SESSION["sunbeam_app"]["userid"], $advisory[0]["advisory_id"]);
-$advisory = $advisory[0];
+  
   ?>
       <div class="container-fluid">
         <div class="row mb-2">
@@ -73,16 +77,22 @@ $advisory = $advisory[0];
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-
-
-
-
-
-
         <div class="row">
           <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
+
+            <?php if(empty($advisory)): ?>
+              <div class="alert alert-danger alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                  You are not yet enrolled to a class. Kindly wait for the administrator to enroll you to an advisory class!
+                </div>
+            <?php endif; ?>
+
+
+
+
             <div class="card card-info">
               <div class="card-header">
                 <h3 class="card-title">Student Information</h3>
@@ -100,14 +110,30 @@ $advisory = $advisory[0];
                     <div class="col-md-10">
                     <table class="table" id="sectionTable">
                     <tr>
+                      <th>Student Learner ID:</th>
+                      <td><?php echo($student["student_id"]); ?></td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                    <tr>
                       <th>Student Name:</th>
                       <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
                       <th>Adviser:</th>
-                      <td><?php echo($advisory["adviser"]); ?></td>
+
+                      <?php if(empty($advisory)): ?>
+                        <td></td>
+                      <?php else: ?>
+                        <td><?php echo($advisory["adviser"]); ?></td>
+                      <?php endif ?>
                     </tr>
                     <tr>
                       <th>Grade Level:</th>
-                      <td><?php echo($enrollment[0]["grade_level"] . " - " . $advisory["section"]); ?></td>
+                      <?php if(empty($advisory)): ?>
+                        <td><?php echo($enrollment[0]["grade_level"]); ?></td>
+                      <?php else: ?>
+                        <td><?php echo($enrollment[0]["grade_level"] . " - " . $advisory["section"]); ?></td>
+                      <?php endif ?>
+                      
                       <th>School Year:</th>
                       <td><?php echo($sy["school_year"]); ?></td>
                     </tr>
@@ -143,7 +169,6 @@ $advisory = $advisory[0];
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Subjects / Grades</a></li>
                   <li class="nav-item"><a class="nav-link" href="#profile" data-toggle="tab">Profile</a></li>
                   <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
@@ -181,7 +206,6 @@ $advisory = $advisory[0];
                       <td><?php echo($row["fourth_grading"]); ?></td>
                       <td><?php echo($row["average"]); ?></td>
                       <td><?php echo($row["remarks"]); ?></td>
-
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -194,6 +218,7 @@ $advisory = $advisory[0];
 
 
                   <table class="table" id="sectionTable">
+                 
                     <tr>
                       <th>Student Name:</th>
                       <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>

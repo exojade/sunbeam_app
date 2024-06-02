@@ -224,7 +224,7 @@
 				foreach($grades as $row):
 					$hint.='<tr>';
 						$hint.='<td>'.$row["student"].'</td>';
-						$hint.='<td><input placeholder="Enter Grade Here" type="number" class="form-control" name="'.$row["student_id"].'" value="'.$row[$grading].'"></td>';
+						$hint.='<td><input placeholder="Enter Grade Here" type="number" min="60" max="100" class="form-control" name="'.$row["student_id"].'" value="'.$row[$grading].'"></td>';
 					$hint.='</tr>';
 				endforeach;
 			$hint.='</tbody>

@@ -14,14 +14,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$_POST["tuition_fee"] = filterize($_POST["tuition_fee"]);
 			$_POST["misc_fee"] = filterize($_POST["misc_fee"]);
 			$_POST["downpayment"] = filterize($_POST["downpayment"]);
-			
 			$i=0;
 			foreach($_POST["account"] as $row):
 				$_POST["amount"][$i] = filterize($_POST["amount"][$i]);
 				$i++;
 			endforeach;
-
-
 
 			$currSY = query("select * from school_year where active_status = 'ACTIVE'");
 			$currSY = $currSY[0]["syid"];
@@ -426,7 +423,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 								left join section s
 								on s.section_id = a.section_id
 								where advisory_id = ?", $enrollment["advisory_id"]);
-			$advisory = $advisory[0];
+
+			if(!empty($advisory)):
+				$advisory = $advisory[0];
+			endif;
+
+			
 			$downpayment = query("select * from payment where enrollment_id = ? and remarks='DOWNPAYMENT'", $_POST["enrollment_id"]);
 			$downpayment = $downpayment[0];
 
@@ -501,11 +503,21 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					<h1 style="margin-top:-10px;" class="text-center"><b>STATEMENT OF ACCOUNT</b></h1>
 					<br>
 					<div class="row">
-						<div class="col-xs-6">
-							<h5><b>Student Name:</b> '.$student["lastname"] . ", " . $student["firstname"].'</h5>
+					<div class="col-xs-12">
+							<h5><b>STUDENT LEARNER ID:</b> '.$student["student_id"].'</h5>
 						</div>
-						<div class="col-xs-4">
-							<h5><b>Class:</b> '.$enrollment["grade_level"] . " - " . $advisory["section"].'</h5>
+						<div class="col-xs-6">
+							<h5><b>STUDENT NAME:</b> '.$student["lastname"] . ", " . $student["firstname"].'</h5>
+						</div>
+						<div class="col-xs-4">';
+
+						if(!empty($advisory)):
+							$html.='<h5><b>CLASS:</b> '.$enrollment["grade_level"] . " - " . $advisory["section"].'</h5>';
+						else:
+							$html.='<h5><b>CLASS:</b> '.$enrollment["grade_level"].'</h5>';
+						endif;
+
+						$html.='
 						</div>
 					</div>
 					<br>
@@ -519,7 +531,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						foreach($enrollment_fees as $row):
 							$total+=$row["amount"];
 							$html.='<tr>';
-								$html.='<td>'.$row["fee"].'</td>';
+								$html.='<td><b>'.$row["fee"].'</b></td>';
 								$html.='<td class="text-right">'.to_peso($row["amount"]).'</td>';
 							$html.='</tr>';
 							

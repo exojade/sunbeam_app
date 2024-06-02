@@ -56,6 +56,26 @@
       </div><!-- /.container-fluid -->
     </section>
 
+
+    <div class="modal fade" id="gradesModal">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content ">
+              <div class="modal-header bg-info">
+					    <h3 class="modal-title text-center">Grades Modal</h3>
+              </div>
+              <div class="modal-body" style="-webkit-user-select: none;  /* Chrome all / Safari all */
+              -moz-user-select: none;     /* Firefox all */
+              -ms-user-select: none;  ">
+                    <div class="fetched-data"></div>
+                    <br>
+                      <div class="box-footer">
+                        <button type="button" class=" btn btn-danger btn-flat pull-right" data-dismiss="modal" aria-label="Close">Close</button>
+                      </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -111,6 +131,10 @@
 
             <!-- About Me Box -->
            
+            
+
+
+
      
           <!-- /.col -->
           <div class="col-md-12">
@@ -163,8 +187,11 @@
                     <?php foreach($students as $row): ?>
                       <tr>
                         <td>
-                          <a href="section?action=specific" class="btn btn-danger btn-sm ">Remove</a>
-                          <a href="section?action=specific" class="btn btn-info btn-sm ">Visit</a>
+                          <a href="#" 
+                          data-student_id="<?php echo($row["student_id"]); ?>" 
+                          data-advisory_id="<?php echo($advisory["advisory_id"]); ?>" 
+                          data-toggle="modal" 
+                          data-target="#gradesModal" class="btn btn-info btn-block btn-sm ">View Grades</a>
                         </td>
                         <td><?php echo($row["student_id"]); ?></td>
                         <td><?php echo($row["student"]); ?></td>
@@ -192,7 +219,7 @@
                                                 left join teacher t
                                                 on s.teacher_id = t.teacher_id
                                                 where s.advisory_id = ?
-                                                order by from_time asc", $_GET["id"]); ?>
+                                                order by STR_TO_DATE(from_time, '%h:%i %p') asc", $_GET["id"]); ?>
 
                       <?php foreach($schedules as $row): 
                         
@@ -310,6 +337,30 @@
   <script>
 
 $('.select2').select2({});
+
+
+
+$('#gradesModal').on('show.bs.modal', function (e) {
+        var advisory_id = $(e.relatedTarget).data('advisory_id');
+        var student_id = $(e.relatedTarget).data('student_id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'advisory', //Here you will fetch records 
+            data: {
+              advisory_id: advisory_id,
+              student_id: student_id,
+               action: "gradesModal"
+            },
+            success : function(data){
+                $('#modalUpdateGrades .fetched-data').html(data);
+                Swal.close();
+                // $(".select2").select2();//Show fetched data from database
+            }
+        });
+     });
+
+
 
 $('.exampleDatatable').DataTable({
   "ordering": false,
