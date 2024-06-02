@@ -1,5 +1,9 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -10,7 +14,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD USER</button>
+            <!-- <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD USER</button> -->
             </ol>
           </div>
         </div>
@@ -149,8 +153,24 @@
     <!-- /.content -->
   </div>
 
-  <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="AdminLTE_new/plugins/jszip/jszip.min.js"></script>
+  <script src="AdminLTE_new/plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="AdminLTE_new/plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script>
+
+
+$('#example1').DataTable({
+  ordering: false
+    });
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }
