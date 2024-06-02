@@ -103,9 +103,64 @@
 				echo json_encode($res_arr); exit();
 		
 
+		elseif($_POST["action"] == "gradesModal"):
+			// dump($_POST);
+			$student = query("select * from student where student_id = ?", $_POST["student_id"]);
+			$student = $student[0];
 
+			$grades = query("select g.*,
+							sub.subject_code, sched.*,
+							concat(teacher_lastname, ', ', teacher_firstname) as teacher
+							from student_grades g
+							left join advisory a
+							on a.advisory_id = g.advisory_id
+							left join schedule sched
+							on sched.schedule_id = g.schedule_id
+							left join subjects sub
+							on sub.subject_id = sched.subject_id
+							left join teacher t
+							on t.teacher_id = sched.teacher_id
+							where g.student_id = ? and g.advisory_id = ?
+							order by STR_TO_DATE(from_time, '%h:%i %p')
+						",$_POST["student_id"], $_POST["advisory_id"]);
 
+			$html = '';
+			$html = $html . '
+			<h4>Student: '.$student["student_id"]. ' - ' . $student["lastname"] . ', ' . $student["firstname"]. '</h4>
+			';
 
+			$html.='
+			<table class="table table-bordered">
+				<thead>
+					<th>Subject</th>
+					<th>Schedule</th>
+					<th>Teacher</th>
+					<th>G1</th>
+					<th>G2</th>
+					<th>G3</th>
+					<th>G4</th>
+					<th>Ave</th>
+					<th>Remarks</th>
+				</thead>
+				<tbody>';
+				foreach($grades as $row):
+					$html .='<tr>';
+						$html .='<td>'.$row["subject_code"].'</td>';
+						$html .='<td>'.$row["from_time"] . ' - ' . $row["to_time"] .'</td>';
+						$html .='<td>'.$row["teacher"] .'</td>';
+						$html .='<td>'.$row["first_grading"] .'</td>';
+						$html .='<td>'.$row["second_grading"] .'</td>';
+						$html .='<td>'.$row["third_grading"] .'</td>';
+						$html .='<td>'.$row["fourth_grading"] .'</td>';
+						$html .='<td>'.$row["average"] .'</td>';
+						$html .='<td>'.$row["remarks"] .'</td>';
+					$html .='</tr>';
+				endforeach;
+			$html .='	</tbody>
+			</table>
+			';
+			// dump($html);
+			echo($html);
 
 		endif;
     }

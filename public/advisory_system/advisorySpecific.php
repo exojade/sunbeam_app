@@ -353,7 +353,7 @@ $('#gradesModal').on('show.bs.modal', function (e) {
                action: "gradesModal"
             },
             success : function(data){
-                $('#modalUpdateGrades .fetched-data').html(data);
+                $('#gradesModal .fetched-data').html(data);
                 Swal.close();
                 // $(".select2").select2();//Show fetched data from database
             }
