@@ -43,7 +43,7 @@
 <body>
     <section>
         <div class="imgBox">
-            <img src="public/static_system/uploads\loginbg.jpg">
+            <img src="resources\bg.jpg">
         </div>
 
         <div class="contentBox">  
