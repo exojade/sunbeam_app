@@ -113,8 +113,13 @@
                       <td><?php echo($row["status"]); ?></td>
                       <td width="10%">
                       <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                        <button type="button" class="btn btn-sm btn-warning">Update</button>
+                      <button type="button" class="btn btn-flat btn-sm btn-warning">Update</button>
+
+                        <form class="generic_form_trigger" data-url="section" style="display:inline;">
+                          <input type="hidden" name="action" value="deleteSection">
+                          <input type="hidden" name="section_id" value="<?php echo($row["section_id"]); ?>">
+                        <button type="submit" class="btn btn-sm btn-flat btn-danger">Delete</button>
+                        </form>
                       </div>
                       </td>
                     </tr>

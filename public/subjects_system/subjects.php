@@ -23,8 +23,12 @@
 				foreach($data as $row):
 					$data[$i]["action"] = '
 					<div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                        <button type="button" class="btn btn-sm btn-warning">Update</button>
+                        <button type="button" class="btn btn-sm btn-flat btn-warning">Update</button>
+						<form class="generic_form_trigger" data-url="subjects" style="display:inline;">
+							<input type="hidden" name="action" value="deleteSubject">
+							<input type="hidden" name="subject_id" value="'.$row["subject_id"].'">
+							<button type="submit" class="btn btn-flat btn-sm btn-flat btn-danger">Delete</button>
+						</form>
                       </div>
 					
 					';
@@ -37,6 +41,31 @@
 					"aaData" => $data
 				);
 				echo json_encode($json_data);
+		elseif($_POST["action"] == "deleteSubject"):
+			$schedule = query("select * from schedule where subject_id = ?", $_POST["subject_id"]);
+			if(!empty($schedule)):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "Failed to Delete! Subject already been added to a schedule!",
+					// "link" => "schedule?action=gradeTeacher&id=".$_POST["schedule_id"],
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			else:
+				query("delete from subjects where subject_id = ?", $_POST["subject_id"]);
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Delete Successfully!",
+					"link" => "subjects",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+
+
+
 		elseif($_POST["action"] == "addSubject"):
 			// dump($_POST);
 			$subject_id = create_trackid("SUBJ");

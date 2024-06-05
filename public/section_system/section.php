@@ -19,6 +19,28 @@
 					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 					];
 					echo json_encode($res_arr); exit();
+		elseif($_POST["action"] == "deleteSection"):
+			$advisory = query("select * from advisory where section_id = ?", $_POST["section_id"]);
+			if(!empty($advisory)):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "Failed to Delete! Section already been added to an Advisory Class!",
+					// "link" => "schedule?action=gradeTeacher&id=".$_POST["schedule_id"],
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			else:
+				query("delete from section where section_id = ?", $_POST["section_id"]);
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Delete Successfully!",
+					"link" => "section",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			endif;
 
 		endif;
     }

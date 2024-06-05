@@ -148,8 +148,13 @@
 			$i = 0;
 			foreach($data as $row):
 				$data[$i]["action"] = '<div class="btn-group">
-				<button type="button" class="btn btn-sm btn-warning">Update</button>
-				<button type="button" class="btn btn-sm btn-danger">Delete</button>
+				<button type="button" class="btn btn-sm btn-flat btn-warning">Update</button>
+				<form class="generic_form_trigger" data-url="schedule" style="display:inline;">
+					<input type="hidden" name="action" value="deleteSchedule">
+					<input type="hidden" name="schedule_id" value="'.$row["schedule_id"].'">
+					<button type="submit" class="btn btn-sm btn-flat btn-danger">Delete</button>
+				</form>
+			
 			  </div>';
 			  $days_string = '';
 			if ($row["monday"] == 1) {
@@ -232,6 +237,32 @@
 			';
 
 			echo($hint);
+
+		elseif($_POST["action"] == "deleteSchedule"):
+			// dump($_POST);
+			$schedule = query("select * from schedule where schedule_id = ?", $_POST["schedule_id"]);
+			$students = query("select * from enrollment where advisory_id = ?", $schedule[0]["advisory_id"]);
+			if(!empty($students)):
+				$res_arr = [
+					"result" => "failed",
+					"title" => "Failed",
+					"message" => "Failed Deleting! Unenroll first students on this Advisory!",
+					// "link" => "schedule?action=gradeTeacher&id=".$_POST["schedule_id"],
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			else:
+				query("delete from schedule where schedule_id = ?", $_POST["schedule_id"]);
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Delete Successfully!",
+					"link" => "schedule",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+			endif;
+
 		elseif($_POST["action"] == "updateGrades"):
 			// dump($_POST);
 			$grades = query("select * from student_grades where schedule_id = ?", $_POST["schedule_id"]);
