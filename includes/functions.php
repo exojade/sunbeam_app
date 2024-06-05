@@ -9,16 +9,18 @@
     }
 
     function hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days) {
-        // dump($advisory_id);
-        // Check for conflicts based on the selected days
-        // Implement this according to your conflict checking logic
         foreach ($existingSchedules as $schedule) {
-            foreach ($days as $day => $selected) {
-                if ($selected && $schedule[$day] == 1 &&
-                    ($schedule['teacher_id'] == $teacher_id || $schedule['advisory_id'] == $advisory_id) &&
-                    (($start_time < $schedule['to_time'] && $end_time > $schedule['from_time']))
-                ) {
-                    return $schedule;
+            if ($schedule['teacher_id'] == $teacher_id || $schedule['advisory_id'] == $advisory_id) {
+                foreach ($days as $day => $isSet) {
+                    if ($isSet && $schedule[$day]) {
+                        if (
+                            ($start_time >= $schedule['from_time'] && $start_time < $schedule['to_time']) ||
+                            ($end_time > $schedule['from_time'] && $end_time <= $schedule['to_time']) ||
+                            ($start_time <= $schedule['from_time'] && $end_time >= $schedule['to_time'])
+                        ) {
+                            return $schedule;
+                        }
+                    }
                 }
             }
         }
