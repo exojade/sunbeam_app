@@ -77,7 +77,7 @@
 				"result" => "success",
 				"title" => "Success",
 				"message" => "Success on adding subject",
-				"link" => "refresh",
+				"link" => "subjects",
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];
 				echo json_encode($res_arr); exit();

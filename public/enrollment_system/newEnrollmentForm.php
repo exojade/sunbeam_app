@@ -269,7 +269,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Name</span></label>
                         <div class="col-sm-3">
-                          <input required placeholder="First Name" name="guardian_firstname" type="text" class="form-control" id="inputEmail3" >
+                          <input placeholder="First Name" name="guardian_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
                           <input  placeholder="Middle Name" name="guardian_middlename" type="text" class="form-control" id="inputEmail3" >
@@ -295,7 +295,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Occupation</span></label>
                         <div class="col-sm-10">
-                          <input required placeholder="---" name="guardian_occupation" type="text" class="form-control" id="inputEmail3" >
+                          <input placeholder="---" name="guardian_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
                   
