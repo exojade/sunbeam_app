@@ -40,6 +40,11 @@
 				require 'public/advisory_system/advisory.php';
 			else if ($request == 'grade')
 				require 'public/grade_system/grade.php';
+
+			else if ($request == 'fees')
+				require 'public/fees_system/fees.php';
+
+
 			else if ($request == 'settings')
 				require 'public/settings_system/settings.php';
 			else if ($request == 'static')

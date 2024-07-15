@@ -13,6 +13,9 @@
 			if($_GET["action"] == "specific"):
 				render("public/student_system/studentSpecific.php",[
 				]);
+				elseif($_GET["action"] == "parentsList"):
+					render("public/student_system/parentsList.php",[
+					]);
 			endif;
 		endif;
 	}

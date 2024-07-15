@@ -124,6 +124,17 @@
   </li>
 
   <li class="nav-item">
+      <a href="fees" class="nav-link">
+        <i class="nav-icon fas fa-database"></i>
+        <p>
+          Fees Database
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+  <li class="nav-item">
       <a href="settings" class="nav-link">
         <i class="nav-icon fas fa-cogs"></i>
         <p>
@@ -139,6 +150,29 @@
         <i class="nav-icon fas fa-user"></i>
         <p>
           Profile
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+  <?php elseif($_SESSION["sunbeam_app"]["role"] == "parent"): ?>
+
+  <li class="nav-item">
+      <a href="student?action=parentsList" class="nav-link">
+        <i class="nav-icon fas fa-graduation-cap"></i>
+        <p>
+          Students
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="student?action=specific" class="nav-link">
+        <i class="nav-icon fas fa-history"></i>
+        <p>
+          Payment History
           <span class="right badge badge-danger"></span>
         </p>
       </a>

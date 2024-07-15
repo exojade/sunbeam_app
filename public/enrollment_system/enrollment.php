@@ -386,11 +386,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$sheet->setCellValue("B49", strtoupper($student["father_contact"]));
 			$sheet->setCellValue("B50", strtoupper($student["father_fb"]));
 
-			$sheet->setCellValue("A52", strtoupper($student["guardian_lastname"]));
-			$sheet->setCellValue("C52", strtoupper($student["guardian_firstname"]));
-			$sheet->setCellValue("E52", strtoupper($student["guardian_middlename"]));
-			$sheet->setCellValue("H52", strtoupper($student["guardian_occupation"]));
-			$sheet->setCellValue("H53", strtoupper($student["guardian_phone"]));
+			$sheet->setCellValue("A52", !empty($student["guardian_lastname"]) ? strtoupper($student["guardian_lastname"]) : "");
+			$sheet->setCellValue("C52", !empty($student["guardian_firstname"]) ? strtoupper($student["guardian_firstname"]) : "");
+			$sheet->setCellValue("E52", !empty($student["guardian_middlename"]) ? strtoupper($student["guardian_middlename"]) : "");
+			$sheet->setCellValue("H52", !empty($student["guardian_occupation"]) ? strtoupper($student["guardian_occupation"]) : "");
+			$sheet->setCellValue("H53", !empty($student["guardian_phone"]) ? strtoupper($student["guardian_phone"]) : "");
 
 
 			if($student["sex"] == "Male"):

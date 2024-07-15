@@ -47,6 +47,9 @@ use Google\Service\Calendar;
 		else if($role == "student"){
 			render("public/student_system/studentSpecific.php",[]);
 		}
+		else if($role == "parent"){
+			render("public/student_system/studentSpecific.php",[]);
+		}
 		else if($role == "teacher"){
 			render("public/dashboard_system/dashboard_teacher.php",[]);
 		}

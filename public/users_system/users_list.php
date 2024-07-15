@@ -13,9 +13,7 @@
             <h1>Users</h1>
           </div>
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <!-- <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#add_user">ADD USER</button> -->
-            </ol>
+            <a href="#" class="btn btn-info float-right" data-toggle="modal" data-target="#addUserModal">Add User</a>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -23,69 +21,71 @@
 
     <!-- Main content -->
     <section class="content">
-    <div class="modal fade" id="add_user">
-        <div class="modal-dialog">
+    <div class="modal fade" id="addUserModal">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Default Modal</h4>
+            <div class="modal-header bg-info">
+              <h4 class="modal-title">Register User</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="users">
+              <form class="generic_form_files_trigger" autocomplete="off" role="form" enctype="multipart/form-data" data-url="users">
               <input type="hidden" name="action" value="addUser">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email address / Username</label>
-                <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
 
-              <div class="form-group">
-                <label for="exampleInputEmail1">Fullname</label>
+              <div class="row">
+                <div class="col-8">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address / Username <span class="color-red">*</span></label>
+                    <input required type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="---">
+                  </div>
+
+                  <div class="form-group">
+                <label for="exampleInputEmail1">Fullname <span class="color-red">*</span></label>
                 <input required type="text" name="fullname" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Address</label>
-                <input required type="text" name="address" class="form-control" id="exampleInputEmail1" placeholder="---">
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Gender</label>
-                <select required name="gender" class="form-control select2">
-                  <option selected disabled value="">Please select Gender</option>
-                  <option value="MALE">MALE</option>
-                  <option value="FEMALE">FEMALE</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Role</label>
-                <select required name="role" class="form-control select2">
-                  <option selected disabled value="">Please select Role</option>
-                  <option value="ADMIN">ADMIN</option>
-                  <option value="SPONSOR">SPONSOR</option>
-                  <option value="VALIDATOR">VALIDATOR</option>
-                  <option value="FACILITATOR">FACILITATOR</option>
-                </select>
               </div>
 
 
               <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Gender <span class="color-red">*</span></label>
+                    <select required name="gender" class="form-control select2">
+                      <option selected disabled value="">Please select Gender</option>
+                      <option value="MALE">MALE</option>
+                      <option value="FEMALE">FEMALE</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Role <span class="color-red">*</span></label>
+                    <select required name="role" class="form-control select2">
+                      <option selected disabled value="">Please select Role</option>
+                      <option value="admin">ADMIN</option>
+                      <option value="cashier">CASHIER</option>
+                      <option value="parent">PARENT</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+                </div>
+                <div class="col-4">
+                <div class="row">
                         <div class="col-12">
                         <div class="form-group">
                           <label for="Image" class="form-label">Profile Image</label>
                           <input accept="image/png, image/gif, image/jpeg" class="form-control" type="file" id="formFile" name="profile_image" onchange="preview()">
-                          <button onclick="clearImage()" type="button" class="btn btn-primary mt-3">Clear</button>
                       </div>
                         </div>
                         <div class="col-12">
-                        <img id="frame" src="" class="img-fluid" width="200" height="200" />
-
+                        <img id="frame" src="resources/default.jpg" class="img-fluid" style="border: 3px solid black; padding: 5px;" width="100%" height="150" />
+                        <button onclick="clearImage()" type="button" class="btn btn-block btn-sm btn-primary mt-3">Clear</button>
                         </div>
                       </div>
-
-             
+                </div>
+              </div>
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -176,7 +176,7 @@ $('#example1').DataTable({
             }
             function clearImage() {
                 document.getElementById('formFile').value = null;
-                frame.src = "";
+                frame.src = "resources/default.jpg";
             }
         </script>
   <?php require("layouts/footer.php") ?>

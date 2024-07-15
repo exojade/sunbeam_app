@@ -2,8 +2,9 @@
 require("includes/google_class.php"); 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
-		// dump($_POST);
+	
         $rows = query("SELECT * FROM users WHERE username = ?", $_POST["username"]);
+	
         if (count($rows) == 1)
         {
             $row = $rows[0];
