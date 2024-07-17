@@ -158,11 +158,23 @@
 
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "parent"): ?>
 
+    <li class="nav-item">
+      <a href="student?action=parentsList" class="nav-link">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>
+          Dashboard
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+
   <li class="nav-item">
       <a href="student?action=parentsList" class="nav-link">
         <i class="nav-icon fas fa-graduation-cap"></i>
         <p>
-          Students
+          Enrolled Students
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -173,6 +185,16 @@
         <i class="nav-icon fas fa-history"></i>
         <p>
           Payment History
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="student?action=parentsList" class="nav-link">
+        <i class="nav-icon fas fa-graduation-cap"></i>
+        <p>
+          All Students
           <span class="right badge badge-danger"></span>
         </p>
       </a>
