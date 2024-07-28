@@ -7,18 +7,18 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 		if($_POST["action"] == "newEnrollment"):
 			// dump($_POST);
-			$_POST["id_fee"] = filterize($_POST["id_fee"]);
-			$_POST["registration_fee"] = filterize($_POST["registration_fee"]);
-			$_POST["electricity_fee"] = filterize($_POST["electricity_fee"]);
-			$_POST["books_fee"] = filterize($_POST["books_fee"]);
-			$_POST["tuition_fee"] = filterize($_POST["tuition_fee"]);
-			$_POST["misc_fee"] = filterize($_POST["misc_fee"]);
-			$_POST["downpayment"] = filterize($_POST["downpayment"]);
-			$i=0;
-			foreach($_POST["account"] as $row):
-				$_POST["amount"][$i] = filterize($_POST["amount"][$i]);
-				$i++;
-			endforeach;
+			// $_POST["id_fee"] = filterize($_POST["id_fee"]);
+			// $_POST["registration_fee"] = filterize($_POST["registration_fee"]);
+			// $_POST["electricity_fee"] = filterize($_POST["electricity_fee"]);
+			// $_POST["books_fee"] = filterize($_POST["books_fee"]);
+			// $_POST["tuition_fee"] = filterize($_POST["tuition_fee"]);
+			// $_POST["misc_fee"] = filterize($_POST["misc_fee"]);
+			// $_POST["downpayment"] = filterize($_POST["downpayment"]);
+			// $i=0;
+			// foreach($_POST["account"] as $row):
+			// 	$_POST["amount"][$i] = filterize($_POST["amount"][$i]);
+			// 	$i++;
+			// endforeach;
 
 			$currSY = query("select * from school_year where active_status = 'ACTIVE'");
 			$currSY = $currSY[0]["syid"];
@@ -106,6 +106,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$_POST["guardian_contact"],
 				$_POST["guardian_occupation"]
 			);
+			// dump($_POST);
+
+			$advisory = query("select * from advisory where advisory_id = ?", $_POST["section"]);
+			$advisory = $advisory[0];
+
 
 			$enrollmentId = create_trackid("ENR");
 			query("insert INTO enrollment (
@@ -114,129 +119,129 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				syid,
 				student_id,
 				grade_level,
-				balance
+				advisory_id,
+				status
 				) 
-			VALUES(?,?,?,?,?,?)", 
+			VALUES(?,?,?,?,?,?,?)", 
 			$enrollmentId,
 			date("Y-m-d H:i:s"),
 			$currSY,
 			$student_id,
-			$_POST["grade_level"],
-			""
+			$advisory["grade_level"],
+			$_POST["section"],
+			"PENDING"
 		);
 
-		$EnrollmentFees = [];
+		// $EnrollmentFees = [];
 
 
-		$enrollment_fees["title"] = "ELECTRICITY FEE";
-		$enrollment_fees["amount"] = $_POST["electricity_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "ELECTRICITY FEE";
+		// $enrollment_fees["amount"] = $_POST["electricity_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$enrollment_fees["title"] = "REGISTRATION FEE";
-		$enrollment_fees["amount"] = $_POST["registration_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "REGISTRATION FEE";
+		// $enrollment_fees["amount"] = $_POST["registration_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$enrollment_fees["title"] = "BOOKS FEE";
-		$enrollment_fees["amount"] = $_POST["books_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "BOOKS FEE";
+		// $enrollment_fees["amount"] = $_POST["books_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$enrollment_fees["title"] = "TUITION FEE";
-		$enrollment_fees["amount"] = $_POST["tuition_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "TUITION FEE";
+		// $enrollment_fees["amount"] = $_POST["tuition_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$enrollment_fees["title"] = "ID / INSUR. FEE";
-		$enrollment_fees["amount"] = $_POST["id_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "ID / INSUR. FEE";
+		// $enrollment_fees["amount"] = $_POST["id_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$enrollment_fees["title"] = "MISCELLANEOUS FEE";
-		$enrollment_fees["amount"] = $_POST["misc_fee"];
-		$EnrollmentFees[] = $enrollment_fees;
+		// $enrollment_fees["title"] = "MISCELLANEOUS FEE";
+		// $enrollment_fees["amount"] = $_POST["misc_fee"];
+		// $EnrollmentFees[] = $enrollment_fees;
 
-		$i=0;
-		foreach($_POST["account"] as $row):
-			$enrollment_fees["title"] = $_POST["account"][$i];
-			$enrollment_fees["amount"] = $_POST["amount"][$i];
-			$EnrollmentFees[] = $enrollment_fees;
-			$i++;
-		endforeach;
+		// $i=0;
+		// foreach($_POST["account"] as $row):
+		// 	$enrollment_fees["title"] = $_POST["account"][$i];
+		// 	$enrollment_fees["amount"] = $_POST["amount"][$i];
+		// 	$EnrollmentFees[] = $enrollment_fees;
+		// 	$i++;
+		// endforeach;
 		// dump($EnrollmentFees);
-		$total = 0;
-		foreach($EnrollmentFees as $row):
-			$total += $row["amount"];
-			query("insert INTO enrollment_fees (
-				enrollment_id,
-				fee,
-				amount
-				) 
-			VALUES(?,?,?)", 
-			$enrollmentId,
-			$row["title"],
-			$row["amount"]
-		);
-		endforeach;
-		$balance = $total - $_POST["downpayment"];
-		$per_month = $balance / 10;
-		query("update enrollment set balance = ?, per_month = ? where enrollment_id = ?", $balance, $per_month ,$enrollmentId);
-		$paymentId = create_trackid("PAY");
-		query("insert INTO payment (
-			payment_id,
-			enrollment_id,
-			syid,
-			amount_paid,
-			date_paid,
-			method_of_payment,
-			or_number,
-			remarks,
-			paid_by
-			) 
-		VALUES(?,?,?,?,?,?,?,?,?)", 
-		$paymentId,
-		$enrollmentId,
-		$currSY,
-		$_POST["downpayment"],
-		date("Y-m-d H:i:s"),
-		"CASH",
-		$_POST["or_number"],
-		"DOWNPAYMENT",
-		$_POST["paid_by"],
-	);
+		// $total = 0;
+		// foreach($EnrollmentFees as $row):
+		// 	$total += $row["amount"];
+		// 	query("insert INTO enrollment_fees (
+		// 		enrollment_id,
+		// 		fee,
+		// 		amount
+		// 		) 
+		// 	VALUES(?,?,?)", 
+		// 	$enrollmentId,
+		// 	$row["title"],
+		// 	$row["amount"]
+		// );
+		// endforeach;
+	// 	$balance = $total - $_POST["downpayment"];
+	// 	$per_month = $balance / 10;
+	// 	query("update enrollment set balance = ?, per_month = ? where enrollment_id = ?", $balance, $per_month ,$enrollmentId);
+	// 	$paymentId = create_trackid("PAY");
+	// 	query("insert INTO payment (
+	// 		payment_id,
+	// 		enrollment_id,
+	// 		syid,
+	// 		amount_paid,
+	// 		date_paid,
+	// 		method_of_payment,
+	// 		or_number,
+	// 		remarks,
+	// 		paid_by
+	// 		) 
+	// 	VALUES(?,?,?,?,?,?,?,?,?)", 
+	// 	$paymentId,
+	// 	$enrollmentId,
+	// 	$currSY,
+	// 	$_POST["downpayment"],
+	// 	date("Y-m-d H:i:s"),
+	// 	"CASH",
+	// 	$_POST["or_number"],
+	// 	"DOWNPAYMENT",
+	// 	$_POST["paid_by"],
+	// );
 
-	$permonthfee = $balance / 10;
+	// $permonthfee = $balance / 10;
 
-	for ($i = 1; $i <= 10; $i++) {
-		query("insert INTO installment (
-			enrollment_id,
-			installment_number,
-			amount_due,
-			is_paid,
-			syid
-			) 
-		VALUES(?,?,?,?,?)", 
-		$enrollmentId,
-		$i,
-		$permonthfee,
-		0,
-		$currSY
-	);
-    }
-	query("insert INTO users (
-		id,
-		username,
-		password,
-		role,
-		active_remarks,
-		fullname
-		) 
-	VALUES(?,?,?,?,?,?)", 
-	$student_id,
-	$student_id,
-	password_hash("p@55word", PASSWORD_DEFAULT),
-	"student",
-	"active",
-	$_POST["lastname"] . ", " . $_POST["firstname"],
-);
-
-
+	// for ($i = 1; $i <= 10; $i++) {
+	// 	query("insert INTO installment (
+	// 		enrollment_id,
+	// 		installment_number,
+	// 		amount_due,
+	// 		is_paid,
+	// 		syid
+	// 		) 
+	// 	VALUES(?,?,?,?,?)", 
+	// 	$enrollmentId,
+	// 	$i,
+	// 	$permonthfee,
+	// 	0,
+	// 	$currSY
+	// );
+    // }
+// 	query("insert INTO users (
+// 		id,
+// 		username,
+// 		password,
+// 		role,
+// 		active_remarks,
+// 		fullname
+// 		) 
+// 	VALUES(?,?,?,?,?,?)", 
+// 	$student_id,
+// 	$student_id,
+// 	password_hash("p@55word", PASSWORD_DEFAULT),
+// 	"student",
+// 	"active",
+// 	$_POST["lastname"] . ", " . $_POST["firstname"],
+// );
 
 
 	$res_arr = [
@@ -263,6 +268,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$sy = $sy[0];
 
 			$where = " where syid = '".$sy["syid"]."'";
+
+			if($_SESSION["sunbeam_app"]["role"] == "cashier"):
+				$where .= " and status = 'PENDING'";
+			endif;
 
 		
 
@@ -308,16 +317,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 			$i = 0;
 			foreach($data as $row):
-				$data[$i]["action"] = '
-				<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-info btn-block">View</a>
-				';
+
+				if($_SESSION["sunbeam_app"]["role"] == "admin"):
+					$data[$i]["action"] = '
+						<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-info btn-block">View</a>
+					';
+				else:
+					$data[$i]["action"] = '
+						<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-warning btn-block">STEP 2</a>
+					';
+				endif;
 
 				$student = $Students[$row["student_id"]];
 
 				$data[$i]["student"] = $student["lastname"] .", " . $student["firstname"];		
 				$data[$i]["section"] = "";
 				$data[$i]["teacher"] = "";
-				$data[$i]["balance"] = to_peso($data[$i]["balance"]);
+				// $data[$i]["balance"] = to_peso($data[$i]["balance"]);
 				if(isset($Advisory[$row["advisory_id"]])):
 					$advisory = $Advisory[$row["advisory_id"]];
 					$teacher = $Teacher[$advisory["teacher_id"]];

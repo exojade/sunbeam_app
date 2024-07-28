@@ -40,7 +40,6 @@
         </p>
       </a>
   </li>
-
   <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -139,6 +138,18 @@
         <i class="nav-icon fas fa-cogs"></i>
         <p>
           Settings
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+  <?php elseif($_SESSION["sunbeam_app"]["role"] == "cashier"): ?>
+  <li class="nav-item">
+      <a href="enrollment" class="nav-link">
+        <i class="nav-icon fas fa-user"></i>
+        <p>
+          Enrollment
           <span class="right badge badge-danger"></span>
         </p>
       </a>

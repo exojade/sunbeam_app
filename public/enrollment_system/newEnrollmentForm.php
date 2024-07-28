@@ -135,21 +135,29 @@
                         </select>
                         </div>
                       </div>
+  
+
+                      <?php 
+                      // dump(get_defined_vars());
+                      
+                      $section = query("select *, a.grade_level as grade_level from advisory a
+                                              left join section s
+                                              on s.section_id = a.section_id
+                                              where school_year = ? order by a.grade_level asc", $sy["syid"]); 
+                      // dump($section);
+                                              
+                                              ?>
 
 
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Grade Level</span></label>
                         <div class="col-sm-8">
-                        <select required name="grade_level" class="form-control select2">
-                          <option selected disabled value="">Please select Grade Level</option>
-                          <option value="Kindergarten 1">Kindergarten 1</option>
-                          <option value="Kindergarten 2">Kindergarten 2</option>
-                          <option value="Grade 1">Grade 1</option>
-                          <option value="Grade 2">Grade 2</option>
-                          <option value="Grade 3">Grade 3</option>
-                          <option value="Grade 4">Grade 4</option>
-                          <option value="Grade 5">Grade 5</option>
-                          <option value="Grade 6">Grade 6</option>
+                        <select required name="section" class="form-control select2">
+                          <option selected disabled value="">Please select Section</option>
+                          <?php foreach($section as $row): ?>
+                            <option value="<?php echo($row["advisory_id"]); ?>"><?php echo($row["grade_level"] . " - " . $row["section"]); ?></option>
+                          <?php endforeach; ?>
+                  
                         </select>
                         </div>
                       </div>
@@ -302,7 +310,7 @@
 
                   <hr>
 
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col-md-6">
                      
                       <div class="form-group row">
@@ -411,10 +419,9 @@
                       </div>
                     </div>
                  
-                  </div>
+                  </div> -->
 
-
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col-md-8">
                       <div class="form-group">
                         <label>Paid By</label>
@@ -432,7 +439,7 @@
 
                 
                  
-                  </div>
+                  </div> -->
 
 
                 

@@ -13,12 +13,14 @@
             <h1>Enrollment Masterlist</h1>
             <small>For School Year: 2023 - 2024</small>
           </div>
+          <?php if($_SESSION["sunbeam_app"]["role"] == "admin"): ?>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
             <a href="enrollment?action=new" class="btn btn-primary">New Enrollee</a> &nbsp;&nbsp;
             <a href="enrollment?action=new" class="btn btn-warning">Re-Enroll</a>
             </ol>
           </div>
+          <?php endif; ?>
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -71,7 +73,7 @@
                     <th>Grade Level</th>
                     <th>Section</th>
                     <th>Adviser</th>
-                    <th>Balance</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -133,7 +135,7 @@ var datatable =
                     { data: 'grade_level', "orderable": false  },
                     { data: 'section', "orderable": false  },
                     { data: 'teacher', "orderable": false  },
-                    { data: 'balance', "orderable": false  },
+                    { data: 'status', "orderable": false  },
                     { data: 'action', "orderable": false },
 
                 ],
