@@ -44,6 +44,9 @@
 			else if ($request == 'fees')
 				require 'public/fees_system/fees.php';
 
+			else if ($request == 'studentAccounts')
+				require 'public/studentAccounts_system/studentAccounts.php';
+
 
 			else if ($request == 'settings')
 				require 'public/settings_system/settings.php';

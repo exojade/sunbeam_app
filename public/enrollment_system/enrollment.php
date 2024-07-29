@@ -355,6 +355,103 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
             );
             echo json_encode($json_data);
 
+			elseif($_POST["action"] == "proceedDownpayment"):
+				// dump($_POST);
+				$enrollment = query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
+				$fixedFees = query("select * from fees where grade_level = ?", $enrollment[0]["grade_level"]);
+				$otherFees = query("select * from enrollment_fees where enrollment_id = ?", $_POST["enrollment_id"]);
+
+				$total_fee = 0;
+				foreach($fixedFees as $row):
+					$total_fee += $row["fee_amount"];
+					query("insert INTO enrollment_fees (
+						enrollment_id,
+						fee,
+						type,
+						amount,
+						status
+						) 
+					VALUES(
+						?,?,?,?,?
+						)", 
+					$_POST["enrollment_id"],
+					$row["fee_title"],
+					$row["fee_type"],
+					$row["fee_amount"],
+					"PAYMENT"
+				);
+				endforeach;
+
+				foreach($otherFees as $row):
+					$total_fee += $row["amount"];
+				endforeach;
+
+				$newTotal = $total_fee - $_POST["downpayment"];
+
+				$installment = round(round($newTotal, 2) / 10, 2);
+
+				query("update enrollment set status = 'ENROLLED', monthly = ? where enrollment_id = ?",
+							$installment, $_POST["enrollment_id"]);
+
+				for($i = 1; $i <= 10; $i++):
+					query("insert INTO installment (
+						enrollment_id,
+						amount_due,
+						is_paid,
+						installment_number,
+						syid
+						) 
+					VALUES(
+						?,?,?,?,?
+						)", 
+					$_POST["enrollment_id"],
+					$installment,
+					"NOT DONE",
+					$i,
+					$enrollment[0]["syid"]
+				);
+				endfor;
+
+
+
+				query("insert INTO payment (
+						enrollment_id,
+						syid,
+						amount_paid,
+						date_paid,
+						method_of_payment,
+						or_number,
+						type
+						) 
+					VALUES(
+						?,?,?,?,?,?,?
+						)", 
+					$_POST["enrollment_id"],
+					$enrollment[0]["syid"],
+					$_POST["downpayment"],
+					date("Y-m-d H:i:00"),
+					"CASH",
+					$_POST["or_number"],
+					"DOWNPAYMENT"
+				);
+
+
+
+
+		$res_arr = [
+		"result" => "success",
+		"title" => "Success",
+		"message" => "Successful Enrollment",
+		"link" => "index",
+		// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+		];
+		echo json_encode($res_arr); exit();
+
+
+
+
+
+
 
 			elseif($_POST["action"] == "enrollmentCashierFee"):
 				// dump($_POST);

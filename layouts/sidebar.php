@@ -147,6 +147,16 @@
       </a>
   </li>
 
+  <li class="nav-item">
+      <a href="studentAccounts" class="nav-link">
+        <i class="nav-icon fas fa-database"></i>
+        <p>
+          Student Accounts
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
 
   <li class="nav-item">
       <a href="fees" class="nav-link">
