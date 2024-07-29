@@ -324,7 +324,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					';
 				else:
 					$data[$i]["action"] = '
-						<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-warning btn-block">STEP 2</a>
+						<a href="enrollment?action=cashier&id='.$row["enrollment_id"].'" class="btn btn-sm btn-warning btn-block">STEP 2</a>
 					';
 				endif;
 
@@ -355,6 +355,121 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
             );
             echo json_encode($json_data);
 
+
+			elseif($_POST["action"] == "enrollmentCashierFee"):
+				// dump($_POST);
+
+
+				$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+				$offset = $_POST["start"];
+				$limit = $_POST["length"];
+				$search = $_POST["search"]["value"];
+	
+				$limitString = " limit " . $limit;
+				$offsetString = " offset " . $offset;
+			
+	
+			
+				// $baseQuery = "select * from enrollment " . $where;
+
+				$enrollment = query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
+				$enrollment = $enrollment[0];
+
+				$grade_level = $enrollment["grade_level"];
+				$enrollment_id = $_POST["enrollment_id"];
+
+				$data = query("
+				SELECT ef.fee, ef.amount as fee_amount, 'ADD-ONS' as fee_type, ef.fee_id
+				FROM enrollment_fees ef
+				WHERE ef.enrollment_id = ?
+
+					UNION ALL
+
+				SELECT f.fee_title as fee, f.fee_amount, f.fee_type, NULL as fee_id
+				FROM fees f
+				WHERE f.grade_level = ?
+				and status = 'ACTIVE'
+				", $enrollment_id, $grade_level);
+				// dump($sql);
+
+				// $data = query($baseQuery);
+				$all_data = $data;
+	
+
+	
+	
+	
+				$i = 0;
+				foreach($data as $row):
+					if($row["fee_type"] == "MAIN" || $row["fee_type"] == "MISCELLANEOUS"):
+						$data[$i]["action"] = '<button disabled class="btn btn-warning btn-block btn-sm">FIXED</button>';
+					else:
+						$data[$i]["action"] = '
+						<form class="generic_form_trigger" data-url="enrollment">
+							<input type="hidden" name="action" value="deleteFee">
+							<input type="hidden" name="fee_id" value="'.$row["fee_id"].'">
+						<button type="submit" class="btn btn-danger btn-block btn-sm">DELETE</button>
+						</form>
+						
+						';
+					endif;
+					$i++;
+				endforeach;
+				$json_data = array(
+					"draw" => $draw + 1,
+					"iTotalRecords" => count($all_data),
+					"iTotalDisplayRecords" => count($all_data),
+					"aaData" => $data
+				);
+				echo json_encode($json_data);
+
+		elseif($_POST["action"] == "addOn"):
+					
+
+			$addon = query("select * from fees where fees_id = ?", $_POST["addOns"]);
+			$addon = $addon[0];
+			// dump($addon);
+
+			query("insert INTO enrollment_fees (
+				enrollment_id,
+				fee,
+				type,
+				amount,
+				status
+				) 
+			VALUES(
+				?,?,?,?,?
+				)", 
+			$_POST["enrollment_id"],
+			$addon["fee_title"],
+			$addon["fee_type"],
+			$_POST["amount"],
+			"PAYMENT"
+		);
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Add-on payment added successfully",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+		elseif($_POST["action"] == "deleteFee"):
+
+			query("delete from enrollment_fees where fee_id = ?", $_POST["fee_id"]);				
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Successful Enrollment",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+		
+				
 		elseif($_POST["action"] == "printEnrollmentForm"):
 			// dump($_POST);
 			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load("reports/enrollment_form.xlsx");
@@ -667,6 +782,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			elseif($_GET["action"] == "profile"):
 				render("public/enrollment_system/enrollmentProfileStudent.php",[
 				]);
+			elseif($_GET["action"] == "cashier"):
+				render("public/enrollment_system/enrollmentCashier.php",[
+				]);
+
 			endif;
 		endif;
 	}

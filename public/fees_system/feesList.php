@@ -42,8 +42,8 @@
                 <input type="hidden" name="action" value="addFees">
                       
                           <div class="form-group">
-                            <label>Grade Level <span class="color-red">*</span></label>
-                            <select style="width: 100%;" required name="grade_level" class="form-control select2" >
+                            <label>Grade Level </label>
+                            <select style="width: 100%;" name="grade_level" class="form-control select2" >
                               <option selected value="">Please select Grade Level</option>
                               <?php foreach($grade_level as $row): ?>
                                 <option value="<?php echo($row["grade_level"]); ?>"><?php echo($row["grade_level"]); ?></option>
@@ -69,8 +69,8 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Amount <span class="color-red">*</span></label>
-                                <input value="" name="fee_amount" step="0.01" required type="number" class="form-control"  placeholder="Enter Fee Amount Here ..">
+                              <label>Amount </label>
+                                <input value="" name="fee_amount" step="0.01" type="number" class="form-control"  placeholder="Enter Fee Amount Here ..">
                             </div>
 
 

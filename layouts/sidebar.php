@@ -122,15 +122,7 @@
       </a>
   </li>
 
-  <li class="nav-item">
-      <a href="fees" class="nav-link">
-        <i class="nav-icon fas fa-database"></i>
-        <p>
-          Fees Database
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
+
 
 
   <li class="nav-item">
@@ -150,6 +142,17 @@
         <i class="nav-icon fas fa-user"></i>
         <p>
           Enrollment
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+  <li class="nav-item">
+      <a href="fees" class="nav-link">
+        <i class="nav-icon fas fa-database"></i>
+        <p>
+          Fees Database
           <span class="right badge badge-danger"></span>
         </p>
       </a>
