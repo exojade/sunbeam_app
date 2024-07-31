@@ -113,6 +113,17 @@
   </li>
 
   <li class="nav-item">
+      <a href="parents" class="nav-link">
+        <i class="nav-icon fas fa-users"></i>
+        <p>
+          Parent's Portal
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
+  <li class="nav-item">
       <a href="users" class="nav-link">
         <i class="nav-icon fas fa-users"></i>
         <p>
@@ -192,33 +203,11 @@
       </a>
   </li>
 
-
-
   <li class="nav-item">
       <a href="student?action=parentsList" class="nav-link">
         <i class="nav-icon fas fa-graduation-cap"></i>
         <p>
-          Enrolled Students
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
-
-  <li class="nav-item">
-      <a href="student?action=specific" class="nav-link">
-        <i class="nav-icon fas fa-history"></i>
-        <p>
-          Payment History
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
-
-  <li class="nav-item">
-      <a href="student?action=parentsList" class="nav-link">
-        <i class="nav-icon fas fa-graduation-cap"></i>
-        <p>
-          All Students
+          My Students
           <span class="right badge badge-danger"></span>
         </p>
       </a>

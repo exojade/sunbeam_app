@@ -51,6 +51,99 @@
 
 		endif;
 
+
+		if($_POST["action"] == "advisoryDetailsHTML"){
+			
+
+			$enrollment = query("select e.*, s.section, concat(t.teacher_lastname, ', ', t.teacher_firstname) as teacher,
+									sy.school_year
+									from enrollment e
+									left join advisory a
+									on a.advisory_id = e.advisory_id
+									left join section s
+									on s.section_id = a.section_id
+									left join teacher t
+									on t.teacher_id = a.teacher_id
+									left join school_year sy
+									on sy.syid = e.syid
+									where e.enrollment_id = ?", $_POST["enrollment_id"]);
+									// dump($enrollment);
+									$enrollment = $enrollment[0];
+			$html ='
+			<tr>
+                   <th>Grade Level:</th>
+                   <td>'.$enrollment["grade_level"].'</td>
+                   <th>Section:</th>
+                   <td>'.$enrollment["section"].'</td>
+                 </tr>
+
+                 <tr>
+                   <th>Adviser:</th>
+                   <td>'.$enrollment["teacher"].'</td>
+                   <th>School Year:</th>
+                   <td>'.$enrollment["school_year"].'</td>
+                 </tr>';
+			
+
+		
+
+			echo($html);
+		}
+
+		if($_POST["action"] == "gradeList"){
+			// dump($_REQUEST);
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+            $offset = $_POST["start"];
+            $limit = $_POST["length"];
+            $search = $_POST["search"]["value"];
+
+			$limitString = " limit " . $limit;
+			$offsetString = " offset " . $offset;
+
+			// $sy = query("select * from school_year where active_status = 'ACTIVE'");
+			// $sy = $sy[0];
+
+			// $where = " where syid = '".$sy["syid"]."'";
+			if(isset($_REQUEST["thisEnrollmentID"])):
+				$_REQUEST["enrollment_id"] = $_REQUEST["thisEnrollmentID"];
+			endif;
+
+
+			$enrollment = query("select * from enrollment where enrollment_id = ?", $_REQUEST["enrollment_id"]);
+			$e = $enrollment[0];
+
+			$baseQuery = "select sg.*, s.subject_id from student_grades sg left join schedule s
+							on s.schedule_id = sg.schedule_id
+							where student_id = '".$e["student_id"]."' and sg.advisory_id = '".$e["advisory_id"]."'";
+		
+			$subjects = query("select * from subjects");
+			$Subjects = [];
+			foreach($subjects as $row):
+				$Subjects[$row["subject_id"]] = $row;
+			endforeach;
+
+			$data = query($baseQuery . $limitString . $offsetString);
+			$all_data = query($baseQuery);
+			// dump($data);
+		
+
+
+			$i=0;
+			foreach($data as $row):
+				$data[$i]["action"] = '<a href="#" data-toggle="modal" data-target="#subjectDetailsModal" class="btn btn-sm btn-block btn-info">Details</a>';
+				$data[$i]["subject"] = $Subjects[$row["subject_id"]]["subject_code"];
+				$i++;
+			endforeach;
+            $json_data = array(
+                "draw" => $draw + 1,
+                "iTotalRecords" => count($all_data),
+                "iTotalDisplayRecords" => count($all_data),
+                "aaData" => $data
+            );
+            echo json_encode($json_data);
+
+		}
+
 		
     }
 	else {
@@ -62,6 +155,12 @@
 			if($_GET["action"] == "specific"):
 				render("public/student_system/studentSpecific.php",[
 				]);
+				elseif($_GET["action"] == "myStudent"):
+					render("public/student_system/myStudentsForm.php",[
+					]);
+
+				
+
 				elseif($_GET["action"] == "parentsList"):
 					render("public/student_system/parentsList.php",[
 					]);

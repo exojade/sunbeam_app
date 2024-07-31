@@ -9,14 +9,23 @@
     }
 
     function hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days) {
+        // Convert start and end times to timestamps
+        $startTimestamp = (new DateTime($start_time))->getTimestamp();
+        $endTimestamp = (new DateTime($end_time))->getTimestamp();
+        // dump($startTimestamp);
+    // 
         foreach ($existingSchedules as $schedule) {
+            // Convert schedule times to timestamps
+            $scheduleFromTimestamp = (new DateTime($schedule['from_time']))->getTimestamp();
+            $scheduleToTimestamp = (new DateTime($schedule['to_time']))->getTimestamp();
+    
             if ($schedule['teacher_id'] == $teacher_id || $schedule['advisory_id'] == $advisory_id) {
                 foreach ($days as $day => $isSet) {
                     if ($isSet && $schedule[$day]) {
                         if (
-                            ($start_time >= $schedule['from_time'] && $start_time < $schedule['to_time']) ||
-                            ($end_time > $schedule['from_time'] && $end_time <= $schedule['to_time']) ||
-                            ($start_time <= $schedule['from_time'] && $end_time >= $schedule['to_time'])
+                            ($startTimestamp >= $scheduleFromTimestamp && $startTimestamp < $scheduleToTimestamp) ||
+                            ($endTimestamp > $scheduleFromTimestamp && $endTimestamp <= $scheduleToTimestamp) ||
+                            ($startTimestamp <= $scheduleFromTimestamp && $endTimestamp >= $scheduleToTimestamp)
                         ) {
                             return $schedule;
                         }

@@ -36,6 +36,8 @@
 				require 'public/enrollment_system/enrollment.php';
 			else if ($request == 'section')
 				require 'public/section_system/section.php';
+			else if ($request == 'parents')
+				require 'public/parents_system/parents.php';
 			else if ($request == 'advisory')
 				require 'public/advisory_system/advisory.php';
 			else if ($request == 'grade')

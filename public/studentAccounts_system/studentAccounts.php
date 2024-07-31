@@ -41,6 +41,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$data[$i]["action"] = '<a href="studentAccounts?action=specific&id='.$row["student_id"].'" class="btn btn-sm btn-block btn-info">Visit</a>';
 				$data[$i]["name"] = $row["lastname"] . ", " . $row["firstname"];
 				$data[$i]["address"] = $row["city_mun"] . ", " . $row["barangay"] . ", " . $row["address"];
+				$i++;
 			endforeach;
             $json_data = array(
                 "draw" => $draw + 1,
@@ -58,12 +59,36 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 			$limitString = " limit " . $limit;
 			$offsetString = " offset " . $offset;
+			$orderString = " order by installment_number asc"; 
 			// dump($_POST);
 
-			$where = " where enrollment_id = '".$_POST["enrollment_id"]."'";
-			$baseQuery = "select * from payment";
+			$where = " where enrollment_id = '".$_REQUEST["enrollment_id"]."' and is_paid = 'DONE'";
+			$baseQuery = "select * from installment";
+
+			$payment = query("select * from payment");
+			$Payment = [];
+			foreach($payment as $row):
+				$Payment[$row["payment_id"]] = $row;
+			endforeach;
 
 
+
+			$school_year = query("select * from school_year");
+			$SY = [];
+			foreach($school_year as $row):
+				$SY[$row["syid"]] = $row;
+			endforeach;
+
+			$data=query($baseQuery . $where . $orderString . $limitString . $offsetString);
+			$all_data=query($baseQuery . $where . $orderString);
+
+			$i=0;
+			foreach($data as $row):
+				$data[$i]["school_year"] = $SY[$row["syid"]]["school_year"];
+				$data[$i]["date_paid"] = $Payment[$row["payment_id"]]["date_paid"];
+				$data[$i]["or_number"] = $Payment[$row["payment_id"]]["or_number"];
+				$i++;
+			endforeach;
 
 
 			$json_data = array(
@@ -73,6 +98,44 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+		elseif($_POST["action"] == "soaList"):
+				$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+				$offset = $_POST["start"];
+				$limit = $_POST["length"];
+				$search = $_POST["search"]["value"];
+	
+				$limitString = " limit " . $limit;
+				$offsetString = " offset " . $offset;
+				// dump($_POST);
+	
+				$where = " where enrollment_id = '".$_REQUEST["enrollment_id"]."'";
+				$baseQuery = "select * from enrollment_fees";
+	
+				$school_year = query("select * from enrollment e left join school_year sy
+										on sy.syid = e.syid
+										where e.enrollment_id = ?", $_REQUEST["enrollment_id"]);
+
+
+			
+	
+				$data=query($baseQuery . $where . $limitString . $offsetString);
+				$all_data=query($baseQuery . $where);
+	
+				$i=0;
+				foreach($data as $row):
+					$data[$i]["school_year"] = $school_year[0]["school_year"];
+					$i++;
+				endforeach;
+	
+	
+				$json_data = array(
+					"draw" => $draw + 1,
+					"iTotalRecords" => count($all_data),
+					"iTotalDisplayRecords" => count($all_data),
+					"aaData" => $data
+				);
+				echo json_encode($json_data);
 
 
 		elseif($_POST["action"] == "printSOA"):

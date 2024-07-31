@@ -36,8 +36,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                           where student_id = ?
                           order by syid desc
                           ", $_GET["id"]);
-
-
 ?>
 
 
@@ -185,15 +183,15 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link active" href="#payment_history" data-toggle="tab">Payment History</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
+                  <!-- <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li> -->
                 </ul>
               </div>
               <div class="card-body">
                 <div class="tab-content">
-                  <div class="active tab-pane" id="activity">
+                  <div class="active tab-pane" id="payment_history">
                   <div class="row">
                     <div class="col-7">
-                        <h4 id="feeTotal" class="text-left"> ₱ 0.00</h4>
+                    <a href="#" data-toggle="modal" data-target="#modalAddOns" class="btn btn-info" style="margin-right:3px;">PRINT Statement of Account</a>
                     </div>
                     
                     <div class="col-5">
@@ -213,12 +211,48 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     </div>
                   </div>
                   <table id="ajaxDatatable" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>School Year</th>
+                        <th>Date Paid</th>
+                        <th>OR Number</th>
+                        <th>From</th>
+                        <th>Paid</th>
+                        <th>Remaining</th>
+                        <th>Type</th>
+                      </tr>
+                    </thead>
+                  </table>
+                  </div>
+
+
+
+                  <div class="tab-pane" id="soa">
+                  <div class="row">
+                    <div class="col-8">
+                        <h4 id="feeTotal2" class="text-left"> ₱ 0.00</h4>
+                    </div>
+                    
+                    <div class="col-4">
+                      <div class="row">
+                        <div class="col-12">
+                        <select style="width: 100%;" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
+                          <?php foreach($enrollmentList as $eList): ?>
+                            <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>
+                  <table id="ajaxDatatable2" width="100%" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>School Year</th>
+                    <th>Fee Title</th>
                     <th>Amount</th>
-                    <th>Date Paid</th>
-                    <th>OR Number</th>
                     <th>Type</th>
                   </tr>
                   </thead>
@@ -251,10 +285,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
-
-
-
-
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }
@@ -297,17 +327,31 @@ var datatable =
                 },
                 'columns': [
                     { data: 'school_year', "orderable": false  },
+                    
+                    { data: 'date_paid', "orderable": false  },
+                    { data: 'or_number', "orderable": false  },
                     {
-                        data: 'amount_paid', 
+                        data: 'from_balance', 
                         orderable: false,
                         render: function (data, type, row) {
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
                         }
                     },
-                    { data: 'date_paid', "orderable": false  },
-                    { data: 'or_number', "orderable": false  },
+                    {
+                        data: 'amount_due', 
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
+                    {
+                        data: 'to_balance', 
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
                     { data: 'type', "orderable": false  },
-
 
                 ],
                 "footerCallback": function (row, data, start, end, display) {
@@ -323,7 +367,7 @@ var datatable =
 
     // Total over all pages
     var received = api
-        .column(2)
+        .column(1)
         .data()
         .reduce(function (a, b) {
             return intVal(a) + intVal(b);
@@ -334,20 +378,107 @@ var datatable =
 
     // Format the output
     var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-
-
+    // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     // Update the footer
-    $('#feeTotal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
-    $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
+    $('#feeTotal').html(formattedReceived);
+    // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
     $('#totalVal').val(received);
 }
             });
 
+
+
+
+
+
+            var enrollment_id = $('#enrollmentSelect').val();
+ 
+
+ var datatable2 = 
+             $('#ajaxDatatable2').DataTable({
+                 "searching": false,
+                 "pageLength": 9999,
+                 language: {
+                     searchPlaceholder: "Search Teacher's Name"
+                 },
+                 "bLengthChange": false,
+                 "ordering": false,
+                 'processing': true,
+                 'serverSide': true,
+                 'serverMethod': 'post',
+                 
+                 'ajax': {
+                     'url':'studentAccounts',
+                      'type': "POST",
+                      "data": function (data){
+                         data.action = "soaList";
+                         data.enrollment_id = enrollment_id;
+                      }
+                 },
+                 'columns': [
+                     { data: 'school_year', "orderable": false  },
+                     { data: 'fee', "orderable": false  },
+                     {
+                         data: 'amount', 
+                         orderable: false,
+                         render: function (data, type, row) {
+                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                         }
+                     },
+                     
+                     { data: 'type', "orderable": false  },
+ 
+ 
+                 ],
+                 "footerCallback": function (row, data, start, end, display) {
+     var api = this.api();
+ 
+     // Remove the formatting to get integer data for summation
+     var intVal = function (i) {
+         return typeof i === 'string' ?
+             i.replace(/[\$,]/g, '') * 1 :
+             typeof i === 'number' ?
+                 i : 0;
+     };
+ 
+     // Total over all pages
+     var received = api
+         .column(2)
+         .data()
+         .reduce(function (a, b) {
+             return intVal(a) + intVal(b);
+         }, 0);
+ 
+     // Calculate installment
+     var installment = received / 10;
+ 
+     // Format the output
+     var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+     // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+     // Update the footer
+     $('#feeTotal2').html(formattedReceived);
+     // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
+     $('#totalVal').val(received);
+ }
+});
+
+
+
+
+
+
+
+
+
             $('.selectFilter').on('change', function() {
               var student_id = $('#studentSelect').val() || "";
               datatable.ajax.url('enrollment?action=enrollmentList&student_id='+student_id).load();
+              });
+
+
+              $('.selectFilter2').on('change', function() {
+              var enrollment_id = $('#enrollmentSelect2').val() || "";
+              datatable.ajax.url('studentAccounts?action=soaList&enrollment_id='+enrollment_id).load();
               });
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);

@@ -253,6 +253,40 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 		];
 		echo json_encode($res_arr); exit();
 
+	elseif($_POST["action"] == "reEnroll"):
+		// dump($_POST);
+
+		$advisory = query("select * from advisory where advisory_id = ?", $_POST["advisory"]);
+
+		$enrollmentId = create_trackid("ENR");
+			query("insert INTO enrollment (
+				enrollment_id,
+				dateEnrolled,
+				syid,
+				student_id,
+				grade_level,
+				advisory_id,
+				status
+				) 
+			VALUES(?,?,?,?,?,?,?)", 
+			$enrollmentId,
+			date("Y-m-d H:i:s"),
+			$_POST["school_year"],
+			$_POST["student"],
+			$advisory[0]["grade_level"],
+			$_POST["advisory"],
+			"PENDING"
+		);
+
+		$res_arr = [
+			"result" => "success",
+			"title" => "Success",
+			"message" => "Successful Enrollment",
+			"link" => "enrollment",
+			// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+			];
+			echo json_encode($res_arr); exit();
+
 
 		elseif($_POST["action"] == "enrollmentList"):
 			// dump($_POST);
@@ -390,10 +424,64 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 				$installment = round(round($newTotal, 2) / 10, 2);
 
-				query("update enrollment set status = 'ENROLLED', monthly = ? where enrollment_id = ?",
-							$installment, $_POST["enrollment_id"]);
+			query("update enrollment set status = 'ENROLLED', monthly = ? where enrollment_id = ?",
+						$installment, $_POST["enrollment_id"]);
 
-				for($i = 1; $i <= 10; $i++):
+			query("update student set current_enrollment_id = ? where student_id = ?",
+			$_POST["enrollment_id"], $enrollment[0]["student_id"]);
+
+			
+
+			query("insert INTO payment (
+					enrollment_id,
+					syid,
+					amount_paid,
+					date_paid,
+					method_of_payment,
+					or_number,
+					type
+					) 
+				VALUES(
+					?,?,?,?,?,?,?
+					)", 
+				$_POST["enrollment_id"],
+				$enrollment[0]["syid"],
+				$_POST["downpayment"],
+				date("Y-m-d H:i:00"),
+				"CASH",
+				$_POST["or_number"],
+				"DOWNPAYMENT"
+			);
+
+			$payment_id = query("SELECT LAST_INSERT_ID() as payment_id");
+			$payment_id = $payment_id[0]["payment_id"];
+				query("insert INTO installment (
+								enrollment_id,
+								amount_due,
+								is_paid,
+								installment_number,
+								syid,
+								type,
+								payment_id,
+								from_balance,
+								to_balance
+								) 
+							VALUES(
+								?,?,?,?,?,?,?,?,?
+								)", 
+							$_POST["enrollment_id"],
+							$_POST["downpayment"],
+							"DONE",
+							1,
+							$enrollment[0]["syid"],
+							"DOWNPAYMENT",
+							$payment_id,
+							$total_fee,
+							$newTotal
+						);
+
+
+				for($i = 2; $i <= 11; $i++):
 					query("insert INTO installment (
 						enrollment_id,
 						amount_due,
@@ -413,27 +501,19 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				endfor;
 
 
+			$schedules = query("select * from schedule where advisory_id = ?", $enrollment[0]["advisory_id"]);
+			
+			foreach($schedules as $row):
+				query("insert INTO student_grades (schedule_id, student_id, advisory_id) 
+				VALUES(?,?,?)", 
+				$row["schedule_id"],
+				$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
+			);
+			endforeach;
 
-				query("insert INTO payment (
-						enrollment_id,
-						syid,
-						amount_paid,
-						date_paid,
-						method_of_payment,
-						or_number,
-						type
-						) 
-					VALUES(
-						?,?,?,?,?,?,?
-						)", 
-					$_POST["enrollment_id"],
-					$enrollment[0]["syid"],
-					$_POST["downpayment"],
-					date("Y-m-d H:i:00"),
-					"CASH",
-					$_POST["or_number"],
-					"DOWNPAYMENT"
-				);
+
+
+				
 
 
 

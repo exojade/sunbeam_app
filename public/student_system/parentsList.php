@@ -10,12 +10,22 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Currently Enrolled Students</h1>
+            <h1>My Students</h1>
           </div>
         
         </div>
       </div><!-- /.container-fluid -->
     </section>
+
+    <?php
+    $students = query("select s.*, sy.school_year, e.grade_level from student s
+                        left join enrollment e
+                        on e.enrollment_id = s.current_enrollment_id
+                        left join school_year sy
+                        on sy.syid = e.syid
+                        where s.parent_id = ?", $_SESSION["sunbeam_app"]["userid"]);
+    // dump($students);
+    ?>
 
     <!-- Main content -->
     <section class="content">
@@ -32,12 +42,19 @@
                     <th>Code</th>
                     <th>Student Name</th>
                     <th>Grade Level</th>
-                    <th>Section</th>
-                    <th>Adviser</th>
+                    <th>School Year</th>
                   </tr>
                   </thead>
                   <tbody>
-   
+                    <?php foreach($students as $row): ?>
+                      <tr>
+                        <td><a class="btn btn-primary btn-sm btn-block" href="student?action=myStudent&id=<?php echo($row["student_id"]); ?>">Visit</a></td>
+                        <td><?php echo($row["student_id"]); ?></td>
+                        <td><?php echo($row["lastname"] . ", " . $row["firstname"]); ?></td>
+                        <td><?php echo($row["grade_level"]); ?></td>
+                        <td><?php echo($row["school_year"]); ?></td>
+                      </tr>
+                    <?php endforeach; ?>
                   </tbody>
                   <tfoot>
              

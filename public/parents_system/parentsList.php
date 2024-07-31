@@ -10,17 +10,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Enrollment Masterlist</h1>
-            <small>For School Year: 2023 - 2024</small>
+            <h1>Parents</h1>
           </div>
-          <?php if($_SESSION["sunbeam_app"]["role"] == "admin"): ?>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <a href="enrollment?action=new" class="btn btn-primary">New Enrollee</a> &nbsp;&nbsp;
-            <a href="#" data-toggle="modal" data-target="#reEnrollModal" class="btn btn-warning">Re-Enroll</a>
-            </ol>
-          </div>
-          <?php endif; ?>
+
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -30,57 +22,50 @@
       <div class="container-fluid">
 
 
-      <div class="modal fade" id="reEnrollModal">
+      <div class="modal fade" id="addParentModal">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header bg-primary">
-              <h4 class="modal-title">RE ENROLL MODAL</h4>
+            <div class="modal-header bg-info">
+              <h4 class="modal-title">ADD PARENT MODAL</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-            <?php $students = query("select s.* from student s left join enrollment e
-                                    on e.student_id = s.student_id where
-                                    e.syid != ?", $school_year[0]["syid"]);
-                                    ?>
+              <input type="hidden" id="totalVal">
+              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="parents">
+                <input type="hidden" name="action" value="addParent">
+                  <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Select Student</label>
+                      <select style="width: 100%;" name="student_id" required class="form-control select2">
+                          <option selected value="">Search Student</option>
+                          <?php
+                          $student = query("select * from student where (parent_id = '' or parent_id is null)");
+                          ?>
+                          <?php foreach($student as $row): ?>
+                            <option value="<?php echo($row["student_id"]); ?>"><?php echo($row["firstname"] . " " . $row["lastname"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Select Parent</label>
+                      <select name="parent_id" style="width: 100%;" required class="form-control select2">
+                          <option selected value="">Search Parent</option>
+                          <?php
+                          $parents = query("SELECT * from users
+                                          WHERE role = 'parent'");
+                          ?>
+                          <?php foreach($parents as $row): ?>
+                            <option value="<?php echo($row["id"]); ?>"><?php echo($row["fullname"] . " - " . $row["username"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                    </div>
+                    </div>
+                  </div>
 
-            <?php $advisory = query("select a.*, s.section from advisory a
-                                      left join section s
-                                      on s.section_id = a.section_id
-                                      where school_year = ?", $school_year[0]["syid"]);
-                                    ?>
-              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="enrollment">
-                <input type="hidden" name="action" value="reEnroll">
-                <input type="hidden" name="school_year" value="<?php echo($school_year[0]["syid"]); ?>">
-              <div class="row">
-                <div class="col-md-12">
-                <div class="form-group">
-                  <label>Student To Re-Enroll</label>
-                  <select required name="student" class="form-control select2" id="" style="width: 100%;" >
-                  <option selected disabled value="" data-amount="">Please Select Student</option>
-                    <?php foreach($students as $row): ?>
-                      <option value="<?php echo($row["student_id"]); ?>" ><?php echo($row["lastname"]. ", " . $row["firstname"]); ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Section To Enroll</label>
-                  <select required name="advisory" class="form-control select2" id="" style="width: 100%;" >
-                  <option selected disabled value="" data-amount="">Please Select Advisory</option>
-                    <?php foreach($advisory as $row): ?>
-                      <option value="<?php echo($row["advisory_id"]); ?>" ><?php echo($row["grade_level"]. " - " . $row["section"]); ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-                </div>
-              
-              </div>
-
-            
-
-          
+              <hr>
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -92,6 +77,13 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+
+
+
+
+
+
 
 
         <div class="row">
@@ -127,6 +119,29 @@
                         </select>
                       </div>
                     </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <select required id="studentSelect" class="form-control select2 selectFilter">
+                          <option selected value="">Search Parent</option>
+                          <?php
+                          // dump($sy);
+                          $student = query("select s.student_id, concat(lastname, ', ' , firstname) as student_name from enrollment e
+                                            left join student s
+                                            on s.student_id = e.student_id
+                                            where e.syid = ?
+                                            ", $sy["syid"]);
+                          // dump($student);
+                          ?>
+                          <?php foreach($student as $row): ?>
+                            <option value="<?php echo($row["student_id"]); ?>"><?php echo($row["student_name"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <a href="#" data-toggle="modal" data-target="#addParentModal" class="btn btn-primary float-right">ADD PARENT</a>
+                    </div>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -134,26 +149,20 @@
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Code</th>
-                    <th>Student Name</th>
-                    <th>Grade Level</th>
-                    <th>Section</th>
-                    <th>Adviser</th>
-                    <th>Status</th>
                     <th>Action</th>
+                    <th>Parent</th>
+                    <th>Username</th>
+                    <th>Student</th>
+                    <th>Address</th>
                   </tr>
                   </thead>
-              
                 </table>
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
         </div>
       </div>
     </section>
-    <!-- /.content -->
   </div>
   <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -171,7 +180,6 @@
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
 
-
 $('.select2').select2({
     });
 
@@ -187,23 +195,19 @@ var datatable =
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
-                
                 'ajax': {
-                    'url':'enrollment',
+                    'url':'parents',
                      'type': "POST",
                      "data": function (data){
-                        data.action = "enrollmentList";
+                        data.action = "parentsList";
                      }
                 },
                 'columns': [
-                    { data: 'student_id', "orderable": false  },
-                    { data: 'student', "orderable": false  },
-                    { data: 'grade_level', "orderable": false  },
-                    { data: 'section', "orderable": false  },
-                    { data: 'teacher', "orderable": false  },
-                    { data: 'status', "orderable": false  },
-                    { data: 'action', "orderable": false },
-
+                    { data: 'action', "orderable": false  },
+                    { data: 'parent', "orderable": false  },
+                    { data: 'username', "orderable": false  },
+                    { data: 'student_name', "orderable": false  },
+                    { data: 'student_address', "orderable": false  },
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;
