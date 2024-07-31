@@ -63,9 +63,8 @@
                     <th>Action</th>
                     <th>Code</th>
                     <th>Student Name</th>
-                    <th>Advisory Class</th>
+                    <th>Address</th>
                     <th>Balance</th>
-                    <th>Monthly</th>
                   </tr>
                   </thead>
                 </table>
@@ -92,7 +91,6 @@
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
 
-
 $('.select2').select2({
     });
 
@@ -108,7 +106,6 @@ var datatable =
                 'processing': true,
                 'serverSide': true,
                 'serverMethod': 'post',
-                
                 'ajax': {
                     'url':'studentAccounts',
                      'type': "POST",
@@ -117,12 +114,11 @@ var datatable =
                      }
                 },
                 'columns': [
+                    { data: 'action', "orderable": false  },
                     { data: 'student_id', "orderable": false  },
-                    { data: 'student', "orderable": false  },
-                    { data: 'grade_level', "orderable": false  },
-                    { data: 'section', "orderable": false  },
-                    { data: 'teacher', "orderable": false  },
-                    { data: 'status', "orderable": false  },
+                    { data: 'name', "orderable": false  },
+                    { data: 'address', "orderable": false  },
+                    { data: 'address', "orderable": false  },
                 ],
                 "footerCallback": function (row, data, start, end, display) {
                     // var api = this.api(), data;

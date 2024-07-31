@@ -15,83 +15,33 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$limitString = " limit " . $limit;
 			$offsetString = " offset " . $offset;
 
-			$sy = query("select * from school_year where active_status = 'ACTIVE'");
-			$sy = $sy[0];
+			// $sy = query("select * from school_year where active_status = 'ACTIVE'");
+			// $sy = $sy[0];
 
-			$where = " where syid = '".$sy["syid"]."'";
+			// $where = " where syid = '".$sy["syid"]."'";
 
-			if(isset($_REQUEST["student_id"])):
-				if($_REQUEST["student_id"] != ""):
-					$where .= " and student_id = '".$_REQUEST["student_id"]."'";
-				endif;
+			$baseQuery = "select * from student";
+
+			// $data = query($baseQuery . $limitString . $offsetString);
+			// $all_data = query($baseQuery);
+
+
+
+			if($search != ""):
+				$baseQuery .= " where firstname like '%".$search."%' or lastname like '%".$search."%'";
+				$data = query($baseQuery . $limitString . $offsetString);
+			else:
+				$data = query($baseQuery . $limitString . $offsetString);
+				$all_data = query($baseQuery);
 			endif;
-			$baseQuery = "select * from enrollment " . $where;
-
-			if($search == ""):
-                $data = query($baseQuery . " " . $limitString . " " . $offsetString);
-                $all_data = query($baseQuery);
-            else:
-                                // dump($query_string);
-                $data = query($baseQuery . " and CONCAT(teacher_firstname, ' ', teacher_lastname) LIKE '%".$search."%'" . " " . $limitString . " " . $offsetString);
-                $all_data = query($baseQuery . " and CONCAT(teacher_firstname, ' ', teacher_lastname) LIKE '%".$search."%'");
-                // $all_data = $data;
-            endif;
 
 
-			$students = query("select * from student");
-			$Students = [];
-			foreach($students as $row):
-				$Students[$row["student_id"]] = $row;
-			endforeach;
-
-			$advisory = query("select a.*, s.section from advisory a 
-								left join section s
-								on s.section_id = a.section_id where school_year = ?", $sy["syid"]);
-			$Advisory = [];
-			foreach($advisory as $row):
-				$Advisory[$row["advisory_id"]] = $row;
-			endforeach;
-
-			$teacher = query("select * from teacher");
-			$Teacher = [];
-			foreach($teacher as $row):
-				$Teacher[$row["teacher_id"]] = $row;
-			endforeach;
-
-
-
-			$i = 0;
+			$i=0;
 			foreach($data as $row):
-
-				if($_SESSION["sunbeam_app"]["role"] == "admin"):
-					$data[$i]["action"] = '
-						<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-info btn-block">View</a>
-					';
-				else:
-					$data[$i]["action"] = '
-						<a href="enrollment?action=cashier&id='.$row["enrollment_id"].'" class="btn btn-sm btn-warning btn-block">STEP 2</a>
-					';
-				endif;
-
-				$student = $Students[$row["student_id"]];
-
-				$data[$i]["student"] = $student["lastname"] .", " . $student["firstname"];		
-				$data[$i]["section"] = "";
-				$data[$i]["teacher"] = "";
-				// $data[$i]["balance"] = to_peso($data[$i]["balance"]);
-				if(isset($Advisory[$row["advisory_id"]])):
-					$advisory = $Advisory[$row["advisory_id"]];
-					$teacher = $Teacher[$advisory["teacher_id"]];
-					$data[$i]["section"] = $advisory["section"];
-					$data[$i]["teacher"] = $teacher["teacher_lastname"] . ", " . $teacher["teacher_firstname"];
-				endif;
-
-
-				
-
-
-                $i++;
-            endforeach;
+				$data[$i]["action"] = '<a href="studentAccounts?action=specific&id='.$row["student_id"].'" class="btn btn-sm btn-block btn-info">Visit</a>';
+				$data[$i]["name"] = $row["lastname"] . ", " . $row["firstname"];
+				$data[$i]["address"] = $row["city_mun"] . ", " . $row["barangay"] . ", " . $row["address"];
+			endforeach;
             $json_data = array(
                 "draw" => $draw + 1,
                 "iTotalRecords" => count($all_data),
@@ -99,6 +49,31 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+		elseif($_POST["action"] == "paymentHistoryList"):
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+            $offset = $_POST["start"];
+            $limit = $_POST["length"];
+            $search = $_POST["search"]["value"];
+
+			$limitString = " limit " . $limit;
+			$offsetString = " offset " . $offset;
+			// dump($_POST);
+
+			$where = " where enrollment_id = '".$_POST["enrollment_id"]."'";
+			$baseQuery = "select * from payment";
+
+
+
+
+			$json_data = array(
+                "draw" => $draw + 1,
+                "iTotalRecords" => count($all_data),
+                "iTotalDisplayRecords" => count($all_data),
+                "aaData" => $data
+            );
+            echo json_encode($json_data);
+
 
 		elseif($_POST["action"] == "printSOA"):
 
@@ -121,7 +96,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			
 			$downpayment = query("select * from payment where enrollment_id = ? and remarks='DOWNPAYMENT'", $_POST["enrollment_id"]);
 			$downpayment = $downpayment[0];
-
 					$mpdf = new \Mpdf\Mpdf([
 						'mode' => 'utf-8', 'format' => 'A4',
 						'debug' => true,
@@ -133,9 +107,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						'default_font' => 'helvetica'
 					]);
 					// dump($mpdf);
-
 					$html = "";
-
 					$html .='
 					<link rel="stylesheet" href="AdminLTE/dist/css/AdminLTE.min.css">
 					<link rel="stylesheet" href="AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -152,7 +124,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						font-size: 15px !important;
 						font-weight: 800;
 					}
-
 					h4{
 						margin:0px !important;
 						padding:0px !important;
@@ -167,16 +138,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						font-size: 90px !important;
 					}
 
-				
-
-		
-
 					b{
 						font-weight: bold;
 					}
-
 					</style>
-				
 					<div class="row">
 						<div class="col-xs-2">
 							<div class="text-center"><img src="resources/logo.png" width="85" height="85" class="img-responsive"></div>
@@ -200,7 +165,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 							<h5><b>STUDENT NAME:</b> '.$student["lastname"] . ", " . $student["firstname"].'</h5>
 						</div>
 						<div class="col-xs-4">';
-
 						if(!empty($advisory)):
 							$html.='<h5><b>CLASS:</b> '.$enrollment["grade_level"] . " - " . $advisory["section"].'</h5>';
 						else:
@@ -319,7 +283,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				render("public/enrollment_system/newEnrollmentForm.php",[
 				]);
 			elseif($_GET["action"] == "specific"):
-				render("public/enrollment_system/enrollmentSpecific.php",[
+				render("public/studentAccounts_system/studentAccountsSpecific.php",[
 				]);
 			elseif($_GET["action"] == "profile"):
 				render("public/enrollment_system/enrollmentProfileStudent.php",[

@@ -1,9 +1,6 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
-  <!-- Theme style -->
-
   <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 <style>
@@ -19,16 +16,28 @@
 <div class="content-wrapper">
 
 <?php
+$student = query("select * from student where student_id = ?", $_GET["id"]);
+$student = $student[0];
+
 $enrollment = query("select e.*, s.section from 
                         enrollment e left join advisory a
                         on a.advisory_id = e.advisory_id
                         left join section s
                         on s.section_id = a.section_id
-                      where e.enrollment_id = ?", $_GET["id"]);
+                      where e.enrollment_id = ?", $student["current_enrollment_id"]);
 $enrollment = $enrollment[0];
 
 $student = query("select * from student where student_id = ?", $enrollment["student_id"]);
 $student = $student[0];
+
+$enrollmentList = query("select e.*, sy.school_year from enrollment e
+                          left join school_year sy
+                          on sy.syid = e.syid
+                          where student_id = ?
+                          order by syid desc
+                          ", $_GET["id"]);
+
+
 ?>
 
 
@@ -86,10 +95,6 @@ $student = $student[0];
                 </div>
               
               </div>
-
-            
-
-          
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,10 +106,6 @@ $student = $student[0];
         </div>
         <!-- /.modal-dialog -->
       </div>
-
-
-
-
       <div class="modal fade" id="modalEnrollStudent">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -131,7 +132,6 @@ $student = $student[0];
                 </div>
                 </div>
               </div>
-
               <hr>
               <h4 id="feeTotalModal" class="text-left"> ₱ 0.00</h4>
             </div>
@@ -141,21 +141,8 @@ $student = $student[0];
             </div>
                   </form>
           </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
       </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
             <div class="card card-primary card-outline">
@@ -190,48 +177,49 @@ $student = $student[0];
         </div>
 
 
-
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-
-            <!-- About Me Box -->
-            
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
           <div class="col-md-9">
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Enrollment Fees</a></li>
-                  <!-- <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li> -->
+                  <li class="nav-item"><a class="nav-link active" href="#payment_history" data-toggle="tab">Payment History</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#soa" data-toggle="tab">Statement of Account</a></li>
                 </ul>
-              </div><!-- /.card-header -->
+              </div>
               <div class="card-body">
                 <div class="tab-content">
                   <div class="active tab-pane" id="activity">
-
                   <div class="row">
-                    <div class="col-8">
+                    <div class="col-7">
                         <h4 id="feeTotal" class="text-left"> ₱ 0.00</h4>
                     </div>
-                    <div class="col-4">
-                        <a href="#" data-toggle="modal" data-target="#modalEnrollStudent" class="btn btn-info btn-sm float-right" >PROCEED DOWNPAYMENT</a>
-                        <a href="#" data-toggle="modal" data-target="#modalAddOns" class="btn btn-primary btn-sm float-right" style="margin-right:3px;">ADD - ONS</a>
+                    
+                    <div class="col-5">
+                      <div class="row">
+                        <div class="col-6">
+                        <select required id="enrollmentSelect" class="form-control select2 selectFilter">
+                          <?php foreach($enrollmentList as $eList): ?>
+                            <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+
+                        </div>
+                        <div class="col-6">
+                          <a href="#" data-toggle="modal" data-target="#modalAddOns" class="btn btn-info btn-block" style="margin-right:3px;">NEW PAYMENT</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  
                   <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Fee Title</th>
-                    <th>Type</th>
+                    <th>School Year</th>
                     <th>Amount</th>
-                    <th>Action</th>
+                    <th>Date Paid</th>
+                    <th>OR Number</th>
+                    <th>Type</th>
                   </tr>
                   </thead>
               
@@ -283,6 +271,9 @@ $student = $student[0];
 $('.select2').select2({
     });
 
+  var enrollment_id = $('#enrollmentSelect').val();
+ 
+
 var datatable = 
             $('#ajaxDatatable').DataTable({
                 "searching": false,
@@ -297,24 +288,25 @@ var datatable =
                 'serverMethod': 'post',
                 
                 'ajax': {
-                    'url':'enrollment',
+                    'url':'studentAccounts',
                      'type': "POST",
                      "data": function (data){
-                        data.action = "enrollmentCashierFee";
-                        data.enrollment_id = "<?php echo($_GET["id"]); ?>";
+                        data.action = "paymentHistoryList";
+                        data.enrollment_id = enrollment_id;
                      }
                 },
                 'columns': [
-                    { data: 'fee', "orderable": false  },
-                    { data: 'fee_type', "orderable": false  },
+                    { data: 'school_year', "orderable": false  },
                     {
-                        data: 'fee_amount', 
+                        data: 'amount_paid', 
                         orderable: false,
                         render: function (data, type, row) {
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
                         }
                     },
-                    { data: 'action', "orderable": false  },
+                    { data: 'date_paid', "orderable": false  },
+                    { data: 'or_number', "orderable": false  },
+                    { data: 'type', "orderable": false  },
 
 
                 ],
