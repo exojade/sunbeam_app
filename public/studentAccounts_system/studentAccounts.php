@@ -62,8 +62,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$orderString = " order by installment_number asc"; 
 			// dump($_POST);
 
+
+			// if()
+
+			if(isset($_REQUEST["enrollmentFilterID"])):
+				$_REQUEST["enrollment_id"] = $_REQUEST["enrollmentFilterID"];
+			endif;
+
 			$where = " where enrollment_id = '".$_REQUEST["enrollment_id"]."' and is_paid = 'DONE'";
 			$baseQuery = "select * from installment";
+			// dump($baseQuery);
 
 			$payment = query("select * from payment");
 			$Payment = [];

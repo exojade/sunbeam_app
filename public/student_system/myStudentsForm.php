@@ -280,10 +280,40 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   </div>
 
                   <div class=" tab-pane" id="payment_history">
-
-                 
-
-             
+                  <form class="generic_form_trigger" data-url="enrollment">
+                  <div class="row mb-2">
+                  <input type="hidden" name="action" value="printSOA">
+                <div class="col-6">
+                  <div class="form-group">
+                  <select style="width:100%;" name="enrollment_id" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
+                            <?php foreach($enrollmentList as $eList): ?>
+                              <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                  </div>
+                          
+                     
+                    </div>
+                    
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-info float-right" >PRINT Statement of Account</button>
+                    </div>
+                    
+                  </div>
+                  </form>
+                  <table style="width: 100%;" id="ajaxDatatable2" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>School Year</th>
+                        <th>Date Paid</th>
+                        <th>OR Number</th>
+                        <th>From</th>
+                        <th>Paid</th>
+                        <th>Remaining</th>
+                        <th>Type</th>
+                      </tr>
+                    </thead>
+                  </table>
                   </div>
                 </div>
               </div>
@@ -432,6 +462,121 @@ var datatable =
               datatable.ajax.url('student?action=gradeList&thisEnrollmentID='+thisEnrollmentID).load();
  
               });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              var datatable2 = 
+            $('#ajaxDatatable2').DataTable({
+                "searching": false,
+                "pageLength": 9999,
+                language: {
+                    searchPlaceholder: "Search Teacher's Name"
+                },
+                "bLengthChange": false,
+                "ordering": false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                
+                'ajax': {
+                    'url':'studentAccounts',
+                     'type': "POST",
+                     "data": function (data){
+                        data.action = "paymentHistoryList";
+                        data.enrollment_id = enrollment_id;
+                     }
+                },
+                'columns': [
+                    { data: 'school_year', "orderable": false  },
+                    
+                    { data: 'date_paid', "orderable": false  },
+                    { data: 'or_number', "orderable": false  },
+                    {
+                        data: 'from_balance', 
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
+                    {
+                        data: 'amount_due', 
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
+                    {
+                        data: 'to_balance', 
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
+                    { data: 'type', "orderable": false  },
+
+                ],
+                "footerCallback": function (row, data, start, end, display) {
+    var api = this.api();
+
+    // Remove the formatting to get integer data for summation
+    var intVal = function (i) {
+        return typeof i === 'string' ?
+            i.replace(/[\$,]/g, '') * 1 :
+            typeof i === 'number' ?
+                i : 0;
+    };
+
+    // Total over all pages
+    var received = api
+        .column(1)
+        .data()
+        .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0);
+
+    // Calculate installment
+    var installment = received / 10;
+
+    // Format the output
+    var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // Update the footer
+    $('#feeTotal').html(formattedReceived);
+    // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
+    $('#totalVal').val(received);
+}
+            });
+            $('.selectFilter2').on('change', function() {
+              var enrollmentFilterID = $('#enrollmentSelect2').val() || "";
+              datatable2.ajax.url('studentAccounts?action=paymentHistoryList&enrollmentFilterID='+enrollmentFilterID).load();
+              });
+
+
+
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }

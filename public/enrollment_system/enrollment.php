@@ -736,9 +736,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				];
 				echo json_encode($res_arr); exit();
 		elseif($_POST["action"] == "printSOA"):
-
+			// dump($_POST);
 			$enrollment_fees = query("select * from enrollment_fees where enrollment_id = ?", $_POST["enrollment_id"]);
-			$enrollment = query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
+			$enrollment = query("select e.*, sy.school_year from enrollment e
+			left join school_year sy on sy.syid = e.syid where enrollment_id = ?", $_POST["enrollment_id"]);
 			$enrollment = $enrollment[0];
 			// dump($enrollment);
 			$student = query("select * from student where student_id = ?", $enrollment["student_id"]);
@@ -749,14 +750,21 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 								on s.section_id = a.section_id
 								where advisory_id = ?", $enrollment["advisory_id"]);
 
+			$installment = query("select * from installment i
+									left join payment p
+									on p.payment_id = i.payment_id
+									where i.enrollment_id = ? and is_paid = 'DONE'
+									order by date_paid desc
+									", $_POST["enrollment_id"]);
+									// dump($installment);
 			if(!empty($advisory)):
 				$advisory = $advisory[0];
 			endif;
 
 			
-			$downpayment = query("select * from payment where enrollment_id = ? and remarks='DOWNPAYMENT'", $_POST["enrollment_id"]);
+			$downpayment = query("select * from payment where enrollment_id = ? and type='DOWNPAYMENT'", $_POST["enrollment_id"]);
+			// dump($downpayment);
 			$downpayment = $downpayment[0];
-
 					$mpdf = new \Mpdf\Mpdf([
 						'mode' => 'utf-8', 'format' => 'A4',
 						'debug' => true,
@@ -801,11 +809,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						margin-bottom: 4px !important
 						font-size: 90px !important;
 					}
-
-				
-
-		
-
 					b{
 						font-weight: bold;
 					}
@@ -828,8 +831,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					<h1 style="margin-top:-10px;" class="text-center"><b>STATEMENT OF ACCOUNT</b></h1>
 					<br>
 					<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 							<h5><b>STUDENT LEARNER ID:</b> '.$student["student_id"].'</h5>
+						</div>
+						<div class="col-xs-4">
+							<h5><b>SCHOOL YEAR:</b> '.$enrollment["school_year"].'</h5>
 						</div>
 						<div class="col-xs-6">
 							<h5><b>STUDENT NAME:</b> '.$student["lastname"] . ", " . $student["firstname"].'</h5>
@@ -876,7 +882,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 							$html.='</tr>';
 							$html.='<tr>';
 								$html.='<td class="text-right"><b>Installment per Exam (total / 10)</b></td>';
-								$html.='<td class="text-right">'.to_peso($enrollment["per_month"]).'</td>';
+								$html.='<td class="text-right">'.to_peso($enrollment["monthly"]).'</td>';
 							$html.='</tr>';
 
 					$html.='	</tbody>
@@ -885,34 +891,28 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					
 					<hr>
 					<h3>Payment</h3>
-
 					<table id="feeTable" class="table table-bordered">
-				
 						<tbody>
 						<tr>
 							<td><b>Date Paid</b></td>
-							<td><b>Amount Paid</b></td>
+							<td><b>Amount</b></td>
 							<td><b>Remarks</b></td>
 							<td><b>OR Number</b></td>
 							<td><b>Outstanding Balance</b></td>
 						</tr>
 						';	
 						$total = 0;
-						foreach($payment as $row):
-							
+						foreach($installment as $row):
+							// dump(date("F d, Y", strtotime($row["date_paid"])));
 							$html.='<tr>';
-								$html.='<td>'.date("F d, Y", strtotime($row["date_paid"])).'</td>';
-								$html.='<td >'.to_peso($row["amount_paid"]).'</td>';
-								$html.='<td >'.($row["remarks"]).'</td>';
+							$html .= '<td>' . date("F d, Y", strtotime($row["date_paid"])) . '</td>';
+								$html.='<td >'.to_peso($row["amount_due"]).'</td>';
+								$html.='<td >'.($row["type"]).'</td>';
 								$html.='<td >'.($row["or_number"]).'</td>';
-								$html.='<td >'.to_peso($enrollment["balance"]).'</td>';
+								$html.='<td >'.to_peso($row["to_balance"]).'</td>';
 							$html.='</tr>';
-							
-
 						endforeach;
-					
-
-					$html.='	</tbody>
+					$html.='</tbody>
 
 					</table>
 					</div>
