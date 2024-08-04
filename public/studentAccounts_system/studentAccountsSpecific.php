@@ -59,39 +59,35 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
         <?php endif; ?>
             <!-- Profile Image -->
 
-      <div class="modal fade" id="modalAddOns">
+      <div class="modal fade" id="newPaymentModal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header bg-primary">
-              <h4 class="modal-title">ADD ONS</h4>
+              <h4 class="modal-title">Payment Modal</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
 
-            <?php $addons = query("select * from fees where fee_type = 'OTHERS'"); ?>
-              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="enrollment">
-                <input type="hidden" name="action" value="addOn">
-                <input type="hidden" name="enrollment_id" value="<?php echo($_GET["id"]); ?>">
+              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="studentAccounts">
+                <input type="hidden" name="enrollment_id" id="enrollmentIdHidden">
+                <input type="hidden" name="action" value="payment">
               <div class="row">
                 <div class="col-md-12">
-                <div class="form-group">
-                  <label>Add Ons</label>
-                  <select name="addOns" class="form-control select2" id="addonSelect" style="width: 100%;" >
-                  <option selected disabled value="" data-amount="">Please Select Add Ons</option>
-                    <?php foreach($addons as $row): ?>
-                      <option value="<?php echo($row["fees_id"]); ?>" data-amount="<?php echo($row["fee_amount"] ?? ''); ?>"><?php echo($row["fee_title"]); ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <div class="form-group">
+                    <label>Amount</label>
+                    <input required name="amount" type="number" step="0.01" id="amountInput" class="form-control" placeholder="Enter ...">
+                  </div>
+                  <div class="form-group">
+                    <label>OR Number</label>
+                    <input required name="or_number" type="text" class="form-control" placeholder="Enter ...">
+                  </div>
+                  <div class="form-group">
+                    <label>Paid By</label>
+                    <input required name="paid_by" type="text" class="form-control" placeholder="Enter ...">
+                  </div>
                 </div>
-
-                <div class="form-group">
-                  <label>Amount</label>
-                  <input required name="amount" type="number" step="0.01" id="amountInput" class="form-control" placeholder="Enter ...">
-                </div>
-                </div>
-              
               </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -190,23 +186,36 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 <div class="tab-content">
                   <div class="active tab-pane" id="payment_history">
                   <div class="row">
-                    <div class="col-7">
-                    <a href="#" data-toggle="modal" data-target="#modalAddOns" class="btn btn-info" style="margin-right:3px;">PRINT Statement of Account</a>
+                    <div class="col-4">
+                    <a href="#" data-toggle="modal" data-target="#newPaymentModal" class="btn btn-info btn-block" style="margin-right:3px;">NEW PAYMENT</a>
                     </div>
                     
-                    <div class="col-5">
-                      <div class="row">
-                        <div class="col-6">
-                        <select required id="enrollmentSelect" class="form-control select2 selectFilter">
+                    <div class="col-8">
+                  
+                          
+                        
+                          <form class="generic_form_trigger" data-url="enrollment">
+                  <div class="row">
+                  <input type="hidden" name="action" value="printSOA">
+                <div class="col-6">
+                  <div class="form-group">
+                  <select name="enrollment_id" required id="enrollmentSelect" class="form-control select2 selectFilter">
                           <?php foreach($enrollmentList as $eList): ?>
                             <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
                           <?php endforeach; ?>
                         </select>
-
-                        </div>
-                        <div class="col-6">
-                          <a href="#" data-toggle="modal" data-target="#modalAddOns" class="btn btn-info btn-block" style="margin-right:3px;">NEW PAYMENT</a>
-                        </div>
+                  </div>
+                          
+                     
+                    </div>
+                    
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-info btn-block" >PRINT Statement of Account</button>
+                    </div>
+                    
+                  </form>
+                        
+                        
                       </div>
                     </div>
                   </div>
@@ -380,9 +389,17 @@ var datatable =
     var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     // Update the footer
+    $('#enrollmentIdHidden').val($('#enrollmentSelect').val());
+    
+    
     $('#feeTotal').html(formattedReceived);
     // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
     $('#totalVal').val(received);
+
+
+
+
+
 }
             });
 
@@ -390,77 +407,9 @@ var datatable =
 
 
 
-
-            var enrollment_id = $('#enrollmentSelect').val();
+            // var enrollment_id = $('#enrollmentSelect').val();
  
 
- var datatable2 = 
-             $('#ajaxDatatable2').DataTable({
-                 "searching": false,
-                 "pageLength": 9999,
-                 language: {
-                     searchPlaceholder: "Search Teacher's Name"
-                 },
-                 "bLengthChange": false,
-                 "ordering": false,
-                 'processing': true,
-                 'serverSide': true,
-                 'serverMethod': 'post',
-                 
-                 'ajax': {
-                     'url':'studentAccounts',
-                      'type': "POST",
-                      "data": function (data){
-                         data.action = "soaList";
-                         data.enrollment_id = enrollment_id;
-                      }
-                 },
-                 'columns': [
-                     { data: 'school_year', "orderable": false  },
-                     { data: 'fee', "orderable": false  },
-                     {
-                         data: 'amount', 
-                         orderable: false,
-                         render: function (data, type, row) {
-                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                         }
-                     },
-                     
-                     { data: 'type', "orderable": false  },
- 
- 
-                 ],
-                 "footerCallback": function (row, data, start, end, display) {
-     var api = this.api();
- 
-     // Remove the formatting to get integer data for summation
-     var intVal = function (i) {
-         return typeof i === 'string' ?
-             i.replace(/[\$,]/g, '') * 1 :
-             typeof i === 'number' ?
-                 i : 0;
-     };
- 
-     // Total over all pages
-     var received = api
-         .column(2)
-         .data()
-         .reduce(function (a, b) {
-             return intVal(a) + intVal(b);
-         }, 0);
- 
-     // Calculate installment
-     var installment = received / 10;
- 
-     // Format the output
-     var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-     // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-     // Update the footer
-     $('#feeTotal2').html(formattedReceived);
-     // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
-     $('#totalVal').val(received);
- }
-});
 
 
 
@@ -470,15 +419,16 @@ var datatable =
 
 
 
-            $('.selectFilter').on('change', function() {
-              var student_id = $('#studentSelect').val() || "";
-              datatable.ajax.url('enrollment?action=enrollmentList&student_id='+student_id).load();
-              });
+            // $('.selectFilter').on('change', function() {
+            //   var student_id = $('#studentSelect').val() || "";
+            //   datatable.ajax.url('enrollment?action=enrollmentList&student_id='+student_id).load();
+            //   });
 
 
-              $('.selectFilter2').on('change', function() {
-              var enrollment_id = $('#enrollmentSelect2').val() || "";
-              datatable.ajax.url('studentAccounts?action=soaList&enrollment_id='+enrollment_id).load();
+              $('.selectFilter').on('change', function() {
+              var enrollment_id = $('#enrollmentSelect').val() || "";
+              // alert(enrollment_id);
+              datatable.ajax.url('studentAccounts?action=paymentHistoryList&enrollmentFilterID='+enrollment_id).load();
               });
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);

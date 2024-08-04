@@ -461,13 +461,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 								is_paid,
 								installment_number,
 								syid,
-								type,
-								payment_id,
-								from_balance,
-								to_balance
+								type
+								
 								) 
 							VALUES(
-								?,?,?,?,?,?,?,?,?
+								?,?,?,?,?,?
 								)", 
 							$_POST["enrollment_id"],
 							$_POST["downpayment"],
@@ -475,10 +473,26 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 							1,
 							$enrollment[0]["syid"],
 							"DOWNPAYMENT",
-							$payment_id,
-							$total_fee,
-							$newTotal
+							
 						);
+				$installment_id = query("SELECT LAST_INSERT_ID() as installment_id");
+				$installment_id = $installment_id[0]["installment_id"];
+				query("insert INTO payment_installment (
+					payment_id,
+					installment_id,
+					enrollment_id,
+					from_balance,
+					to_balance
+					) 
+				VALUES(
+					?,?,?,?,?
+					)", 
+				$payment_id,
+				$installment_id,
+				$_POST["enrollment_id"],
+				$total_fee,
+				$newTotal
+			);
 
 
 				for($i = 2; $i <= 11; $i++):
@@ -510,6 +524,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
 			);
 			endforeach;
+
+
+			
 
 
 
@@ -744,19 +761,29 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			// dump($enrollment);
 			$student = query("select * from student where student_id = ?", $enrollment["student_id"]);
 			$student = $student[0];
-			$payment = query("select * from payment where enrollment_id = ?", $_POST["enrollment_id"]);
+			// $payment = query("select * from payment where enrollment_id = ?", $_POST["enrollment_id"]);
 			$advisory = query("select a.*, s.section from advisory a
 								left join section s
 								on s.section_id = a.section_id
 								where advisory_id = ?", $enrollment["advisory_id"]);
 
-			$installment = query("select * from installment i
-									left join payment p
-									on p.payment_id = i.payment_id
-									where i.enrollment_id = ? and is_paid = 'DONE'
-									order by date_paid desc
-									", $_POST["enrollment_id"]);
-									// dump($installment);
+			$payment_installment = query("
+			
+			
+			select * from payment_installment pi
+			left join payment p
+			on p.payment_id = pi.payment_id
+			where pi.enrollment_id = ? order by tbl_id desc
+			", $_POST["enrollment_id"]);
+
+
+			// $installment = query("select * from installment i
+			// 						left join payment p
+			// 						on p.payment_id = i.payment_id
+			// 						where i.enrollment_id = ? and is_paid IN ('DONE', 'PROMISSORY')
+			// 						order by date_paid desc
+			// 						", $_POST["enrollment_id"]);
+			// 						dump($installment);
 			if(!empty($advisory)):
 				$advisory = $advisory[0];
 			endif;
@@ -902,11 +929,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						</tr>
 						';	
 						$total = 0;
-						foreach($installment as $row):
+						foreach($payment_installment as $row):
+							// dump($row);
+							// $payment = $
+
 							// dump(date("F d, Y", strtotime($row["date_paid"])));
 							$html.='<tr>';
 							$html .= '<td>' . date("F d, Y", strtotime($row["date_paid"])) . '</td>';
-								$html.='<td >'.to_peso($row["amount_due"]).'</td>';
+								$html.='<td >'.to_peso($row["paid"]).'</td>';
 								$html.='<td >'.($row["type"]).'</td>';
 								$html.='<td >'.($row["or_number"]).'</td>';
 								$html.='<td >'.to_peso($row["to_balance"]).'</td>';

@@ -161,9 +161,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     <div class="col-7">
 
 
-                    <div style="border: 1px solid black; border-radius: 20px;" class="p-3">
-
-                    <h4 class="mb-3">Student's Profile</h4>
+                    <div class="card p-3">
 
                     <table class="table" id="sectionTable">
                  
@@ -212,35 +210,30 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     </div>
                     </div>
                     <div class="col-5">
-                    <div style="border: 1px solid black; border-radius: 20px;" class="p-3">
 
-<h4 class="mb-3">Parent's Profile</h4>
-
+                    <div class="card p-3">
                     <h5 class="card-title text-black"><b><?php echo($student["father_lastname"] . ", " . $student["father_firstname"]); ?></b></h5>
                     <p class="card-text text-gray m-0">Father</p>
                     <p class="card-text text-gray m-0"><?php echo($student["father_occupation"]); ?></p>
-                    <p class="card-text text-gray m-0"><?php echo($student["father_occupation"]); ?></p>
+                    <p class="card-text text-gray m-0"><?php echo($student["father_education"]); ?></p>
                     <p class="card-text text-gray mdd-0"><?php echo($student["father_contact"] . " / " . $student["father_fb"]); ?></p>
+          </div>
+
+
+          <div class="card p-3">
+                    <h5 class="card-title text-black"><b><?php echo($student["mother_lastname"] . ", " . $student["mother_firstname"]); ?></b></h5>
+                    <p class="card-text text-gray m-0">Mother</p>
+                    <p class="card-text text-gray m-0"><?php echo($student["mother_occupation"]); ?></p>
+                    <p class="card-text text-gray m-0"><?php echo($student["mother_education"]); ?></p>
+                    <p class="card-text text-gray mdd-0"><?php echo($student["mother_contact"] . " / " . $student["mother_fb"]); ?></p>
+          </div>
+                    
                     <table class="table" id="sectionTable">
 
                     
-                
-               
-                 <tr>
-                   <th>Mother:</th>
-                   <td><?php echo($student["mother_lastname"] . ", " . $student["mother_firstname"]); ?></td>
-                   <th>Contact / FB:</th>
-                   <td><?php echo($student["mother_contact"] . " / " . $student["mother_fb"]); ?></td>
-                 </tr>
-                 <tr>
-                   <th>Occupation:</th>
-                   <td><?php echo($student["mother_occupation"]); ?></td>
-                   <th>Educational Attainment:</th>
-                   <td><?php echo($student["mother_education"]); ?></td>
-                 </tr>
+       
 
           </table>
-                    </div>
                     </div>
                   </div>
 
