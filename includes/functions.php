@@ -37,6 +37,24 @@
     }
 
 
+    function getInstallmentName($number) {
+        $installmentNames = [
+            2 => '1st installment',
+            3 => '2nd installment',
+            4 => '3rd installment',
+            5 => '4th installment',
+            6 => '5th installment',
+            7 => '6th installment',
+            8 => '7th installment',
+            9 => '8th installment',
+            10 => '9th installment',
+            11 => '10th installment'
+        ];
+    
+        return isset($installmentNames[$number]) ? $installmentNames[$number] : 'Invalid installment number';
+    }
+
+
 
 
     function calculateAge($birthDate) {

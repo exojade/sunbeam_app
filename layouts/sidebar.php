@@ -170,7 +170,7 @@
 
 
   <li class="nav-item">
-      <a href="studentAccounts" class="nav-link">
+      <a href="installment" class="nav-link">
         <i class="nav-icon fas fa-database"></i>
         <p>
           Installment Report

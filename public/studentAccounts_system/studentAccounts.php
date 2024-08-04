@@ -357,7 +357,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			// dump($_POST);
 
 			$school_year= query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
+			$student = $school_year[0]["student_id"];
+			// dump($student);
 			$school_year = $school_year[0]["syid"];
+			
 			// $latest_installment = query("select * from installment where is_paid = 'DONE' and enrollment_id = ? order by installment_number desc", $_POST["enrollment_id"]);
 			// $latest_installment = $latest_installment[0];
 
@@ -551,7 +554,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					"result" => "success",
 					"title" => "Success",
 					"message" => "PAYMENT SUCCCESS",
-					"link" => "index",
+					"link" => "studentAccounts?action=specific&id=".$student,
 					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 					];
 					echo json_encode($res_arr); exit();
@@ -560,7 +563,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			// Call the function to handle installment payments
 			handleInstallmentPayments($enrollment_id, $amount_paid, $or_number, $paid_by, $latest_payment, $school_year);
 
-
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "PAYMENT SUCCCESS",
+				"link" => "studentAccounts?action=specific&id=".$student,
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
 
 
 		endif;

@@ -49,6 +49,9 @@
 			else if ($request == 'studentAccounts')
 				require 'public/studentAccounts_system/studentAccounts.php';
 
+			else if ($request == 'installment')
+				require 'public/installment_system/installment.php';
+
 
 			else if ($request == 'settings')
 				require 'public/settings_system/settings.php';

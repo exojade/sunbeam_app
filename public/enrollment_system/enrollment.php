@@ -482,16 +482,20 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					installment_id,
 					enrollment_id,
 					from_balance,
-					to_balance
+					to_balance,
+					paid,
+					amount_due
 					) 
 				VALUES(
-					?,?,?,?,?
+					?,?,?,?,?,?,?
 					)", 
 				$payment_id,
 				$installment_id,
 				$_POST["enrollment_id"],
 				$total_fee,
-				$newTotal
+				$newTotal,
+				$_POST["downpayment"],
+				$_POST["downpayment"]
 			);
 
 
@@ -539,7 +543,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 		"result" => "success",
 		"title" => "Success",
 		"message" => "Successful Enrollment",
-		"link" => "index",
+		"link" => "studentAccounts?action=specific&id=".$enrollment[0]["student_id"],
 		// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 		];
 		echo json_encode($res_arr); exit();
