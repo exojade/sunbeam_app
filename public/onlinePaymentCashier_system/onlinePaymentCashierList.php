@@ -11,11 +11,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
         <div class="col">
-            <h1>Online Payment Module</h1>
+            <h1>Online Payment Cashier Module</h1>
           </div>
-            <div class="col">
-              <a href="#" data-target="#modalPayOnline" data-toggle="modal" class="btn btn-primary float-right">Pay Online</a>
-            </div>
+         
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -61,7 +59,7 @@
                   <thead>
                   <tr>
                     <th></th>
-                    <th>Transaction Code</th>
+                    <th>Paid By</th>
                     <th>Date</th>
                     <th>Amount Paid</th>
                     <th>Bank</th>
@@ -118,16 +116,15 @@ var datatable =
                 'serverMethod': 'post',
                 
                 'ajax': {
-                    'url':'onlinePayment',
+                    'url':'onlinePaymentCashier',
                      'type': "POST",
                      "data": function (data){
                         data.action = "onlinePaymentList";
-                        data.paidBy = "<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>";
                      }
                 },
                 'columns': [
                     { data: 'action', "orderable": false  },
-                    { data: 'transactionCode', "orderable": false  },
+                    { data: 'fullname', "orderable": false  },
                     { data: 'transactionDate', "orderable": false  },
                     {
             data: 'amount',

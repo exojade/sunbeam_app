@@ -195,10 +195,6 @@ GROUP BY
                         exit();
                     }
 			}
-
-
-
-		// dump($target);
 		$totalAmount = 0;
 		foreach($payment_balance as $row):
 			

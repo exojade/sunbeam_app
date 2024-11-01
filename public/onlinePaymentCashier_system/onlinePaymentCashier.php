@@ -235,11 +235,10 @@ GROUP BY
 			$limitString = " limit " . $limit;
 			$offsetString = " offset " . $offset;
 			$where = " where 1=1";
-
-			if(isset($_REQUEST["paidBy"])):
-				$where .= " and paidBy = '".$_REQUEST["paidBy"]."'";
-			endif;
-			$baseQuery = "select * from onlinepayment " . $where;
+			$baseQuery = "select o.*, u.fullname from onlinepayment o
+							left join users u
+							on u.id = o.paidBy
+			" . $where;
 
 			$bank = query("select * from bankdetails");
 			$Bank = [];
@@ -279,7 +278,7 @@ GROUP BY
 	else {
 
 		if(!isset($_GET["action"])):
-			render("public/onlinePayment_system/onlinePaymentList.php",[
+			render("public/onlinePaymentCashier_system/onlinePaymentCashierList.php",[
 			]);
 		else:
 			if($_GET["action"] == "specific"):
