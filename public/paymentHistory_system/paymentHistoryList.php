@@ -10,14 +10,10 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1>Teachers</h1>
+        <div class="col">
+            <h1>Payment History</h1>
           </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTeacher">Add Teacher</button>
-            </ol>
-          </div>
+       
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -26,160 +22,6 @@
     <section class="content">
 
 
-    <div class="modal fade" id="addTeacher">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add Teacher</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-            <form class="generic_form_trigger" data-url="teacher">
-                <input type="hidden" name="action" value="teacherAdd">
-                <input type="hidden" name="region" id="true_region" value="">
-                  <input type="hidden" name="province" id="true_province" value="">
-                  <input type="hidden" name="cityMun" id="true_city_mun" value="">
-                  <input type="hidden" name="barangay" id="true_barangay" value="">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">First Name</label>
-                        <input required value="" type="text" name="firstname" class="form-control" id="exampleInputEmail1" placeholder="First Name">
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Middle Name</label>
-                        <input  type="text" value="" name="middlename" class="form-control" id="exampleInputEmail1" placeholder="Middle Name">
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Last Name</label>
-                        <input required type="text" value="" name="lastname" class="form-control" id="exampleInputEmail1" placeholder="Last Name">
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Name Extension</label>
-                        <input  type="text" value="" name="nameExtension" class="form-control" id="exampleInputEmail1" placeholder="Ex. I, II, III, Jr. Sr.">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Region <span class="color_red">*</span></label>
-                              <select required class="form-control select2" id="region_select">
-                                  <option  value=""></option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Province <span class="color_red">*</span></label>
-                              <select required class="form-control select2" id="province_select">
-                                  <option  value=""></option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">City | Municipality <span class="color_red">*</span></label>
-                              <select required class="form-control select2" id="city_mun_select">
-                                  <option  value=""></option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Barangay <span class="color_red">*</span></label>
-                              <select required class="form-control select2" id="barangay_select">
-                                  <option  value=""></option>
-                              </select>
-                            </div>
-                          </div>
-                      </div>
-                  
-                      <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Street / House Number / Purok</label>
-                              <input value="" name="address" required type="text" class="form-control"  placeholder="Street / House Number / Purok">
-                            </div>
-                          </div>
-                      </div>
-
-                      <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Birthdate</label>
-                              <input  max="<?php echo date('Y-m-d'); ?>" value="" name="birthDate" required type="date" class="form-control"  placeholder="Birthdate">
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Sex</label>
-                              <select required name="gender" class="form-control select2" >
-                                <option disabled selected value="">Please select Sex</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div class="col-md-6">
-                          <div class="form-group">
-                              <label>Contact Number:</label>
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                </div>
-                                <input name="contactNumber" required type="text" class="form-control" data-inputmask='"mask": "(+63) 9999999999"' data-mask>
-                              </div>
-                              <!-- /.input group -->
-                            </div>
-                          </div>
-
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Email Address (this will serve as username on the system)</label>
-                              <input value="" name="email" required type="email" class="form-control"  placeholder="---">
-                            </div>
-                          </div>
-
-
-                          <div class="col-md-6">
-                          <div class="form-group">
-                              <label>Undergraduate Course</label>
-                              <input value="" name="undergrad_course" required type="text" class="form-control"  placeholder="Ex. BS in Eduation">
-                            </div>
-                          </div>
-
-
-                          <div class="col-md-6">
-                          <div class="form-group">
-                              <label>Postgraduate Course</label>
-                              <input value="" name="postgraduate_course" type="text" class="form-control"  placeholder="Ex. Masters in Education">
-                            </div>
-                          </div>
-
-
-
-
-                      </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-            </div>
-      
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
 
     
       <div class="container-fluid">
@@ -187,50 +29,13 @@
           <div class="col-12">
             <!-- Default box -->
             <div class="card">
-              <div class="card-header">
-                <!-- <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter School Year</option>
-                          <option value="">2023-2024</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Grade Level</option>
-                          <option value="">Grade 1</option>
-                          <option value="">Grade 2</option>
-                          <option value="">Grade 3</option>
-                          <option value="">Grade 4</option>
-                          <option value="">Grade 5</option>
-                          <option value="">Grade 6</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <select required name="gender" class="form-control select2">
-                          <option selected disabled value="">Filter Section</option>
-                          <option value="">Section Apple</option>
-                          <option value="">Section Orange</option>
-                          <option value="">Section Grapes</option>
-                         
-                        </select>
-                      </div>
-                    </div>
-                </div> -->
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
                 
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Date</th>
+                    <th>OR Number</th>
                     <th>Teacher Name</th>
                     <th width="10%">Action</th>
                   </tr>
