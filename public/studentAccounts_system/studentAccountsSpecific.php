@@ -50,7 +50,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-4">
           <?php if($enrollment["status"] == "PENDING"): ?>
           <div class="alert alert-warning alert-block">
                   <h5><i class="icon fas fa-ban"></i> Alert!</h5>
@@ -139,6 +139,41 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
       </div>
 
 
+      <div class="small-box bg-info">
+              <div class="inner">
+
+       
+              <?php 
+
+            // dump(get_defined_vars());
+            // if($currentInstallmentNumber != 0)
+            $payment_balance = query("
+            
+            SELECT 
+                SUM(CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END) AS total_amount
+            FROM 
+                installment ins
+            left join enrollment e
+            on e.enrollment_id = ins.enrollment_id
+            WHERE 
+                ins.installment_number <= ?
+                and ins.syid = ?
+                and e.student_id = ?
+            ", $currentInstallmentNumber, $sy["syid"], $_GET["id"]);
+      
+              ?>
+
+
+
+                <h3>₱ <?php echo(number_format(floatval($payment_balance[0]["total_amount"]),2)); ?></h3>
+                <p>Due Balance as of <?php echo(date("F d, Y")); ?></p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+            </div>
+
+
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
@@ -174,7 +209,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
               </div>
             </div>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-8">
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
@@ -219,19 +254,21 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                       </div>
                     </div>
                   </div>
-                  <table id="ajaxDatatable" class="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th>School Year</th>
-                        <th>Date Paid</th>
-                        <th>OR Number</th>
-                        <th>From</th>
-                        <th>Paid</th>
-                        <th>Remaining</th>
-                        <th>Type</th>
-                      </tr>
-                    </thead>
-                  </table>
+                  <div class="table-responsive">
+                    <table id="ajaxDatatable" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>School Year</th>
+                          <th>Date Paid</th>
+                          <th>OR Number</th>
+                          <th>From</th>
+                          <th>Paid</th>
+                          <th>Remaining</th>
+                          <th>Type</th>
+                        </tr>
+                      </thead>
+                    </table>
+                    </div>
                   </div>
 
 

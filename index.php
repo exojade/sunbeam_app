@@ -46,6 +46,10 @@
 			else if ($request == 'fees')
 				require 'public/fees_system/fees.php';
 
+			else if ($request == 'paymentHistory')
+				require 'public/paymentHistory_system/paymentHistory.php';
+
+
 			else if ($request == 'studentAccounts')
 				require 'public/studentAccounts_system/studentAccounts.php';
 

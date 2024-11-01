@@ -8,6 +8,25 @@ use Google\Service\Calendar;
 // $service = new Google_Service_Drive($google);
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 
+		if($_POST["action"] == "updatePaymentSchedule"):
+
+			query("delete from payment_settings");
+			query("insert INTO payment_settings (dueDate, installment_number) 
+				VALUES(?,?)", 
+				$_POST["dueDate"], $_POST["installment_number"]);
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Updated Payment Schedule Successfully",
+				"link" => "index",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+		endif;
+
 		
 
 	
@@ -48,7 +67,7 @@ use Google\Service\Calendar;
 			render("public/student_system/studentSpecific.php",[]);
 		}
 		else if($role == "cashier"){
-			render("public/dashboard_system/dashboard_admin.php",[]);
+			render("public/dashboard_system/dashboard_cashier.php",[]);
 		}
 		else if($role == "parent"){
 			render("public/dashboard_system/dashboard_parent.php",[]);

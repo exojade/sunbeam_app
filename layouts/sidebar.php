@@ -136,6 +136,7 @@
 
 
 
+
   <li class="nav-item">
       <a href="settings" class="nav-link">
         <i class="nav-icon fas fa-cogs"></i>
@@ -148,6 +149,18 @@
 
 
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "cashier"): ?>
+
+  <li class="nav-item">
+      <a href="index" class="nav-link">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>
+          Dashboard
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+
   <li class="nav-item">
       <a href="enrollment" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
@@ -217,6 +230,16 @@
         <i class="nav-icon fas fa-graduation-cap"></i>
         <p>
           My Students
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="paymentHistory" class="nav-link">
+        <i class="nav-icon fas fa-graduation-cap"></i>
+        <p>
+          Payment History
           <span class="right badge badge-danger"></span>
         </p>
       </a>

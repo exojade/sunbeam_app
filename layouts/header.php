@@ -79,3 +79,11 @@
 <!-- AdminLTE for demo purposes -->
 
 
+<?php 
+  $payment_settings = query("select * from payment_settings");
+
+  $currentInstallmentNumber = 11;
+  if(!empty($payment_settings)):
+    $currentInstallmentNumber = $payment_settings[0]["installment_number"];
+  endif;
+?>
