@@ -14,6 +14,12 @@
 		$request = explode('/',$request);
 		$request = $request[1];
 		$countering = array("login", "register");
+
+
+
+
+
+
 		// dump($_SESSION);
 		if (!in_array($request, $countering)){
 			if(empty($_SESSION["sunbeam_app"]["userid"]) && empty($_SESSION["sunbeam_app"]["application"])){
@@ -46,8 +52,13 @@
 			else if ($request == 'fees')
 				require 'public/fees_system/fees.php';
 
-			else if ($request == 'paymentHistory')
-				require 'public/paymentHistory_system/paymentHistory.php';
+			else if ($request == 'onlinePayment')
+				require 'public/onlinePayment_system/onlinePayment.php';
+
+
+			else if ($request == 'onlinePaymentCashier')
+				require 'public/onlinePaymentCashier_system/onlinePaymentCashier.php';
+
 
 
 			else if ($request == 'studentAccounts')

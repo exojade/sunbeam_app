@@ -16,6 +16,19 @@
 
     <!-- Main content -->
     <section class="content">
+
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+        <div class="col">
+            <h1>Dashboard</h1>
+          </div>
+       
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
       <div class="container-fluid">
           <div class="row">
             <div class="col-7">

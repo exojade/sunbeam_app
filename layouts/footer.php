@@ -25,7 +25,7 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
     Swal.fire({
         title: prompttitle,
         text: promptmessage,
-        type: 'info',
+        icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'Yes',
         cancelButtonText: 'Cancel'

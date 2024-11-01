@@ -28,11 +28,11 @@
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-light navbar-light" >
+  <nav class="main-header navbar navbar-expand navbar-primary" >
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <a class="nav-link " data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="color:white;"></i></a>
       </li>
     </ul>
 
@@ -79,9 +79,8 @@
 <!-- AdminLTE for demo purposes -->
 
 
-<?php 
+<?php
   $payment_settings = query("select * from payment_settings");
-
   $currentInstallmentNumber = 11;
   if(!empty($payment_settings)):
     $currentInstallmentNumber = $payment_settings[0]["installment_number"];

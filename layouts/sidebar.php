@@ -6,14 +6,14 @@
 
 .sidebar-dark-primary{
 
-  background-color: #42a1ff !important;
+  /* background-color: #42a1ff !important; */
   color: #fff;
 }
 .sidebar-dark-primary a{
   color: #fff !important;
 }
 </style>
-<aside class="main-sidebar sidebar-dark-primary elevation-4" >
+<aside class="main-sidebar sidebar-dark-primary bg-primary elevation-4" >
     <!-- Brand Logo -->
     <div class="user-panel mt-3 pb-3 mb-3 text-center">
         <div class="image" style="display:block;">
@@ -191,6 +191,17 @@
         </p>
       </a>
   </li>
+
+  <li class="nav-item">
+      <a href="onlinePaymentCashier" class="nav-link">
+        <i class="nav-icon fas fa-database"></i>
+        <p>
+          Online Payment
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
   <li class="nav-item">
       <a href="fees" class="nav-link">
         <i class="nav-icon fas fa-database"></i>
@@ -236,10 +247,10 @@
   </li>
 
   <li class="nav-item">
-      <a href="paymentHistory" class="nav-link">
-        <i class="nav-icon fas fa-graduation-cap"></i>
+      <a href="onlinePayment" class="nav-link">
+        <i class="nav-icon fas fa-upload"></i>
         <p>
-          Payment History
+          Online Payment
           <span class="right badge badge-danger"></span>
         </p>
       </a>
