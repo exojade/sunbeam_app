@@ -216,7 +216,7 @@
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "parent"): ?>
 
     <li class="nav-item">
-      <a href="student?action=parentsList" class="nav-link">
+      <a href="index" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
           Dashboard

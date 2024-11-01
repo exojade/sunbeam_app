@@ -6,7 +6,7 @@
 
   <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
-<style>
+<!-- <style>
   #sectionTable td{
     border: 0px;
     padding: 0px;
@@ -25,7 +25,7 @@
     border: 0px;
     padding: 0px;
   }
-</style>
+</style> -->
 <div class="content-wrapper">
 
 <?php
@@ -84,7 +84,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-4">
           <?php if($boolEnrolled == 0): ?>
           <div class="alert alert-warning alert-block">
             <h5><i class="icon fas fa-ban"></i> Alert!</h5>
@@ -93,6 +93,40 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
           <?php endif; ?>
             <!-- Profile Image -->
 
+
+            <div class="small-box bg-info">
+              <div class="inner">
+
+       
+              <?php 
+
+            // dump(get_defined_vars());
+            // if($currentInstallmentNumber != 0)
+            $payment_balance = query("
+            
+            SELECT 
+                SUM(CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END) AS total_amount
+            FROM 
+                installment ins
+            left join enrollment e
+            on e.enrollment_id = ins.enrollment_id
+            WHERE 
+                ins.installment_number <= ?
+                and ins.syid = ?
+                and e.student_id = ?
+            ", $currentInstallmentNumber, $sy["syid"], $_GET["id"]);
+      
+              ?>
+
+
+
+                <h3>₱ <?php echo(number_format(floatval($payment_balance[0]["total_amount"]),2)); ?></h3>
+                <p>Due Balance as of <?php echo(date("F d, Y")); ?></p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+            </div>
 
 
 
@@ -142,7 +176,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
             <!-- /.card -->
           </div>
           <!-- /.col -->
-          <div class="col-md-9">
+          <div class="col-md-8">
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
@@ -156,7 +190,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 <div class="tab-content">
                   <div class="active tab-pane" id="profile">
 
-                  <table class="table" id="sectionTable">
+                  <table class="table table-bordered" id="sectionTable">
                  
                     <tr>
                       <th>Student Name:</th>
@@ -241,7 +275,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
                     <h5 class="bg-teal p-2">Advisory Details</h5>
 
-                  <table class="table" id="advisorySection">
+                  <table class="table table-bordered" id="advisorySection">
                  <tr>
                    <th>Grade Level:</th>
                    <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
@@ -301,6 +335,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     
                   </div>
                   </form>
+                  <div class="table-responsive">
                   <table style="width: 100%;" id="ajaxDatatable2" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -314,6 +349,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                       </tr>
                     </thead>
                   </table>
+                            </div>
                   </div>
                 </div>
               </div>
