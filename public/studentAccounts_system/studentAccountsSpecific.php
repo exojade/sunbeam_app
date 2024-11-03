@@ -264,7 +264,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                           <th>From</th>
                           <th>Paid</th>
                           <th>Remaining</th>
-                          <th>Type</th>
+                          <!-- <th>Type</th> -->
                         </tr>
                       </thead>
                     </table>
@@ -397,7 +397,7 @@ var datatable =
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
                         }
                     },
-                    { data: 'type', "orderable": false  },
+                    //{ data: 'type', "orderable": false  },
 
                 ],
                 "footerCallback": function (row, data, start, end, display) {

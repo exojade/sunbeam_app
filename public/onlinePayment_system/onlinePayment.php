@@ -32,36 +32,36 @@
 
 
 			$payment_balance = query("
-           SELECT 
-    e.student_id,
-    CONCAT(s.lastname, ', ', s.firstname) AS fullname,
-    
-    -- Urgent amount for specified installment number
-    SUM(CASE 
-            WHEN ins.installment_number <= ?
-            THEN CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END 
-            ELSE 0 
-        END) AS urgent_amount,
-    
-    -- Total outstanding balance (all installments regardless of installment number)
-    SUM(CASE 
-            WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' 
-            THEN amount_due 
-            ELSE 0 
-        END) AS total_outstanding_balance
-    
-FROM 
-    installment ins
-LEFT JOIN 
-    enrollment e ON e.enrollment_id = ins.enrollment_id
-LEFT JOIN 
-    student s ON s.student_id = e.student_id
+			SELECT 
+					e.student_id,
+					CONCAT(s.lastname, ', ', s.firstname) AS fullname,
+					
+					-- Urgent amount for specified installment number
+					SUM(CASE 
+							WHEN ins.installment_number <= ?
+							THEN CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END 
+							ELSE 0 
+						END) AS urgent_amount,
+					
+					-- Total outstanding balance (all installments regardless of installment number)
+					SUM(CASE 
+							WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' 
+							THEN amount_due 
+							ELSE 0 
+						END) AS total_outstanding_balance
+					
+				FROM 
+					installment ins
+				LEFT JOIN 
+					enrollment e ON e.enrollment_id = ins.enrollment_id
+				LEFT JOIN 
+					student s ON s.student_id = e.student_id
 
-WHERE 
-    ins.syid = ?
-    AND e.student_id IN (".$studentIdsString.")
-GROUP BY 
-    e.student_id
+				WHERE 
+					ins.syid = ?
+					AND e.student_id IN (".$studentIdsString.")
+				GROUP BY 
+				e.student_id
             ", $currentInstallmentNumber, $syid);
 			// dump($payment_balance);
 			$hint = '<input type="hidden" name="action" value="onlinePayment">';
@@ -208,10 +208,9 @@ GROUP BY
 			endif;
 		endforeach;
 
-		query("insert INTO onlinepayment (transactionCode, amount, proofPayment, status, transactionDate,paidBy,bankDetailsId) 
-                    VALUES(?,?,?,?,?,?,?)", 
-                	$transactionCode, $totalAmount, $target, "PENDING", date("Y-m-d H:i:s"), $_SESSION["sunbeam_app"]["userid"], $_POST["bank"]);
-
+		query("insert INTO onlinepayment (transactionCode, amount, proofPayment, status, transactionDate,paidBy,bankDetailsId,installment_number,syid) 
+                    VALUES(?,?,?,?,?,?,?,?,?)", 
+                	$transactionCode, $totalAmount, $target, "PENDING", date("Y-m-d H:i:s"), $_SESSION["sunbeam_app"]["userid"], $_POST["bank"],$currentInstallmentNumber,$syid);
 					$res_arr = [
 						"result" => "success",
 						"title" => "Success",

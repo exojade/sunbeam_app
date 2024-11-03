@@ -46,7 +46,7 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
                         Swal.fire({
                             title: "Submit success",
                             text: o.message,
-                            type: "success"
+                            icon: "success"
                         }).then(function () {
                           if(typeof(o.newlink) != "undefined" && o.newlink !== null) {
                           if(o.newlink == "newlink"){

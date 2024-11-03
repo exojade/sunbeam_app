@@ -502,6 +502,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				if ($amount_paid < $amount_due) {
 					$is_promissory = true;
 				}
+				
 			
 				// Insert the payment record
 				$payment_type = $is_promissory ? 'PROMISSORY' : 'INSTALLMENT';
@@ -550,14 +551,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				// 	query("UPDATE installment SET credit_balance = '".$latest_credit_balance."' WHERE installment_id = '".$latest_installment_id."'");
 				// }
 			
-				$res_arr = [
-					"result" => "success",
-					"title" => "Success",
-					"message" => "PAYMENT SUCCCESS",
-					"link" => "studentAccounts?action=specific&id=".$student,
-					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
-					];
-					echo json_encode($res_arr); exit();
+				// $res_arr = [
+				// 	"result" => "success",
+				// 	"title" => "Success",
+				// 	"message" => "PAYMENT SUCCCESS",
+				// 	"link" => "studentAccounts?action=specific&id=".$student,
+				// 	// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				// 	];
+				// 	echo json_encode($res_arr); exit();
 			}
 			
 			// Call the function to handle installment payments

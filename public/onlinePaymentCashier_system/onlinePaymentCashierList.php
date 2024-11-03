@@ -19,6 +19,29 @@
     </section>
 
 
+    <div class="modal fade" id="verifyOnlinePaymentModal">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content ">
+              <div class="modal-header bg-warning">
+					    <h3 class="modal-title text-center">Verify Online Payment</h3>
+              </div>
+              <div class="modal-body" style="-webkit-user-select: none;  /* Chrome all / Safari all */
+              -moz-user-select: none;     /* Firefox all */
+              -ms-user-select: none;  ">
+                  <form class="generic_form_trigger" data-url="onlinePaymentCashier" autocomplete="off">
+                    <div class="fetched-data"></div>
+                    <br>
+                      <div class="box-footer">
+                        <button type="button" class=" btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="submit" class="btn btn-primary">Accept Payment</button>
+                      </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
     <div class="modal fade" id="modalPayOnline">
           <div class="modal-dialog modal-xl">
             <div class="modal-content ">
@@ -182,6 +205,29 @@ var datatable =
             },
             success : function(data){
                 $('#modalPayOnline .fetched-data').html(data);
+                Swal.close();
+                $(function () {
+                  bsCustomFileInput.init();
+                });
+                // $(".select2").select2();//Show fetched data from database
+            }
+        });
+     });
+
+
+
+     $('#verifyOnlinePaymentModal').on('show.bs.modal', function (e) {
+      var id = $(e.relatedTarget).data('id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'onlinePaymentCashier', //Here you will fetch records 
+            data: {
+               action: "verifyOnlinePaymentModal",
+               tblid: id
+            },
+            success : function(data){
+                $('#verifyOnlinePaymentModal .fetched-data').html(data);
                 Swal.close();
                 $(function () {
                   bsCustomFileInput.init();
