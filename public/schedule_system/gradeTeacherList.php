@@ -44,10 +44,13 @@ $schedule = query("select a.grade_level,sched.*,s.section, sub.subject_code, sub
 
 $teacher = query("select * from teacher where teacher_id = ?", $_SESSION["sunbeam_app"]["userid"]);  
 $teacher = $teacher[0];
-$grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_name from student_grades g
+$grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_name, sub.subject_type from student_grades g
                   left join student s
                   on s.student_id = g.student_id
-                  where schedule_id = ?", $schedule["schedule_id"]);
+                  left join subjects sub
+                  on sub.subject_id = g.subject_id
+                  where schedule_id = ?
+                  group by schedule_id", $schedule["schedule_id"]);
 // dump($grades);
                           ?>
 
@@ -205,7 +208,6 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   <?php endif; ?>
                 <?php endif; ?>
               <?php endforeach; ?>
-
 
               </div><!-- /.card-header -->
               <div class="card-body">

@@ -1,19 +1,15 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+<link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Subjects</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSubject">Add Subject</button>
-            </ol>
-          </div>
-        </div>
+       
       </div><!-- /.container-fluid -->
     </section>
 
@@ -32,6 +28,18 @@
               <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
               <input type="hidden" name="action" value="addSubject">
 
+
+              <?php $subject_main = query("select * from subject_main"); ?>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Subject Type</label>
+                <select required class="form-control" name="subject_head_id">
+                  <option  value="" selected disabled>Please Select</option>
+                  <?php foreach($subject_main as $row): ?>
+                    <option value="<?php echo($row["subject_head_id"]); ?>"><?php echo($row["subject_head_name"]); ?></option>
+                  <?php endforeach; ?>
+
+                </select>
+              </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Subject Code</label>
                 <input required type="text" name="subject_code" class="form-control" id="exampleInputEmail1" placeholder="---">
@@ -51,11 +59,49 @@
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+                  </form>
           </div>
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="modal fade" id="addSubSubjectModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+              <h4 class="modal-title">Add Child Subject</h4>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
+              <input type="hidden" name="action" value="addSubSubject">
+              <div class="fetched-data"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+                  </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
 
 
 
@@ -65,30 +111,33 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+              <div class="row mb-2">
+                  <div class="col-sm-6">
+                    <h3>Subjects</h3>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addSubject">Add Subject</button>
+                  </div>
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="ajax_datatable" class="table table-bordered table-striped">
+                <table id="ajax_datatable" class="table table-bordered table-striped" width="100%">
                   <thead>
-                    <th>Subject</th>
+                    <th>Type</th>
+                    <th>Title</th>
                     <th>Description</th>
-                    <th>Grade Level</th>
+                    <th>Sub Subjects</th>
                     <th>Action</th>
-
                   </thead>
                 </table>
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
         </div>
       </div>
     </section>
-    <!-- /.content -->
   </div>
-
-  <!-- <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script> -->
   <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -126,9 +175,11 @@ var datatable =
                      }
                 },
                 'columns': [
-                    { data: 'subject_code', "orderable": false  },
+                    { data: 'subject_head_name', "orderable": false  },
+                    // { data: 'subject_code', "orderable": false  },
                     { data: 'subject_title', "orderable": false  },
                     { data: 'subject_description', "orderable": false  },
+                    { data: 'subject_type', "orderable": false  },
                     { data: 'action', "orderable": false },
 
                 ],
@@ -156,5 +207,26 @@ var datatable =
                     // $('#currentTotal').html('$ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
             });
+
+
+            $('#addSubSubjectModal').on('show.bs.modal', function (e) {
+                  var rowid = $(e.relatedTarget).data('id');
+                  Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+                  $.ajax({
+                      type : 'post',
+                      url : 'subjects', //Here you will fetch records 
+                      data: {
+                          subject_id: rowid ,action: "addSubSubjectModal"
+                      },
+                      success : function(data){
+                          $('#addSubSubjectModal .fetched-data').html(data);
+                          Swal.close();
+                          // $(".select2").select2();//Show fetched data from database
+                      }
+                  });
+              });
+
+
+
         </script>
   <?php require("layouts/footer.php") ?>

@@ -8,9 +8,9 @@
 				$search = $_POST["search"]["value"];
 				$limitString = " limit " . $limit;
 				$offsetString = " offset " . $offset;
-				$where = " where 1=1";
-				$baseQuery = "select * from subjects";
-
+				$where = " where subjects.subject_type = 'PARENT'";
+				$baseQuery = "select subjects.*, sm.subject_head_name from subjects left join subject_main sm
+								on sm.subject_head_id = subjects.subject_head_id";
 				if($search == ""):
 					$data = query($baseQuery . " " . $where . $limitString . " " . $offsetString);
 					$all_data = query($baseQuery . " ");
@@ -22,15 +22,15 @@
 				$i = 0;
 				foreach($data as $row):
 					$data[$i]["action"] = '
-					<div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-flat btn-warning">Update</button>
-						<form class="generic_form_trigger" data-url="subjects" style="display:inline;">
+					<div class="btn-group btn-block">
+                        <a type="button" href="#" data-toggle="modal" data-id="'.$row["subject_id"].'" data-target="#addSubSubjectModal" class="btn btn-sm btn-flat btn-primary">Add Sub</a>
+                        <a type="button" href="#" data-target="#updateSubSubjectsModal" data-id="'.$row["subject_id"].'" data-toggle="modal" class="btn btn-sm btn-flat btn-warning">Update Sub</a>
+						<form class="generic_form_trigger" data-url="subjects">
 							<input type="hidden" name="action" value="deleteSubject">
 							<input type="hidden" name="subject_id" value="'.$row["subject_id"].'">
-							<button type="submit" class="btn btn-flat btn-sm btn-flat btn-danger">Delete</button>
+							<button type="submit" class="btn btn-flat btn-sm btn-danger">Delete</button>
 						</form>
-                      </div>
-					
+					</div>
 					';
 					$i++;
 				endforeach;
@@ -69,9 +69,9 @@
 		elseif($_POST["action"] == "addSubject"):
 			// dump($_POST);
 			$subject_id = create_trackid("SUBJ");
-			query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description) 
-				VALUES(?,?,?,?)", 
-				$subject_id, $_POST["subject_code"] ,$_POST["subject_name"], $_POST["description"]);
+			query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type) 
+				VALUES(?,?,?,?,?,?)", 
+				$subject_id, $_POST["subject_code"] ,$_POST["subject_name"], $_POST["description"],$_POST["subject_head_id"], "PARENT");
 
 			$res_arr = [
 				"result" => "success",
@@ -81,6 +81,53 @@
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];
 				echo json_encode($res_arr); exit();
+
+
+		elseif($_POST["action"] == "addSubSubjectModal"):
+			// dump($_POST);
+
+			$hint = "";
+			$subject = query("select * from subjects s left join subject_main sm on sm.subject_head_id = s.subject_head_id
+								where subject_id = ?", $_POST["subject_id"]);
+
+			$hint.='
+			<input type="hidden" name="subject_id" value="'.$_POST["subject_id"].'">
+			<div class="form-group">
+				<label>Subject</label>
+				<input class="form-control" disabled value="'.$subject[0]["subject_head_name"].'">
+			</div>
+
+			<div class="form-group">
+				<input class="form-control" disabled value="'.$subject[0]["subject_title"].'">
+			</div>
+
+			<div class="form-group">
+				<label>Sub Subject Title</label>
+				<input class="form-control" required name="sub_subject" placeholder="Enter Title of Sub Subject">
+			</div>
+
+			';
+
+			echo($hint);
+
+		elseif($_POST["action"] == "addSubSubject"):
+			// dump($_POST);
+
+
+			$subject_id = create_trackid("SUBJ");
+			query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type, subject_parent_id) 
+				VALUES(?,?,?,?,?,?,?)", 
+				$subject_id, "" ,$_POST["sub_subject"], "","", "CHILD", $_POST["subject_id"]);
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on adding subject",
+				"link" => "subjects",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
 		
 		
 		endif;

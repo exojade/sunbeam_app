@@ -5,25 +5,23 @@
 <?php
 // dump($_SESSION);
 $schedules = query("
-    SELECT 
-        s.*, 
-        sec.section, 
-        sub.subject_code, 
-        a.grade_level AS gradeLevel,
-        CASE 
-            WHEN sub.subject_id IN (SELECT subject_parent_id FROM subjects WHERE subject_parent_id IS NOT NULL) THEN 1
-            ELSE 0
-        END AS has_parent
-    FROM schedule s
-    LEFT JOIN advisory a ON a.advisory_id = s.advisory_id
-    LEFT JOIN subjects sub ON sub.subject_id = s.subject_id
-    LEFT JOIN section sec ON sec.section_id = a.section_id
-    WHERE s.teacher_id = ?
-    AND syid = ?
-", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
+                    
+
+
+
+                    select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
+                    left join advisory a
+                    on a.advisory_id = s.advisory_id
+                    left join subjects sub
+                    on sub.subject_id = s.subject_id
+                    left join section sec
+                    on sec.section_id = a.section_id     
+                    where s.teacher_id = ?
+                    and syid = ?
+                  ", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
 // dump($schedules);
 ?>
-
+5
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -134,13 +132,7 @@ $schedules = query("
             $days_string = rtrim($days_string, ',');
             ?>
             <div class="col-md-4">
-
-           <?php if($row["has_parent"] == 0): ?>
             <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>">
-           <?php else: ?>
-            <a href="schedule?action=childSubjects&id=<?php echo($row["schedule_id"]); ?>">
-           <?php endif; ?>
-            
             <div class="card card-widget widget-user">
               <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header bg-info">

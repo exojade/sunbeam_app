@@ -48,7 +48,7 @@
                                   on s.section_id = a.section_id
                                   where school_year = ?", $sy["syid"]);
 
-              $subjects = query("select * from subjects");
+              $subjects = query("select * from subjects where subject_type = 'PARENT'");
               $teacher = query("select * from teacher");
 
             ?>

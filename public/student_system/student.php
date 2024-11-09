@@ -112,26 +112,32 @@
 			$enrollment = query("select * from enrollment where enrollment_id = ?", $_REQUEST["enrollment_id"]);
 			$e = $enrollment[0];
 
-			$baseQuery = "select sg.*, s.subject_id from student_grades sg left join schedule s
-							on s.schedule_id = sg.schedule_id
+			$baseQuery = "select * from student_grades sg
 							where student_id = '".$e["student_id"]."' and sg.advisory_id = '".$e["advisory_id"]."'";
 		
-			$subjects = query("select * from subjects");
+			$subjects = query("select * from subjects sub left join subject_main sm on sm.subject_head_id = sub.subject_head_id");
 			$Subjects = [];
 			foreach($subjects as $row):
 				$Subjects[$row["subject_id"]] = $row;
 			endforeach;
 
-			$data = query($baseQuery . $limitString . $offsetString);
-			$all_data = query($baseQuery);
+			$data = query($baseQuery . " order by sg.grade_id asc " .  $limitString . $offsetString . " ");
 			// dump($data);
+			$all_data = query($baseQuery);
+			// dump($Subjects);
 		
 
 
 			$i=0;
 			foreach($data as $row):
 				$data[$i]["action"] = '<a href="#" data-toggle="modal" data-target="#subjectDetailsModal" class="btn btn-sm btn-block btn-info">Details</a>';
-				$data[$i]["subject"] = $Subjects[$row["subject_id"]]["subject_code"];
+				$subject_title = "";
+				if($Subjects[$row["subject_id"]]["subject_type"] == "CHILD"):
+					$subject_title = $Subjects[$Subjects[$row["subject_id"]]["subject_parent_id"]]["subject_head_name"] . " - " . $Subjects[$row["subject_id"]]["subject_title"]   ;
+				else:
+					$subject_title = $Subjects[$row["subject_id"]]["subject_head_name"];
+				endif;
+				$data[$i]["subject"] = $subject_title;
 				$i++;
 			endforeach;
             $json_data = array(

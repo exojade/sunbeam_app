@@ -307,6 +307,13 @@
 			elseif($_GET["action"] == "gradeTeacher"):
 				render("public/schedule_system/gradeTeacherList.php",[
 				]);
+
+
+			elseif($_GET["action"] == "childSubjects"):
+				render("public/schedule_system/scheduleTeacherListSubSubjectsList.php",[
+				]);
+
+
 			endif;
 		endif;
 	}
