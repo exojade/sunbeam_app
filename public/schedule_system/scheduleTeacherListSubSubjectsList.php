@@ -4,18 +4,14 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <?php
 // dump($_SESSION);
-$schedules = query("
-                    
-
-
-
-                    select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
+$schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
                     left join advisory a
                     on a.advisory_id = s.advisory_id
                     left join subjects sub
                     on sub.subject_id = s.subject_id
                     left join section sec
-                    on sec.section_id = a.section_id     
+                    on sec.section_id = a.section_id  
+                    left join    
                     where s.teacher_id = ?
                     and syid = ?
                   ", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
