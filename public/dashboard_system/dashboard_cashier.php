@@ -57,7 +57,7 @@
                     for ($i = 2; $i <= 11; $i++) {
                         // Define suffix based on the installment number
                         $suffix = match($i) {
-                            1 => 'st',
+                           1 => 'st',
                             2 => 'nd',
                             3 => 'rd',
                             default => 'th'
@@ -86,7 +86,14 @@
             <button type="submit" class="btn btn-warning btn-block">UPDATE</button>
           </div>
         </div>
+        
         </form>
+
+        <form class="generic_form_trigger" data-url="cashier">
+          <input type="hidden" name="action" value="sendEmailNotification">
+          <button type="submit" class="btn btn-info btn-block">Send Email Notification</button>
+        </form>
+        <br>
 
 
 

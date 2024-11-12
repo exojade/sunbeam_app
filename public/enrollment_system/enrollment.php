@@ -529,6 +529,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 $subjectIds = array_column($schedules, 'subject_id'); // Assuming schedule has 'subject_id'
+// dump($subjectIds);
+$subjectIdsString = implode(',', array_map(function($id) {
+    return "'$id'";
+}, $subjectIds));
+// dump($subjectIdsString);
 
 // Fetch relevant subjects with schedule_id
 $subjects = query("
@@ -541,25 +546,28 @@ $subjects = query("
         OR (s1.subject_type != 'CHILD' AND s1.subject_id NOT IN (
             SELECT subject_parent_id FROM subjects WHERE subject_parent_id IS NOT NULL
         ))
-", implode(',', $subjectIds));
+", $subjectIdsString);
 				// dump($subjects);
 			// $child
 			foreach($subjects as $row):
-
 				$schedule_id = "";
 				if($row["subject_type"] == "PARENT"):
-					$schedule_id = $TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]]["schedule_id"];
+					if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
+						$schedule_id = $TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]]["schedule_id"];
+					endif;
 				else:
-					$schedule_id = $TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_parent_id"]]["schedule_id"];
+					if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
+						$schedule_id = $TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_parent_id"]]["schedule_id"];
+					endif;
 				endif;
-
-
-				query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
-				VALUES(?,?,?,?)", 
-				$row["subject_id"],
-				$schedule_id,
-				$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
-			);
+				if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
+					query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
+					VALUES(?,?,?,?)", 
+					$row["subject_id"],
+					$schedule_id,
+					$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
+				);
+				endif;
 			endforeach;
 
 

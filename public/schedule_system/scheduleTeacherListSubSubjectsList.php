@@ -4,36 +4,81 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <?php
 // dump($_SESSION);
-$schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
-                    left join advisory a
-                    on a.advisory_id = s.advisory_id
-                    left join subjects sub
-                    on sub.subject_id = s.subject_id
-                    left join section sec
-                    on sec.section_id = a.section_id  
-                    left join    
-                    where s.teacher_id = ?
-                    and syid = ?
-                  ", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
+// $schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as gradeLevel from schedule s
+//                     left join advisory a
+//                     on a.advisory_id = s.advisory_id
+//                     left join subjects sub
+//                     on sub.subject_id = s.subject_id
+//                     left join section sec
+//                     on sec.section_id = a.section_id  
+//                     left join    
+//                     where s.teacher_id = ?
+//                     and syid = ?
+//                   ", $_SESSION["sunbeam_app"]["userid"], $sy["syid"]);
 // dump($schedules);
+
+$schedule = query("SELECT 
+    s.*, 
+    sec.section, 
+    sub.subject_code, 
+    a.grade_level as gradeLevel,
+    CONCAT_WS(', ',
+        IF(s.monday = 1, 'Monday', NULL),
+        IF(s.tuesday = 1, 'Tuesday', NULL),
+        IF(s.wednesday = 1, 'Wednesday', NULL),
+        IF(s.thursday = 1, 'Thursday', NULL),
+        IF(s.friday = 1, 'Friday', NULL)
+    ) AS scheduled_days,
+    sm.subject_head_name
+FROM 
+    schedule s
+LEFT JOIN 
+    advisory a ON a.advisory_id = s.advisory_id
+LEFT JOIN 
+    subjects sub ON sub.subject_id = s.subject_id
+LEFT JOIN 
+    section sec ON sec.section_id = a.section_id  
+LEFT JOIN 
+    subject_main sm ON sm.subject_head_id = sub.subject_head_id  
+WHERE 
+    s.schedule_id = ?
+                  ", $_GET["id"]);
+// dump($schedule);
+$childSubjects = query("select * from subjects where subject_parent_id = ?", $schedule[0]["subject_id"]);
+// dump($childSubjects);
+
 ?>
-5
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
+        <!-- <div class="row mb-2">
           <div class="col-sm-6">
             <h1>My Classrooms</h1>
             <small>Current SY: 2023 - 2024</small>
           </div>
-        </div>
-      </div><!-- /.container-fluid -->
+        </div> -->
+      </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+      <h5 class="bg-teal p-2"><?php echo($schedule[0]["subject_head_name"] . " - " . $schedule[0]["subject_code"]); ?></h5>
+      <table class="table table-bordered" id="advisorySection">
+			<tr>
+                   <th>Grade Level:</th>
+                   <td><?php echo($schedule[0]["gradeLevel"]); ?></td>
+                   <th>Section:</th>
+                   <td><?php echo($schedule[0]["section"]); ?></td>
+                 </tr>
+
+                 <tr>
+                   <th>Time</th>
+                   <td><?php echo($schedule[0]["from_time"] . " - " . $schedule[0]["to_time"]); ?></td>
+                   <th>Days</th>
+                   <td><?php echo($schedule[0]["scheduled_days"]); ?></td>
+                 </tr></table>
 
       <div class="modal fade" id="addSchedule">
         <div class="modal-dialog modal-lg">
@@ -106,51 +151,23 @@ $schedules = query("select s.*,sec.section, sub.subject_code, a.grade_level as g
         <!-- /.modal-dialog -->
       </div>
       <div class="row">
-          <?php foreach($schedules as $row): 
-            $days_string = '';
-            if ($row["monday"] == 1) {
-              $days_string .= 'M , ';
-            }
-            if ($row["tuesday"] == 1) {
-              $days_string .= 'T , ';
-            }
-            if ($row["wednesday"] == 1) {
-              $days_string .= 'W , ';
-            }
-            if ($row["thursday"] == 1) {
-              $days_string .= 'TH , ';
-            }
-            if ($row["friday"] == 1) {
-              $days_string .= 'F';
-            }
-          
+          <?php foreach($childSubjects as $row): 
             // Remove the trailing comma
-            $days_string = rtrim($days_string, ',');
+            // dump($row);
+            // $days_string = rtrim($days_string, ',');
             ?>
-            <div class="col-md-4">
-            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>">
+            <div class="col-md-3">
+            <a href="schedule?action=gradeTeacher&id=<?php echo($schedule[0]["schedule_id"]); ?>&subject_id=<?php echo($row["subject_id"]); ?>">
             <div class="card card-widget widget-user">
               <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header bg-info">
-                <h3 class="widget-user-username"><?php echo($row["subject_code"]); ?></h3>
-                <h5 class="widget-user-desc"><?php echo($row["gradeLevel"]); ?> - 
-                         <?php echo($row["section"]); ?></h5>
+                <h3 class="widget-user-username"><b><?php echo($row["subject_title"]); ?></b></h3>
+                <!-- <h5 class="widget-user-desc"><?php echo($row["gradeLevel"]); ?> - 
+                         <?php echo($row["section"]); ?></h5> -->
                 <h5 class="widget-user-desc"></h5>
               </div>
            
-              <div class="card-footer">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="description-block">
-                      <h5 class="description-header"><?php echo($row["from_time"] . " - " . $row["to_time"]); ?></h5>
-                      <span class="description-text"><?php echo($days_string); ?></span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-             
-                </div>
-                <!-- /.row -->
-              </div>
+    
             </div></a>
             </div>
           <?php endforeach; ?>

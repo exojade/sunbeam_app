@@ -8,6 +8,8 @@
         return $value;
     }
 
+
+
     function hasConflict($existingSchedules, $teacher_id, $advisory_id, $start_time, $end_time, $days) {
         // Convert start and end times to timestamps
         $startTimestamp = (new DateTime($start_time))->getTimestamp();

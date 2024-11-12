@@ -136,7 +136,7 @@ $schedules = query("
             <div class="col-md-4">
 
            <?php if($row["has_parent"] == 0): ?>
-            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>">
+            <a href="schedule?action=gradeTeacher&id=<?php echo($row["schedule_id"]); ?>&subject_id=<?php echo($row["subject_id"]); ?>">
            <?php else: ?>
             <a href="schedule?action=childSubjects&id=<?php echo($row["schedule_id"]); ?>">
            <?php endif; ?>

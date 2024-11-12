@@ -269,6 +269,16 @@
 </li>
 
 <li class="nav-item">
+    <a href="teacherAdvisory" class="nav-link">
+      <i class="nav-icon fas fa-calendar"></i>
+      <p>
+        Advisory
+        <span class="right badge badge-danger"></span>
+      </p>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="schedule" class="nav-link">
       <i class="nav-icon fas fa-calendar"></i>
       <p>

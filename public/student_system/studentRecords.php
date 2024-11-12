@@ -6,6 +6,9 @@
 
   <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
+
+
+  
 <style>
   #sectionTable td{
     border: 0px;
@@ -27,6 +30,144 @@
   }
 </style>
 <div class="content-wrapper">
+
+
+
+
+
+
+<div class="modal fade" id="newForm137Modal">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Schedule</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger"  data-url="student">
+                <input type="hidden" name="action" value="captureForm137">
+                <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
+
+                <div class="row">
+                  <div class="col-8">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_name" placeholder="Enter School Name">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_id" placeholder="Enter School ID">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_name" placeholder="Enter District">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_id" placeholder="Enter Division">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_id" placeholder="Enter Region">
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group">
+                      <select class="form-control" name="grade_level">
+                        <option disabled selected value="">Select Grade Level</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="section" placeholder="Enter Section">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="school_id" placeholder="Enter School Year">
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="adviser" placeholder="Enter Adviser / Teacher's Name">
+                    </div>
+                  </div>
+                </div>
+
+
+                <table class="table table-bordered">
+                  <thead>
+                    <th rowspan="2">Learning Areas</th>
+                    <th colspan="4">Quarterly Rating</th>
+                    <th rowspan="2">Remarks</th>
+                    <tr>
+                      <th>1</th>
+                      <th>2</th>
+                      <th>3</th>
+                      <th>4</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                 
+                  </tbody>
+                  
+
+                </table>
+
+              
+    
+
+
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <?php
 // $enrollment = query("select e.*, s.section from 
@@ -149,6 +290,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab">Profile Info</a></li>
                   <li class="nav-item"><a class="nav-link " href="#grades" data-toggle="tab">Grades</a></li>
                   <li class="nav-item"><a class="nav-link " href="#payment_history" data-toggle="tab">Payment History</a></li>
+                  <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Form 137</a></li>
              
                 </ul>
               </div><!-- /.card-header -->
@@ -339,6 +481,20 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     </thead>
                   </table>
                   </div>
+
+
+
+
+
+                  <div class=" tab-pane" id="form137">
+
+                      <a href="#" data-toggle="modal" data-target="#newForm137Modal" class="btn btn-info">Capture FORM 137</a>
+
+           
+                  </div>
+
+
+
                 </div>
               </div>
             </div>
@@ -362,6 +518,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="resources/js/vue.js"></script>
   <script>
 
 

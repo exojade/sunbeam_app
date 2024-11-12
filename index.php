@@ -2,6 +2,7 @@
     require("includes/config.php");
     require("includes/uuid.php");
     require("includes/checkhit.php");
+	require("PHPMailer/PHPMailerAutoload.php");
 	ini_set('max_execution_time', '300');
 		$request = $_SERVER['REQUEST_URI'];
 	
@@ -52,22 +53,20 @@
 			else if ($request == 'fees')
 				require 'public/fees_system/fees.php';
 
+			else if ($request == 'cashier')
+				require 'public/cashier_system/cashier.php';
+
 			else if ($request == 'onlinePayment')
 				require 'public/onlinePayment_system/onlinePayment.php';
-
-
 			else if ($request == 'onlinePaymentCashier')
 				require 'public/onlinePaymentCashier_system/onlinePaymentCashier.php';
-
-
-
 			else if ($request == 'studentAccounts')
 				require 'public/studentAccounts_system/studentAccounts.php';
+			else if ($request == 'teacherAdvisory')
+				require 'public/teacherAdvisory_system/teacherAdvisory.php';
 
 			else if ($request == 'installment')
 				require 'public/installment_system/installment.php';
-
-
 			else if ($request == 'settings')
 				require 'public/settings_system/settings.php';
 			else if ($request == 'static')

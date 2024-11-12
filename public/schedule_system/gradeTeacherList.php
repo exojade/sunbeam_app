@@ -7,8 +7,20 @@
 <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 
 <?php
+
+$subject = query("select * from subjects where subject_id = ?", $_GET["subject_id"]);
+$subject = $subject[0];
+
+if($subject["subject_type"] == "CHILD"):
+  $concatSubject = $subject["subject_title"];
+else:
+  $concatSubject = "";
+endif;
+
+
 $schedule = query("select a.grade_level,sched.*,s.section, sub.subject_code, sub.subject_title,
-                  CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS adviser
+                  CONCAT(t.teacher_lastname, ', ', t.teacher_firstname) AS adviser,
+                  sm.subject_head_name
                   from schedule sched
                   left join advisory a
                   on a.advisory_id = sched.advisory_id
@@ -18,8 +30,11 @@ $schedule = query("select a.grade_level,sched.*,s.section, sub.subject_code, sub
                   on s.section_id = a.section_id
                   left join subjects sub
                   on sub.subject_id = sched.subject_id
+                  left join subject_main sm
+                  on sm.subject_head_id = sub.subject_head_id
                   where schedule_id = ?", $_GET["id"]);
   $schedule = $schedule[0];
+  // dump($schedule);
 
   $days_string = '';
                           if ($schedule["monday"] == 1) {
@@ -50,7 +65,8 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   left join subjects sub
                   on sub.subject_id = g.subject_id
                   where schedule_id = ?
-                  group by schedule_id", $schedule["schedule_id"]);
+                  and g.subject_id = ?
+                  group by schedule_id", $schedule["schedule_id"], $_GET["subject_id"]);
 // dump($grades);
                           ?>
 
@@ -118,7 +134,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                     </tr>
                     <tr>
                       <th>Subject:</th>
-                      <td><?php echo($schedule["subject_code"]. " - " . $schedule["subject_title"]); ?></td>
+                      <td><?php echo($schedule["subject_head_name"] . " - " . $concatSubject); ?></td>
                       <th>Teacher:</th>
                       <td><?php echo($teacher["teacher_lastname"]. ", " . $teacher["teacher_firstname"]); ?></td>
                     </tr>
@@ -172,6 +188,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   <?php if($row["active_status"] == "active"): ?>
                   <a href="#" data-toggle="modal" 
                       data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-subject_id="<?php echo($_GET["subject_id"]); ?>"
                       data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
                       data-grading="first_grading"
                       data-target="#modalUpdateGrades" class="btn btn-warning">Update 1st Grading</a>
@@ -182,6 +199,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   <?php if($row["active_status"] == "active"): ?>
                     <a href="#" data-toggle="modal" 
                       data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-subject_id="<?php echo($_GET["subject_id"]); ?>"
                       data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
                       data-grading="second_grading"
                       data-target="#modalUpdateGrades" class="btn btn-warning">Update 2nd Grading</a>
@@ -192,6 +210,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   <?php if($row["active_status"] == "active"): ?>
                     <a href="#" data-toggle="modal" 
                       data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-subject_id="<?php echo($_GET["subject_id"]); ?>"
                       data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
                       data-grading="third_grading"
                       data-target="#modalUpdateGrades" class="btn btn-warning">Update 3rd Grading</a>
@@ -202,6 +221,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   <?php if($row["active_status"] == "active"): ?>
                     <a href="#" data-toggle="modal" 
                       data-schedule="<?php echo($schedule["schedule_id"]); ?>"
+                      data-subject_id="<?php echo($_GET["subject_id"]); ?>"
                       data-teacher="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>"
                       data-grading="fourth_grading"
                       data-target="#modalUpdateGrades" class="btn btn-warning">Update 4th Grading</a>
@@ -384,6 +404,7 @@ $('.select2').select2({});
 $('#modalUpdateGrades').on('show.bs.modal', function (e) {
         var schedule_id = $(e.relatedTarget).data('schedule');
         var teacher_id = $(e.relatedTarget).data('teacher');
+        var subject_id = $(e.relatedTarget).data('subject_id');
         var grading = $(e.relatedTarget).data('grading');
         Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
         $.ajax({
@@ -392,6 +413,7 @@ $('#modalUpdateGrades').on('show.bs.modal', function (e) {
             data: {
               schedule_id: schedule_id,
               teacher_id: teacher_id,
+              subject_id: subject_id,
               grading: grading,
                action: "updateGradesModal"
             },
