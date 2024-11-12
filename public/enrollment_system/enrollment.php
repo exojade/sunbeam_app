@@ -552,7 +552,7 @@ $subjects = query("
 			// dump($subjects);
 			foreach($subjects as $row):
 				$schedule_id = "";
-				if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
+				if(isset($TheSchedules[$row["subject_id"]])):
 					if($row["subject_type"] == "PARENT"):
 						$schedule_id = $TheSchedules[$row["subject_id"]]["schedule_id"];
 						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
