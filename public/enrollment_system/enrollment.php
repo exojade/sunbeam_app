@@ -554,19 +554,25 @@ $subjects = query("
 				if($row["subject_type"] == "PARENT"):
 					if(isset($TheSchedules[$row["subject_id"]])):
 						$schedule_id = $TheSchedules[$row["subject_id"]]["schedule_id"];
+
+						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
+							VALUES(?,?,?,?)", 
+							$row["subject_id"],
+							$schedule_id,
+							$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
+						);
 					endif;
 				else:
 					if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
 						$schedule_id = $TheSchedules[$row["subject_parent_id"]]["schedule_id"];
+
+						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
+							VALUES(?,?,?,?)", 
+							$row["subject_id"],
+							$schedule_id,
+							$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
+						);
 					endif;
-				endif;
-				if(isset($TheSchedules[$row["subject_id"]])):
-					query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
-					VALUES(?,?,?,?)", 
-					$row["subject_id"],
-					$schedule_id,
-					$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
-				);
 				endif;
 			endforeach;
 
