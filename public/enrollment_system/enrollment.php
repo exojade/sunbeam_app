@@ -543,19 +543,22 @@ $subjects = query("
 			// dump($subjects);
 			foreach($subjects as $row):
 				$schedule_id = "";
-				
 				if(isset($TheSchedules[$row["subject_id"]])):
 					// dump($row);
-					if($row["subject_type"] == "PARENT"):
+					$childSubjects = query("select * from subjects where subject_parent_id = ?", $row["subject_id"]);
+
+					if(!empty($childSubjects)):
+						foreach($childSubjects as $child):
+							$schedule_id = $TheSchedules[$row["subject_id"]]["schedule_id"];
+							query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
+								VALUES(?,?,?,?)", 
+								$child["subject_id"],
+								$schedule_id,
+								$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
+							);
+						endforeach;
+					else:
 						$schedule_id = $TheSchedules[$row["subject_id"]]["schedule_id"];
-						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
-							VALUES(?,?,?,?)", 
-							$row["subject_id"],
-							$schedule_id,
-							$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
-						);
-					elseif($row["subject_type"] == "CHILD"):
-						$schedule_id = $TheSchedules[$row["subject_parent_id"]]["schedule_id"];
 						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
 							VALUES(?,?,?,?)", 
 							$row["subject_id"],
