@@ -249,21 +249,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$sheet->setCellValue("C38", strtoupper($student["grade_level"] . " - " . $student["section"]));
 			$sheet->setCellValue("B42", strtoupper($student["teacher_name"]));
 
+			
+			
 
-
-			$writer = new Xlsx($spreadsheet);
-			$filename = "grade.xlsx";
-			$path = 'reports/'.$filename;
-			$writer->save($path);
-			$res_arr = [
-				"result" => "success",
-				"title" => "Success",
-				"message" => "Success on updating data",
-				"link" => $path,
-				"newlink" => "newlink",
-				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
-				];
-				echo json_encode($res_arr); exit();
 
 
 			$grades = query("
@@ -281,6 +269,52 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			foreach($subjects as $row):
 				$Subjects[$row["subject_id"]] = $row;
 			endforeach;
+
+			$start_row = 26;
+			
+			foreach($grades as $row):
+				$sheet->insertNewRowBefore($start_row);
+				$subject_name = "";
+				if($Subjects[$row["subject_id"]]["subject_type"] == "PARENT"):
+					$subject_name=$Subjects[$row["subject_id"]]["subject_head_name"];
+				else:
+					$parent = $Subjects[$row["subject_id"]]["subject_parent_id"];
+					$subject_name=$Subjects[$parent]["subject_head_name"] . " - " . $Subjects[$row["subject_id"]]["subject_title"];
+				endif;
+
+
+				$sheet->setCellValue("A".$start_row, strtoupper($subject_name));
+				$sheet->setCellValue("C".$start_row, $row["first_grading"]);
+				$sheet->setCellValue("D".$start_row, $row["second_grading"]);
+				$sheet->setCellValue("E".$start_row, $row["third_grading"]);
+				$sheet->setCellValue("F".$start_row, $row["fourth_grading"]);
+
+
+
+
+				$start_row++;
+			endforeach;
+
+
+
+
+
+			$writer = new Xlsx($spreadsheet);
+			$filename = "grade.xlsx";
+			$path = 'reports/'.$filename;
+			$writer->save($path);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => $path,
+				"newlink" => "newlink",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+
+			
 			
 
 		endif;
