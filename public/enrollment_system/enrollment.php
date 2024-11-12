@@ -537,22 +537,15 @@ $subjectIdsString = implode(',', array_map(function($id) {
 
 // Fetch relevant subjects with schedule_id
 $subjects = query("
-    SELECT s1.*
-    FROM subjects s1
-    LEFT JOIN subjects s2 ON s1.subject_parent_id = s2.subject_id
-    WHERE 
-        (s1.subject_type = 'CHILD' AND s1.subject_parent_id IN (?))
-        OR (s1.subject_type = 'CHILD' AND s1.subject_parent_id IS NOT NULL)
-        OR (s1.subject_type != 'CHILD' AND s1.subject_id NOT IN (
-            SELECT subject_parent_id FROM subjects WHERE subject_parent_id IS NOT NULL
-        ))
-", $subjectIdsString);
+    select * from subjects");
 				// dump($TheSchedules);
 			// $child
 			// dump($subjects);
 			foreach($subjects as $row):
 				$schedule_id = "";
+				
 				if(isset($TheSchedules[$row["subject_id"]])):
+					// dump($row);
 					if($row["subject_type"] == "PARENT"):
 						$schedule_id = $TheSchedules[$row["subject_id"]]["schedule_id"];
 						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
@@ -561,7 +554,6 @@ $subjects = query("
 							$schedule_id,
 							$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
 						);
-
 					elseif($row["subject_type"] == "CHILD"):
 						$schedule_id = $TheSchedules[$row["subject_parent_id"]]["schedule_id"];
 						query("insert INTO student_grades (subject_id, schedule_id, student_id, advisory_id) 
@@ -571,7 +563,6 @@ $subjects = query("
 							$enrollment[0]["student_id"], $enrollment[0]["advisory_id"]
 						);
 					endif;
-
 				endif;
 
 
