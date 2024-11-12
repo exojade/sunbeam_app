@@ -533,7 +533,7 @@ $subjectIds = array_column($schedules, 'subject_id'); // Assuming schedule has '
 $subjectIdsString = implode(',', array_map(function($id) {
     return "'$id'";
 }, $subjectIds));
-// dump($subjectIdsString);
+dump($subjectIdsString);
 
 // Fetch relevant subjects with schedule_id
 $subjects = query("
@@ -547,7 +547,7 @@ $subjects = query("
             SELECT subject_parent_id FROM subjects WHERE subject_parent_id IS NOT NULL
         ))
 ", $subjectIdsString);
-				dump($subjects);
+				// dump($subjects);
 			// $child
 			foreach($subjects as $row):
 				$schedule_id = "";
