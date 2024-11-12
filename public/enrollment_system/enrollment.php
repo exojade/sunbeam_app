@@ -549,6 +549,7 @@ $subjects = query("
 ", $subjectIdsString);
 				// dump($TheSchedules);
 			// $child
+			dump($subjects);
 			foreach($subjects as $row):
 				$schedule_id = "";
 				if($row["subject_type"] == "PARENT"):
