@@ -547,7 +547,7 @@ $subjects = query("
             SELECT subject_parent_id FROM subjects WHERE subject_parent_id IS NOT NULL
         ))
 ", $subjectIdsString);
-				// dump($subjects);
+				dump($subjects);
 			// $child
 			foreach($subjects as $row):
 				$schedule_id = "";
