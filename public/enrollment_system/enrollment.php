@@ -549,7 +549,7 @@ $subjects = query("
 ", $subjectIdsString);
 				// dump($TheSchedules);
 			// $child
-			dump($subjects);
+			// dump($subjects);
 			foreach($subjects as $row):
 				$schedule_id = "";
 				if(isset($TheSchedules[$enrollment[0]["advisory_id"]][$row["subject_id"]])):
