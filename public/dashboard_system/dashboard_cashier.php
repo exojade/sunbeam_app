@@ -131,7 +131,7 @@
         <div class="card-header bg-info">
           <h3 class="card-title">PENDING ENROLLMENT</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body d-flex justify-content-center align-items-center">
           <?php $enrollment = query("select e.enrollment_id, concat(s.lastname, ', ', s.firstname) as fullname,
                                       sec.section, e.grade_level
                                      from enrollment e
@@ -160,7 +160,11 @@
             </tbody>
           </table>
           <?php else: ?>
-            <h3 class="text-center"><b>--N/A--</b></h3>
+            <!-- <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 290px;"> -->
+
+              <img src="resources/no_result.gif" class="img-fluid" alt="Responsive Image" style="max-height: 250px; max-width: 100%;">
+                <!-- <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
+              <!-- </div> -->
 <?php endif; ?>
         </div>
       </div>

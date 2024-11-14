@@ -104,9 +104,54 @@
               <div class="card-header">
                 <h3 class="card-title">Document Tracker</h3>
               </div>
-              <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 290px;">
+              <?php
+                $lacking = query("
+                SELECT 
+                    concat(s.lastname, ', ', s.firstname) as student_name,
+                    GROUP_CONCAT(document_name SEPARATOR ', ') AS documents_tagged_no
+                FROM 
+                    enrollment_requirements er
+                left join enrollment e
+                on e.enrollment_id = er.enrollment_id
+                left join student s on e.student_id = s.student_id
+                WHERE 
+                    er.status = 'NO'
+                GROUP BY 
+                    er.enrollment_id");
+                    // dump($lacking);
+              ?>
+              <div class="card-body 
+              <?php if(empty($lacking)): 
+                echo("d-flex justify-content-center align-items-center");
+              endif;
+                ?>
+              
+              " style="min-height: 290px;">
 
-              <img src="resources/no_result.gif" class="img-fluid" alt="Responsive Image" style="max-height: 250px; max-width: 100%;">
+        
+
+              <?php if(!empty($lacking)): ?>
+                <table class="table table-bordered">
+                  <thead>
+                    <th></th>
+                    <th>Student</th>
+                    <th>Lacking Documents</th>
+                  </thead>
+                  <tbody>
+                    <?php foreach($lacking as $row): ?>
+                      <tr>
+                        <td><a href="#" class="btn btn-warning btn-block btn-sm">Update</a></td>
+                        <td><?php echo($row["student_name"]); ?></td>
+                        <td><?php echo($row["documents_tagged_no"]); ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+
+                </table>
+              <?php else: ?>
+                <img src="resources/no_result.gif" class="img-fluid" alt="Responsive Image" style="max-height: 250px; max-width: 100%;">
+              <?php endif; ?>
+
                 <!-- <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
               </div>
               <!-- /.card-body -->
