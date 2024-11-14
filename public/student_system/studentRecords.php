@@ -10,14 +10,14 @@
 
   
 <style>
-  #sectionTable td{
+  /* #sectionTable td{
     border: 0px;
     padding: 5px 0px;
   }
   #sectionTable th{
     border: 0px;
     padding: 5px 0px;
-  }
+  } */
 
 
   #advisorySection td{
@@ -263,8 +263,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 <p class="text-muted">
                   <?php echo($enrollment["grade_level"]); ?>
                 </p>
-
-
                 <strong> Section</strong>
                 <p class="text-muted">
                   <?php echo($enrollment["section"]); ?>
@@ -281,7 +279,11 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
             <!-- About Me Box -->
             
             <!-- /.card -->
+            <button class="btn btn-info btn-block">Print Form 137</button>
           </div>
+
+
+      
           <!-- /.col -->
           <div class="col-md-9">
             <div class="card">
@@ -290,7 +292,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab">Profile Info</a></li>
                   <li class="nav-item"><a class="nav-link " href="#grades" data-toggle="tab">Grades</a></li>
                   <li class="nav-item"><a class="nav-link " href="#payment_history" data-toggle="tab">Payment History</a></li>
-                  <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Form 137</a></li>
+                  <!-- <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Form 137</a></li> -->
              
                 </ul>
               </div><!-- /.card-header -->
@@ -300,58 +302,75 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
 
                   <div class="row">
-                    <div class="col-7">
+                    <div class="col-12">
 
 
                     <div class="card p-3">
 
-                    <table class="table" id="sectionTable">
+                    <table class="table table-bordered" id="sectionTable">
                  
-                 <tr>
-                   <th>Student Name:</th>
-                   <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
-                   </tr>
-                   <tr>
-                   <th>Student Code:</th>
-                   <td><?php echo($student["student_id"]); ?></td>
-                  </tr>
-                 
-                 <tr>
-                   <th>Birth Date:</th>
-                   <td><?php echo($student["birthDate"]); ?></td>
-                  </tr>
-                  <tr>
-                   <th>Birth Place:</th>
-                   <td><?php echo($student["birthPlace"]); ?></td>
-                 </tr>
-                 <tr>
-                   <th>Religion:</th>
-                   <td><?php echo($student["religion"]); ?></td>
-          </tr>
-          <tr>
-                   <th>Sex:</th>
-                   <td><?php echo($student["sex"]); ?></td>
-                 </tr>
-                 <tr>
-                   <th>City:</th>
-                   <td><?php echo($student["city_mun"]); ?></td>
-                 </tr>
-                 <tr>
-                   <th>Barangay:</th>
-                   <td><?php echo($student["barangay"] . " , " . $student["address"]); ?></td>
-                 </tr>
-                 <tr>
-                   <th>Address:</th>
-                   <td><?php echo($student["address"]); ?></td>
-                 </tr>
-              
+                    <tr>
+                      <th>Student Code:</th>
+                      <td colspan="3"><?php echo($student["student_id"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Student Name:</th>
+                      <td colspan="3"><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
+                    </tr>
+                    
+                    <tr>
+                      <th>Birth Date:</th>
+                      <td><?php echo($student["birthDate"]); ?></td>
+                      <th>Birth Place:</th>
+                      <td><?php echo($student["birthPlace"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Religion:</th>
+                      <td><?php echo($student["religion"]); ?></td>
+                      <th>Sex:</th>
+                      <td><?php echo($student["sex"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Address:</th>
+                      <td colspan="3"><?php echo($student["province"] . " , " . $student["city_mun"] . " , " . $student["barangay"] . " , " . $student["address"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th colspan="4">-</th>
+                    </tr>
 
-                 
-               </table>
+                    <tr>
+                      <th>Father:</th>
+                      <td><?php echo($student["father_lastname"] . ", " . $student["father_firstname"]); ?></td>
+                      <th>Contact / FB:</th>
+                      <td><?php echo($student["father_contact"] . " / " . $student["father_fb"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Occupation:</th>
+                      <td><?php echo($student["father_occupation"]); ?></td>
+                      <th>Education:</th>
+                      <td><?php echo($student["father_education"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th colspan="4">-</th>
+                    </tr>
+
+                    <tr>
+                      <th>Mother:</th>
+                      <td><?php echo($student["mother_lastname"] . ", " . $student["mother_firstname"]); ?></td>
+                      <th>Contact / FB:</th>
+                      <td><?php echo($student["mother_contact"] . " / " . $student["mother_fb"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Occupation:</th>
+                      <td><?php echo($student["mother_occupation"]); ?></td>
+                      <th>Education:</th>
+                      <td><?php echo($student["mother_education"]); ?></td>
+                    </tr>
+                  </table>
 
                     </div>
                     </div>
-                    <div class="col-5">
+                    <!-- <div class="col-5">
 
                     <div class="card p-3">
                     <h5 class="card-title text-black"><b><?php echo($student["father_lastname"] . ", " . $student["father_firstname"]); ?></b></h5>
@@ -376,7 +395,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
        
 
           </table>
-                    </div>
+                    </div> -->
                   </div>
 
                  
@@ -473,9 +492,9 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                         <th>School Year</th>
                         <th>Date Paid</th>
                         <th>OR Number</th>
-                        <th>From</th>
+                        <!-- <th>From</th> -->
                         <th>Paid</th>
-                        <th>Remaining</th>
+                        <!-- <th>Remaining</th> -->
                         <th>Type</th>
                       </tr>
                     </thead>
@@ -696,13 +715,13 @@ var datatable =
                     
                     { data: 'date_paid', "orderable": false  },
                     { data: 'or_number', "orderable": false  },
-                    {
-                        data: 'from_balance', 
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                        }
-                    },
+                    // {
+                    //     data: 'from_balance', 
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                    //     }
+                    // },
                     {
                         data: 'amount_due', 
                         orderable: false,
@@ -710,13 +729,13 @@ var datatable =
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
                         }
                     },
-                    {
-                        data: 'to_balance', 
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                        }
-                    },
+                    // {
+                    //     data: 'to_balance', 
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                    //     }
+                    // },
                     { data: 'type', "orderable": false  },
 
                 ],

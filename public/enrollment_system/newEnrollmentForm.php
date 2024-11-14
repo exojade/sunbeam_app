@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 <style>
   #sectionTable td{
     border: 0px;
@@ -23,7 +24,6 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Enrollment Module</h1>
-            <small>For School Year: 2023 - 2024</small>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -50,12 +50,7 @@
 
 
                 <div class="card-body">
-                <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Enrollment ID</span></label>
-                        <div class="col-sm-10">
-                          <input disabled stype="email" class="form-control" id="inputEmail3" value="EEF2024-908221XN">
-                        </div>
-                      </div>
+            
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group row">
@@ -117,7 +112,7 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Birth Date</span></label>
                         <div class="col-sm-8">
-                          <input placeholder="Enter Birthdate" name="birthdate" type="date" class="form-control" id="inputEmail3" >
+                          <input placeholder="Enter Birthdate" required name="birthdate" type="date" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -168,7 +163,7 @@
                     <div class="col-md-6">
                      
                       <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Birth Place</span></label>
+                        <label for="inputEmail3"  class="col-sm-4 col-form-label"><span style="text-align:right !important;">Birth Place</span></label>
                         <div class="col-sm-8">
                           <input placeholder="Enter Birthplace" required name="birthplace" type="text" class="form-control" id="inputEmail3" >
                         </div>
@@ -189,7 +184,7 @@
                   <hr>
 
                     <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Name</span></label>
+                        <label for="inputEmail3"  class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Name</span></label>
                         <div class="col-sm-3">
                           <input required placeholder="First Name" name="father_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
@@ -271,9 +266,7 @@
                           <input placeholder="Enter Facebook Account" name="mother_fb" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
-
                       <hr>
-
                     <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Name</span></label>
                         <div class="col-sm-3">
@@ -306,153 +299,113 @@
                           <input placeholder="---" name="guardian_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
-                  
-
                   <hr>
 
-                  <!-- <div class="row">
-                    <div class="col-md-6">
-                     
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Registration Fee</span></label>
-                        <div class="col-sm-8">
-                          <input placeholder="0.00" name="registration_fee" type="text" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Electricty Subsidy</span></label>
-                        <div class="col-sm-8">
-                          <input placeholder="0.00" name="electricity_fee" type="text" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Books</span></label>
-                        <div class="col-sm-8">
-                          <input placeholder="0.00" name="books_fee" type="text" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                      
-                    </div>
+            
 
-                    
-
-                    <div class="col-md-6">
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Tuition Fee</span></label>
-                        <div class="col-sm-8">
-                        <input placeholder="0.00" type="text" name="tuition_fee" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                   
-                   
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">ID / Insurance</span></label>
-                        <div class="col-sm-8">
-                          <input placeholder="0.00" type="text" name="id_fee" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                    
-                      <div class="form-group row">
-                        <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-4 col-form-label"><span style="text-align:right !important;">Misc. Fee</span></label>
-                        <div class="col-sm-8">
-                        <input placeholder="0.00" type="text" name="misc_fee" class="form-control numberic costing" id="inputEmail3" >
-                        </div>
-                      </div>
-                      
-                    </div>
-
-                 
-                  </div>
-  <hr>
-
-  <div class="row">
-                    <div class="col-md-6">
-                    <h3>Add-ons: (optional)</h3>
-                    </div>
-                    <div class="col-md-6 text-right">
-                      <button type="button" id="add-on-btn" class="btn btn-primary">Add - On</button>
-                    </div>
-                 
-                  </div>
-                  <br>
-
-
-
-
-
-                  <div id="addon-container">
-            <div class="row addon-row">
-                <div class="col-md-6">
-                    <input name="account[]"  placeholder="Place Name of Account Here" type="text" class="form-control name-field">
-                </div>
-                <div class="col-md-5">
-                    <input name="amount[]"  placeholder="Place Amount here" type="text" class="form-control numberic amount-field costing">
-                </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-danger remove-btn">Remove</button>
-                </div>
-            </div>
-        </div>
-
-
-                  <hr>
                   <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Total</label>
-                        <input id="total" disabled type="text" class="form-control numberic" placeholder="0.00">
+                    <div class="col">
+                    <div class="form-group clearfix">
+                    <label for="radioPrimary3">
+                          Birth Certificate
+                        </label>
+                        <br>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="yes" id="birthRadio1" name="birthCertificate">
+                        <label for="birthRadio1">
+                          Yes
+                        </label>
                       </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="no" id="birthRadio2" name="birthCertificate">
+                        <label for="birthRadio2">
+                          No
+                        </label>
+                      </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="na" id="birthRadio3" name="birthCertificate">
+                        <label for="birthRadio3">
+                          Not Applicable
+                        </label>
+                      </div>
+                    </div>
                     </div>
 
 
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Down Payment</label>
-                        <input required name="downpayment" type="text" class="form-control numberic costing" id="downpayment" placeholder="Enter ...">
+
+                    <div class="col">
+                    <div class="form-group clearfix">
+                    <label for="radioPrimary3">
+                          Good Moral
+                        </label>
+                        <br>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="yes" id="goodmoralRadio1" name="goodMoral">
+                        <label for="goodmoralRadio1">
+                          Yes
+                        </label>
+                      </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="no" id="goodmoralRadio2" name="goodMoral">
+                        <label for="goodmoralRadio2">
+                          No
+                        </label>
+                      </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="na" id="goodmoralRadio3" name="goodMoral">
+                        <label for="goodmoralRadio3">
+                          Not Applicable
+                        </label>
                       </div>
                     </div>
-
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Balance</label>
-                        <input disabled id="balance" type="text numberic" class="form-control" placeholder="0.00">
-                      </div>
-                    </div>
-                 
-                  </div> -->
-
-                  <!-- <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group">
-                        <label>Paid By</label>
-                        <input name="paid_by" required type="text" class="form-control" placeholder="Paid By">
-                      </div>
                     </div>
 
 
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Down Payment</label>
-                        <input name="or_number" required type="text" class="form-control"  placeholder="Enter OR NUMBER">
+
+                    <div class="col">
+                    <div class="form-group clearfix">
+                    <label for="radioPrimary3">
+                          Form 137
+                        </label>
+                        <br>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="yes" id="form137Radio1" name="form137">
+                        <label for="form137Radio1">
+                          Yes
+                        </label>
+                      </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="no" id="form137Radio2" name="form137">
+                        <label for="form137Radio2">
+                          No
+                        </label>
+                      </div>
+                      <div class="icheck-primary d-inline">
+                        <input required type="radio" value="na" id="form137Radio3" name="form137">
+                        <label for="form137Radio3">
+                          Not Applicable
+                        </label>
                       </div>
                     </div>
+                    </div>
+                  </div>
 
-                
-                 
-                  </div> -->
 
+            
+              
 
                 
 
 
            
                   </div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
+                  <div class="card-footer">
                   <button type="submit" class="btn btn-info">Enroll Student</button>
                   <a href="enrollment" class="btn btn-default">Back</a>
                 </div>
+                </div>
+                <!-- /.card-body -->
+                
                 <!-- /.card-footer -->
               </form>
             </div>
@@ -685,7 +638,7 @@ $(function () {
     errorElement: 'span',
     errorPlacement: function (error, element) {
       error.addClass('invalid-feedback');
-      element.closest('.form-group').append(error);
+      element.closest('.form-control').append(error);
     },
     highlight: function (element, errorClass, validClass) {
       $(element).addClass('is-invalid').removeClass('is-valid');
@@ -696,7 +649,7 @@ $(function () {
     success: function (label, element) {
       $(element).addClass('is-valid'); // Adds green border when valid
       // Add a green check icon or any valid styling you want to apply
-      $(element).closest('.form-group').find('span.valid-feedback').remove();
+      $(element).closest('.form-control').find('span.valid-feedback').remove();
       // $(element).closest('.form-group').append('<span class="valid-feedback">✓</span>'); // Adds a check mark
     }
   });

@@ -100,12 +100,14 @@
 
           <div class="col-6">
 
-          <div class="card card-danger">
+          <div class="card card-danger" >
               <div class="card-header">
-                <h3 class="card-title">Teacher's Grade Remarks for this Quarter</h3>
+                <h3 class="card-title">Document Tracker</h3>
               </div>
-              <div class="card-body">
-                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 290px;">
+
+              <img src="resources/no_result.gif" class="img-fluid" alt="Responsive Image" style="max-height: 250px; max-width: 100%;">
+                <!-- <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
               </div>
               <!-- /.card-body -->
             </div>
@@ -177,12 +179,12 @@
       responsive : true,
     }
 
-    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
- new Chart(donutChartCanvas, {
-      type: 'doughnut',
-      data: donutData2,
-      options: donutOptions
-    })
+//     var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+//  new Chart(donutChartCanvas, {
+//       type: 'doughnut',
+//       data: donutData2,
+//       options: donutOptions
+//     })
 
 var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
     var pieData        = donutData;

@@ -66,7 +66,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   on sub.subject_id = g.subject_id
                   where schedule_id = ?
                   and g.subject_id = ?
-                  group by schedule_id", $schedule["schedule_id"], $_GET["subject_id"]);
+                  group by schedule_id, student_id", $schedule["schedule_id"], $_GET["subject_id"]);
 // dump($grades);
                           ?>
 
@@ -86,9 +86,8 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
 <div class="content-wrapper">
     <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-          </div>
+        <div class="row mb-0">
+       
         </div>
       </div>
     </section>

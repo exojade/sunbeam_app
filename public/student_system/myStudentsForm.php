@@ -193,10 +193,12 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <table class="table table-bordered" id="sectionTable">
                  
                     <tr>
-                      <th>Student Name:</th>
-                      <td><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
                       <th>Student Code:</th>
-                      <td><?php echo($student["student_id"]); ?></td>
+                      <td colspan="3"><?php echo($student["student_id"]); ?></td>
+                    </tr>
+                    <tr>
+                      <th>Student Name:</th>
+                      <td colspan="3"><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
                     </tr>
                     
                     <tr>
@@ -228,7 +230,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     <tr>
                       <th>Occupation:</th>
                       <td><?php echo($student["father_occupation"]); ?></td>
-                      <th>Educational Attainment:</th>
+                      <th>Education:</th>
                       <td><?php echo($student["father_education"]); ?></td>
                     </tr>
                     <tr>
@@ -244,7 +246,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     <tr>
                       <th>Occupation:</th>
                       <td><?php echo($student["mother_occupation"]); ?></td>
-                      <th>Educational Attainment:</th>
+                      <th>Education:</th>
                       <td><?php echo($student["mother_education"]); ?></td>
                     </tr>
                   </table>
@@ -342,9 +344,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                         <th>School Year</th>
                         <th>Date Paid</th>
                         <th>OR Number</th>
-                        <th>From</th>
                         <th>Paid</th>
-                        <th>Remaining</th>
                         <th>Type</th>
                       </tr>
                     </thead>
@@ -551,13 +551,13 @@ var datatable =
                     
                     { data: 'date_paid', "orderable": false  },
                     { data: 'or_number', "orderable": false  },
-                    {
-                        data: 'from_balance', 
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                        }
-                    },
+                    // {
+                    //     data: 'from_balance', 
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                    //     }
+                    // },
                     {
                         data: 'amount_due', 
                         orderable: false,
@@ -565,13 +565,13 @@ var datatable =
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
                         }
                     },
-                    {
-                        data: 'to_balance', 
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                        }
-                    },
+                    // {
+                    //     data: 'to_balance', 
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+                    //     }
+                    // },
                     { data: 'type', "orderable": false  },
 
                 ],

@@ -132,6 +132,69 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			"PENDING"
 		);
 
+		if($_POST["birthCertificate"] == "yes"):
+			$_POST["birthCertificate"] = "YES";
+		elseif($_POST["birthCertificate"] == "no"):
+			$_POST["birthCertificate"] = "NO";
+		elseif($_POST["birthCertificate"] == "na"):
+			$_POST["birthCertificate"] = "NOT APPLICABLE";
+		endif;
+
+
+		if($_POST["goodMoral"] == "yes"):
+			$_POST["goodMoral"] = "YES";
+		elseif($_POST["goodMoral"] == "no"):
+			$_POST["goodMoral"] = "NO";
+		elseif($_POST["goodMoral"] == "na"):
+			$_POST["goodMoral"] = "NOT APPLICABLE";
+		endif;
+
+		if($_POST["form137"] == "yes"):
+			$_POST["form137"] = "YES";
+		elseif($_POST["form137"] == "no"):
+			$_POST["form137"] = "NO";
+		elseif($_POST["form137"] == "na"):
+			$_POST["form137"] = "NOT APPLICABLE";
+		endif;
+
+		query("insert INTO enrollment_requirements (
+			enrollment_id,
+			document_name,
+			status
+			) 
+			VALUES(?,?,?)", 
+			$enrollmentId,
+			"BIRTH CERTIFICATE",
+			$_POST["birthCertificate"]
+		);
+
+
+		query("insert INTO enrollment_requirements (
+			enrollment_id,
+			document_name,
+			status
+			) 
+			VALUES(?,?,?)", 
+			$enrollmentId,
+			"GOOD MORAL",
+			$_POST["goodMoral"]
+		);
+
+
+		query("insert INTO enrollment_requirements (
+			enrollment_id,
+			document_name,
+			status
+			) 
+			VALUES(?,?,?)", 
+			$enrollmentId,
+			"FORM 137",
+			$_POST["form137"]
+		);
+		
+
+
+
 		// $EnrollmentFees = [];
 
 
