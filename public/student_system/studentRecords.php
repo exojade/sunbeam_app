@@ -37,16 +37,16 @@
 
 
 <div class="modal fade" id="newForm137Modal">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Add Schedule</h4>
+              <h4 class="modal-title">New Form 137</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form class="generic_form_trigger"  data-url="student">
+              <form id="CaptureForm137" class="generic_form_trigger" data-url="student">
                 <input type="hidden" name="action" value="captureForm137">
                 <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
 
@@ -66,34 +66,26 @@
                 <div class="row">
                   <div class="col">
                     <div class="form-group">
-                      <input required type="text" class="form-control" name="school_name" placeholder="Enter District">
+                      <input required type="text" class="form-control" name="school_district" placeholder="Enter District">
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <input required type="text" class="form-control" name="school_id" placeholder="Enter Division">
+                      <input required type="text" class="form-control" name="school_division" placeholder="Enter Division">
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <input required type="text" class="form-control" name="school_id" placeholder="Enter Region">
+                      <input required type="text" class="form-control" name="school_region" placeholder="Enter Region">
                     </div>
                   </div>
                 </div>
 
-
+                <hr>
                 <div class="row">
                   <div class="col">
                     <div class="form-group">
-                      <select class="form-control" name="grade_level">
-                        <option disabled selected value="">Select Grade Level</option>
-                        <option value="Grade 1">Grade 1</option>
-                        <option value="Grade 2">Grade 2</option>
-                        <option value="Grade 3">Grade 3</option>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
-                      </select>
+                      <input required type="text" class="form-control" name="grade_level" placeholder="Enter Grade Level">
                     </div>
                   </div>
                   <div class="col">
@@ -103,48 +95,75 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <input required type="text" class="form-control" name="school_id" placeholder="Enter School Year">
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="form-group">
-                      <input required type="text" class="form-control" name="adviser" placeholder="Enter Adviser / Teacher's Name">
+                      <input required type="text" class="form-control" name="school_year" data-inputmask='"mask": "9999-9999"'data-mask placeholder="SY. Ex. 2023-2024">
                     </div>
                   </div>
                 </div>
 
-
-                <table class="table table-bordered">
-                  <thead>
-                    <th rowspan="2">Learning Areas</th>
-                    <th colspan="4">Quarterly Rating</th>
-                    <th rowspan="2">Remarks</th>
-                    <tr>
-                      <th>1</th>
-                      <th>2</th>
-                      <th>3</th>
-                      <th>4</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                 
-                  </tbody>
-                  
-
-                </table>
-
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" name="adviser_name" placeholder="Enter Adviser Name">
+                    </div>
+                  </div>
               
-    
-
-
-
+                </div>
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
           </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
+      <div class="modal fade" id="modalUpdateGrades">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header bg-success">
+              <h4 class="modal-title">Update Grades</h4>
+            </div>
+            <div class="modal-body fetched-data" id="updateGrades">
+                    <!-- Render the grades data using Vue here -->
+                  <table class="table table-bordered">
+                    <tr v-for="(grade, i) in grades" :key="i">
+                      <td><input class="form-control" v-model="grade.subject"  type="text" placeholder="Subject"></td>
+                      <td><input class="form-control" v-model="grade.first_grading"  type="number" placeholder="1st Grading"></td>
+                      <td><input class="form-control" v-model="grade.second_grading"  type="number" placeholder="2nd Grading"></td>
+                      <td><input class="form-control" v-model="grade.third_grading"  type="number" placeholder="3rd Grading"></td>
+                      <td><input class="form-control" v-model="grade.fourth_grading"  type="number" placeholder="4th Grading"></td>
+                      <td><input class="form-control" v-model="grade.final_rating"  type="number" placeholder="Final Rating"></td>
+                      <td><input class="form-control" v-model="grade.remarks"  type="text" placeholder="Remarks"></td>
+                      <td>
+                        <button @click="remGrade(i)" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i> Remove</button>
+                      </td>
+                    </tr>
+
+                    <!-- Display message when there are no grades -->
+                    <tr v-if="numOfGrades === 0">
+                      <td colspan="8" style="text-align: center; color: lightgrey;">-- No grades available --</td>
+                    </tr>
+
+                    <!-- Add button (only visible if not in read-only mode) -->
+                    <tr>
+                      <td colspan="8">
+                        <button class="btn btn-primary" @click="addGrade">
+                          <i class="fa fa-plus"></i> Add Grade
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
           </div>
           <!-- /.modal-content -->
         </div>
@@ -272,13 +291,8 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
 
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-
-            <!-- About Me Box -->
             
-            <!-- /.card -->
             <button class="btn btn-info btn-block">Print Form 137</button>
           </div>
 
@@ -292,7 +306,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab">Profile Info</a></li>
                   <li class="nav-item"><a class="nav-link " href="#grades" data-toggle="tab">Grades</a></li>
                   <li class="nav-item"><a class="nav-link " href="#payment_history" data-toggle="tab">Payment History</a></li>
-                  <!-- <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Form 137</a></li> -->
+                  <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Capture Form 137</a></li>
              
                 </ul>
               </div><!-- /.card-header -->
@@ -506,10 +520,37 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
 
                   <div class=" tab-pane" id="form137">
+                      <table style="width: 100%;" id="ajaxDatatable2" class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th width="15%"><a href="#" data-toggle="modal" data-target="#newForm137Modal" class="btn btn-info btn-block btn-sm"><i class="fa fa-plus"></i></a></th>
+                            <th>School</th>
+                            <th>School Year</th>
+                            <th>Grade Level</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php $form137 = query("select * from captureform137 where student_id = ?
+                                                  order by school_year", $_GET["id"]); ?>
+                        <?php foreach($form137 as $row): ?>
+                          <tr>
+                            <td>
+                              <div class="btn-group btn-block">
+                                <!-- <button @click="showModal(<?php echo($row["form137_id"]); ?>)" class="btn btn-sm btn-warning">Update</button> -->
+                               
+                                
+                                <a href="#" data-toggle="modal" data-id="<?php echo($row["form137_id"]); ?>" data-target="#modalUpdate" class="btn btn-sm btn-warning">Update</a>
+                                <a href="form137?action=addGrade&id=<?php echo($row["form137_id"]); ?>" class="btn btn-sm btn-success">Grades</a>
+                              </div>
+                            </td>
+                            <td><?php echo($row["school_name"]); ?></td>
+                            <td><?php echo($row["school_year"]); ?></td>
+                            <td><?php echo($row["grade_level"]); ?></td>
+                          </tr>
+                        <?php endforeach; ?>
 
-                      <a href="#" data-toggle="modal" data-target="#newForm137Modal" class="btn btn-info">Capture FORM 137</a>
-
-           
+                        </tbody>
+                      </table>
                   </div>
 
 
@@ -538,6 +579,9 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script src="resources/js/vue.js"></script>
+  <script src="AdminLTE_new/plugins/inputmask/jquery.inputmask.min.js"></script>
+<script src="AdminLTE_new/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="AdminLTE_new/plugins/jquery-validation/additional-methods.min.js"></script>
   <script>
 
 
@@ -630,30 +674,27 @@ var datatable =
 }
             });
 
-
+            $('[data-mask]').inputmask()
   function loadDetails(){
   // alert("awit");
 
   var enrollment_id = $('#enrollmentSelect').val() || "";
-  // alert(enrollment_id);
-
-  Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
-        $.ajax({
-            type : 'post',
-            url : 'student', //Here you will fetch records 
-            data: {
-              enrollment_id: enrollment_id, action: "advisoryDetailsHTML"
-            },
-            success : function(data){
-                $('#advisorySection').html(data);
-         
-                // $(".select2").select2();//Show fetched data from database
-            }
-        });
-        Swal.close();
- 
-}  
-
+                  Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+                        $.ajax({
+                            type : 'post',
+                            url : 'student', //Here you will fetch records 
+                            data: {
+                              enrollment_id: enrollment_id, action: "advisoryDetailsHTML"
+                            },
+                            success : function(data){
+                                $('#advisorySection').html(data);
+                        
+                                // $(".select2").select2();//Show fetched data from database
+                            }
+                        });
+                        Swal.close();
+                
+                }  
             $('.selectFilter').on('change', function() {
               loadDetails();
 
@@ -664,32 +705,7 @@ var datatable =
               });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              var datatable2 = 
+          var datatable2 = 
             $('#ajaxDatatable2').DataTable({
                 "searching": false,
                 "pageLength": 9999,
@@ -740,42 +756,41 @@ var datatable =
 
                 ],
                 "footerCallback": function (row, data, start, end, display) {
-    var api = this.api();
+                    var api = this.api();
 
-    // Remove the formatting to get integer data for summation
-    var intVal = function (i) {
-        return typeof i === 'string' ?
-            i.replace(/[\$,]/g, '') * 1 :
-            typeof i === 'number' ?
-                i : 0;
-    };
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
 
-    // Total over all pages
-    var received = api
-        .column(1)
-        .data()
-        .reduce(function (a, b) {
-            return intVal(a) + intVal(b);
-        }, 0);
+                    // Total over all pages
+                    var received = api
+                        .column(1)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-    // Calculate installment
-    var installment = received / 10;
+                    // Calculate installment
+                    var installment = received / 10;
 
-    // Format the output
-    var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    // Update the footer
-    $('#feeTotal').html(formattedReceived);
-    // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
-    $('#totalVal').val(received);
-}
+                    // Format the output
+                    var formattedReceived = '₱ ' + received.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    // var formattedInstallment = '₱ ' + installment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    // Update the footer
+                    $('#feeTotal').html(formattedReceived);
+                    // $('#feeTotalModal').html(formattedReceived + ' (' + formattedInstallment + ' / month)');
+                    $('#totalVal').val(received);
+                }
             });
+            
             $('.selectFilter2').on('change', function() {
               var enrollmentFilterID = $('#enrollmentSelect2').val() || "";
               datatable2.ajax.url('studentAccounts?action=paymentHistoryList&enrollmentFilterID='+enrollmentFilterID).load();
               });
-
-
 
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
@@ -784,6 +799,135 @@ var datatable =
                 document.getElementById('formFile').value = null;
                 frame.src = "";
             }
+
+
+  $(function () {
+      $('#CaptureForm137').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-control').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid').removeClass('is-valid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid').addClass('is-valid');
+        },
+        success: function (label, element) {
+          $(element).addClass('is-valid'); // Adds green border when valid
+          // Add a green check icon or any valid styling you want to apply
+          $(element).closest('.form-control').find('span.valid-feedback').remove();
+          // $(element).closest('.form-group').append('<span class="valid-feedback">✓</span>'); // Adds a check mark
+        }
+      });
+  });
+
+
+
+  // $('#modalUpdateGrades').on('show.bs.modal', function (e) {
+  //   var row_id = $(e.relatedTarget).data('id');
+  //   // Call Vue method and pass form137_id
+  //     var vueInstance = $("#updateGrades")[0].__vue__;
+  //     vueInstance.fetchGrades(row_id);
+  // });
+
+
+
+  // $('#modalUpdateGrades').on('show.bs.modal', function (e) {
+  //       var row_id = $(e.relatedTarget).data('id');
+  //       Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+  //       $.ajax({
+  //           type : 'post',
+  //           url : 'student', //Here you will fetch records 
+  //           data: {
+  //             form137_id: row_id,
+  //             action: "modalUpdateGrades"
+  //           },
+  //           success : function(data){
+  //               $('#modalUpdateGrades .fetched-data').html(data);
+
+
+
+
+
+  //               Swal.close();
+  //               // $(".select2").select2();//Show fetched data from database
+  //           }
+  //       });
+  //    });
+  new Vue({
+  el: "#updateGrades",
+  data: {
+    readonly: true,
+    form137_id: 0,
+    grades: [],  // Make sure grades is initialized here
+    grade: {
+      subject: null,
+      first_grading: null,
+      second_grading: null,
+      third_grading: null,
+      fourth_grading: null,
+      final_rating: null,
+      remarks: null
+    },
+  },
+  computed: {
+  numOfGrades() {
+    return this.grades ? this.grades.length : 0;
+  }
+},
+  methods: {
+    fetchGrades(form137_id) {
+      Swal.fire({
+        title: 'Please wait...',
+        imageUrl: 'AdminLTE_new/dist/img/loader.gif',
+        showConfirmButton: false
+      });
+
+      $.ajax({
+        type: 'post',
+        url: 'student',
+        data: {
+          form137_id: form137_id,
+          action: "modalUpdateGrades"
+        },
+        success: (response) => {
+          this.grades = response;
+          console.log(this.grades);  // Assume response contains grades data
+          Swal.close();
+        },
+        error: (err) => {
+          console.error('Error fetching grades:', err);
+          Swal.close();
+        }
+      });
+    },
+    addGrade() {
+      this.grades = [];
+      // console.log(this.grades);
+      this.grades.push({
+                Title: null,
+                Rating: null,
+                DateExam: null,
+                PlaceExam: null,
+                License: null,
+                DateReleased: null
+             })
+    },
+    remGrade(index) {
+      this.grades.splice(index, 1);
+    }
+  },
+  mounted() {
+    $('#modalUpdateGrades').on('show.bs.modal', (e) => {
+      var row_id = $(e.relatedTarget).data('id');
+      this.fetchGrades(row_id);
+    });
+  }
+});
+
+
         </script>
 
 

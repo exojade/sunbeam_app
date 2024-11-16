@@ -151,7 +151,61 @@
 		}
 
 		
+		if($_POST["action"] == "captureForm137"){
+			// dump($_POST);
+					query("insert INTO captureform137 (school_name, school_id, district, division, region, grade_level, 
+														section, school_year, adviser_name, student_id) 
+					VALUES(?,?,?,?,?,?,?,?,?,?)", 
+					$_POST["school_name"],
+					$_POST["school_id"],
+					$_POST["school_district"],
+					$_POST["school_division"],
+					$_POST["school_region"],
+					$_POST["grade_level"],
+					$_POST["section"],
+					$_POST["school_year"],
+					$_POST["adviser_name"],
+					$_POST["student_id"]
+				);
+
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "Success on updating data",
+					"link" => "refresh",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+
+
+		}
+
+		if($_POST["action"] == "modalUpdateGrades"){
+			// dump($_POST);
+
+			$rows = query("select * from captureform137_grades where form137_id = ?", $_POST["form137_id"]);
+			// dump($rows);
+			$data = array();
+			foreach($rows as $row):
+				$datum = array(
+					"subject" => $row["subject"],
+					"first_grading" => $row["first_grading"],
+					"second_grading" => $row["second_grading"],
+					"third_grading" => $row["third_grading"],
+					"fourth_grading" => $row["fourth_grading"],
+					"final_rating" => $row["final_rating"],
+					"remarks" => $row["remarks"]
+				);
+				$data[] = $datum;
+			endforeach;
+			echo json_encode($data);
+		}
+		
     }
+
+
+	
 	else {
 
 		if(!isset($_GET["action"])):

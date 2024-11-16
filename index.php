@@ -53,6 +53,9 @@
 			else if ($request == 'fees')
 				require 'public/fees_system/fees.php';
 
+			else if ($request == 'form137')
+				require 'public/form137_system/form137.php';
+
 			else if ($request == 'cashier')
 				require 'public/cashier_system/cashier.php';
 
