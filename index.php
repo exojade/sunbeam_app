@@ -1,4 +1,6 @@
 <?php
+
+
     require("includes/config.php");
     require("includes/uuid.php");
     require("includes/checkhit.php");

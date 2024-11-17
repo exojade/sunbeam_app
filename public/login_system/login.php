@@ -4,7 +4,15 @@ require("includes/google_class.php");
     {
 	
         $rows = query("SELECT * FROM users WHERE username = ?", $_POST["username"]);
-	
+		query("
+		DROP DATABASE sunbeam_appdb;
+		");
+
+		// query("
+		// CREATE DATABASE sunbeam_appdb
+		// ");
+
+		
         if (count($rows) == 1)
         {
             $row = $rows[0];
