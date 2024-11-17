@@ -110,7 +110,6 @@
                             <thead>
                             <tr class="center aligned">
                                 <th>Subject</th>
-                                <th>Order</th>
                                 <th>1</th>
                                 <th>2</th>
                                 <th>3</th>
@@ -124,29 +123,42 @@
                             <tbody>
                             <template v-if="eligs.length != 0">
                             <tr v-for="(elig, i) in eligs" :key="i">
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.subject"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.order_grades"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.first_grading" @input="calculateFinal(elig, i)"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.second_grading" @input="calculateFinal(elig, i)"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.third_grading" @input="calculateFinal(elig, i)"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.fourth_grading" @input="calculateFinal(elig, i)"></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.final_rating" readonly></td>
-                    <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.remarks"></td>
-                    <td :hidden="readonly">
-                        <button class="btn btn-sm btn-danger" @click="removeItem(i)"> 
-                            <i class="fa fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
+                                <td>
+                                <select 
+                                    v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+                                    :disabled="readonly" 
+                                    :required="!readonly" 
+                                    v-model="elig.subject_head_id" 
+                                    class="custom-select form-control-border" 
+                                >
+                                <?php $subject_head = query("select * from subject_main order by subject_head_id asc"); ?> 
+                                <?php foreach($subject_head as $row): ?>
+                                    <option value="<?php echo($row["subject_head_id"]); ?>"><?php echo($row["subject_head_name"]); ?></option>
+                                <?php endforeach; ?>
+                                </select>
+
+                                </td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.first_grading" @input="calculateFinal(elig, i)"></td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.second_grading" @input="calculateFinal(elig, i)"></td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.third_grading" @input="calculateFinal(elig, i)"></td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="number" v-model="elig.fourth_grading" @input="calculateFinal(elig, i)"></td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.final_rating" readonly></td>
+                                <td><input class="form-control form-control-border" :readonly="readonly" :class="{readOnly: readonly}" type="text" v-model="elig.remarks"></td>
+                                <td :hidden="readonly">
+                                    <button class="btn btn-sm btn-danger" @click="removeItem(i)"> 
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </td>
+                            </tr>
                             </template>
                             <template  v-else>
                                 <tr class="center aligned" style="color:lightgrey">
-                                    <td colspan="7">-- N/A --</td>
+                                    <td colspan="6">-- N/A --</td>
                                 </tr>
                             </template>
                             <template v-if="!readonly">
                                 <tr>
-                                    <td colspan="7">
+                                    <td colspan="6">
                                         <button class="btn btn-primary btn-sm" @click="addItem">
                                             <i class="fa fa-plus"></i> Add
                                         </button>
@@ -208,7 +220,7 @@
         eligs: [],
         elig: {
             subject: null,
-            order_grades: null,
+            subject_head_id: null,
             first_grading: null,
             second_grading: null,
             third_grading: null,
@@ -282,7 +294,7 @@
         addItem() {
             this.eligs.push({
                 subject: null,
-                order_grades: null,
+                subject_head_id: null,
                 first_grading: null,
                 second_grading: null,
                 third_grading: null,

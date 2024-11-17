@@ -209,8 +209,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 		elseif($_POST["action"] == "generateGradeExcel"):
 			// dump($_POST);
-			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load("reports/reportCardTemplate.xlsx");
-			$sheet = $spreadsheet->getActiveSheet();
+			$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load("reports/reportCardNewTemplate.xlsx");
+			$sheet = $spreadsheet->getSheetByName("FRONT");
 
 			$student = query("select s.*, e.grade_level, sec.section,
 								concat(t.teacher_firstname, ' ', t.teacher_lastname) as teacher_name,
@@ -246,14 +246,15 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$sheet->setCellValue("H11", strtoupper($student["sex"]));
 			$sheet->setCellValue("B12", strtoupper($student["school_year"]));
 			$sheet->setCellValue("B22", strtoupper($student["middlename"]));
-			$sheet->setCellValue("C38", strtoupper($student["grade_level"] . " - " . $student["section"]));
-			$sheet->setCellValue("B42", strtoupper($student["teacher_name"]));
+			$sheet->setCellValue("B51", strtoupper($student["grade_level"] . " - " . $student["section"]));
+			$sheet->setCellValue("B55", strtoupper($student["teacher_name"]));
 
 
 			$student_grades = query("select * from student_grades sg
 									left join subjects sub on sub.subject_id = sg.subject_id
 									left join subject_main sm on sm.subject_head_id = sub.subject_head_id
 									where sg.advisory_id = ? and sg.student_id = ?
+									order by sm.subject_head_id
 								",
 									$_POST["advisory_id"], $_POST["student_id"]);
 			$Grades = [];
@@ -268,42 +269,66 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 								left join subjects sub on sub.subject_id = sched.subject_id
 								left join subject_main sm on sm.subject_head_id = sub.subject_head_id
 								where sg.advisory_id = ? and sg.student_id = ?
-								group by schedule_id", $_POST["advisory_id"], $_POST["student_id"]);
+								group by schedule_id
+								order by sm.subject_head_id asc", $_POST["advisory_id"], $_POST["student_id"]);
 			// dump($schedule);
 // 
-			$start_row = 27;
-			foreach($schedule as $row):
-				$sheet->insertNewRowBefore($start_row);
-				// dump($Grades[$row["subject_id"]]["subject_head_name"]);
-				$sheet->setCellValue("A".$start_row, ($row["subject_head_name"]));
-				
-				$childSubjects = query("select * from subjects where subject_parent_id = ?", $row["main_subject"]);
-				// dump($childSubjects);
-				if(!empty($childSubjects)):
-					$parentRow = $start_row;
-					foreach($childSubjects as $child):
-						$start_row++;
-						$sheet->insertNewRowBefore($start_row);
-						$sheet->setCellValue("A".$start_row, " ...".($Grades[$child["subject_id"]]["subject_title"]));
-
-						$sheet->setCellValue("C".$start_row, ($Grades[$child["subject_id"]]["first_grading"]));
-						$sheet->setCellValue("D".$start_row, ($Grades[$child["subject_id"]]["second_grading"]));
-						$sheet->setCellValue("E".$start_row, ($Grades[$child["subject_id"]]["third_grading"]));
-						$sheet->setCellValue("F".$start_row, ($Grades[$child["subject_id"]]["fourth_grading"]));
-
-						
-					endforeach;
-					$sheet->setCellValue("C".$parentRow, "=AVERAGE(C".($parentRow+1).":C".$start_row.")");
-					$sheet->setCellValue("D".$parentRow, "=AVERAGE(D".($parentRow+1).":D".$start_row.")");
-					$sheet->setCellValue("E".$parentRow, "=AVERAGE(E".($parentRow+1).":E".$start_row.")");
-					$sheet->setCellValue("F".$parentRow, "=AVERAGE(F".($parentRow+1).":F".$start_row.")");
-				else:
-					$sheet->setCellValue("C".$start_row, ($Grades[$row["main_subject"]]["first_grading"]));
-					$sheet->setCellValue("D".$start_row, ($Grades[$row["main_subject"]]["second_grading"]));
-					$sheet->setCellValue("E".$start_row, ($Grades[$row["main_subject"]]["third_grading"]));
-					$sheet->setCellValue("F".$start_row, ($Grades[$row["main_subject"]]["fourth_grading"]));
-				endif;
-				$start_row++;
+			// $start_row = 27;
+			// dump($student_grades);
+			foreach($student_grades as $row):
+					// dump($myGrades);
+					$theRow = 0;
+					switch ($row["subject_head_id"]) {
+						case 1.0:
+							$theRow = 26;
+							break;
+						case 2.0:
+							$theRow = 27;
+							break;
+						case 3.0:
+							$theRow = 28;
+							break;
+						case 4.0:
+							$theRow = 29;
+							break;
+						case 5.0:
+							$theRow = 30;
+							break;
+						case 6.0:
+							$theRow = 31;
+							break;
+						case 7.0:
+							$theRow = 32;
+							break;
+						case 8.0:
+							$theRow = 33;
+							break;
+						case 8.1:
+							$theRow = 34;
+							break;
+						case 8.2:
+							$theRow = 35;
+							break;
+						case 8.3:
+							$theRow = 36;
+							break;
+						case 8.4:
+							$theRow = 37;
+							break;
+						case 9.0:
+							$theRow = 38;
+							break;
+						case 10.0:
+							$theRow = 39;
+							break;
+						default:
+							echo "Unknown version";
+							break;
+					}
+					$sheet->setCellValue("C".$theRow, $row["first_grading"]);
+					$sheet->setCellValue("D".$theRow, $row["second_grading"]);
+					$sheet->setCellValue("E".$theRow, $row["third_grading"]);
+					$sheet->setCellValue("F".$theRow, $row["fourth_grading"]);
 			endforeach;
 			
 			

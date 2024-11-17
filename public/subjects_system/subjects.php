@@ -23,12 +23,10 @@
 				foreach($data as $row):
 					$data[$i]["action"] = '
 					<div class="btn-group btn-block">
-                        <a type="button" href="#" data-toggle="modal" data-id="'.$row["subject_id"].'" data-target="#addSubSubjectModal" class="btn btn-sm btn-flat btn-primary">Add Sub</a>
-                        <a type="button" href="#" data-target="#updateSubSubjectsModal" data-id="'.$row["subject_id"].'" data-toggle="modal" class="btn btn-sm btn-flat btn-warning">Update Sub</a>
 						<form class="generic_form_trigger" data-url="subjects">
 							<input type="hidden" name="action" value="deleteSubject">
 							<input type="hidden" name="subject_id" value="'.$row["subject_id"].'">
-							<button type="submit" class="btn btn-flat btn-sm btn-danger">Delete</button>
+							<button type="submit" class="btn btn-sm btn-danger">Delete</button>
 						</form>
 					</div>
 					';
@@ -68,10 +66,38 @@
 
 		elseif($_POST["action"] == "addSubject"):
 			// dump($_POST);
-			$subject_id = create_trackid("SUBJ");
-			query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type) 
-				VALUES(?,?,?,?,?,?)", 
-				$subject_id, $_POST["subject_code"] ,$_POST["subject_name"], $_POST["description"],$_POST["subject_head_id"], "PARENT");
+
+
+			if(intval($_POST["subject_head_id"]) != 8):
+				$subject_id = create_trackid("SUBJ");
+				query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type) 
+					VALUES(?,?,?,?,?,?)", 
+					$subject_id, $_POST["subject_code"] ,$_POST["subject_name"], $_POST["description"],$_POST["subject_head_id"], "PARENT");
+			else:
+				$subject_id = create_trackid("SUBJ");
+				query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type) 
+					VALUES(?,?,?,?,?,?)", 
+					$subject_id, $_POST["subject_code"] ,$_POST["subject_name"], $_POST["description"],$_POST["subject_head_id"], "PARENT");
+
+				$mapeh_subjects = array("Music", "Arts", "Physical Education", "Health");
+				$i=0;
+				foreach($mapeh_subjects as $row):
+					$i++;
+					$childMain_id = $_POST["subject_head_id"] ."." . $i;
+					$childSubjects = create_trackid("SUBJ");
+					query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type, subject_parent_id) 
+					VALUES(?,?,?,?,?,?,?)", 
+					$childSubjects, "" ,$row, "",floatval($childMain_id), "CHILD", $subject_id);
+				endforeach;
+
+
+			
+
+			endif;
+
+
+
+			
 
 			$res_arr = [
 				"result" => "success",

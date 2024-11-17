@@ -127,7 +127,6 @@
                     <th>Type</th>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Sub Subjects</th>
                     <th>Action</th>
                   </thead>
                 </table>
@@ -179,7 +178,6 @@ var datatable =
                     // { data: 'subject_code', "orderable": false  },
                     { data: 'subject_title', "orderable": false  },
                     { data: 'subject_description', "orderable": false  },
-                    { data: 'subject_type', "orderable": false  },
                     { data: 'action', "orderable": false },
 
                 ],

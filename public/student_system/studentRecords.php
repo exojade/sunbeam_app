@@ -292,8 +292,11 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
               </div>
             </div>
-            
-            <button class="btn btn-info btn-block">Print Form 137</button>
+            <form class="generic_form_trigger" data-url="form137">
+              <input type="hidden" name="action" value="printForm137">
+              <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
+              <button type="submit" class="btn btn-info btn-block">Print Form 137</button>
+            </form>
           </div>
 
 
