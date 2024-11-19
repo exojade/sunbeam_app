@@ -310,7 +310,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <li class="nav-item"><a class="nav-link " href="#grades" data-toggle="tab">Grades</a></li>
                   <li class="nav-item"><a class="nav-link " href="#payment_history" data-toggle="tab">Payment History</a></li>
                   <li class="nav-item"><a class="nav-link " href="#form137" data-toggle="tab">Capture Form 137</a></li>
-             
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -682,7 +681,22 @@ var datatable =
   // alert("awit");
 
   var enrollment_id = $('#enrollmentSelect').val() || "";
-                  Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+                  Swal.fire({title: 'Please wait...', 
+                    showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
+                    imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
                         $.ajax({
                             type : 'post',
                             url : 'student', //Here you will fetch records 

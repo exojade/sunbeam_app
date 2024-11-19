@@ -12,7 +12,7 @@ MySQL - 8.0.39 : Database - sunbeam_appdb
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`sunbeam_appdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`sunbeam_appdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci*/ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 USE `sunbeam_appdb`;
 
@@ -26,7 +26,7 @@ CREATE TABLE `advisory` (
   `grade_level` varchar(100) DEFAULT NULL,
   `school_year` varchar(100) DEFAULT NULL,
   `teacher_id` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `advisory` */
 
@@ -44,7 +44,7 @@ CREATE TABLE `bankdetails` (
   `instructions` text,
   `accountNumber` varchar(100) DEFAULT NULL,
   `accountName` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `bankdetails` */
 
@@ -116,7 +116,7 @@ CREATE TABLE `enrollment` (
   `status` varchar(100) DEFAULT NULL,
   `credit_balance` varchar(100) DEFAULT NULL,
   `monthly` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `enrollment` */
 
@@ -137,7 +137,7 @@ CREATE TABLE `enrollment_fees` (
   `amount` varchar(100) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`fee_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `enrollment_fees` */
 
@@ -191,7 +191,7 @@ CREATE TABLE `fees` (
   `fee_amount` varchar(100) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`fees_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `fees` */
 
@@ -217,7 +217,7 @@ CREATE TABLE `grade_level` (
   `grade_level_id` int NOT NULL AUTO_INCREMENT,
   `grade_level` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`grade_level_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `grade_level` */
 
@@ -248,7 +248,7 @@ CREATE TABLE `installment` (
   `to_balance` varchar(100) DEFAULT NULL,
   `credit_balance` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`installment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=430 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=430 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `installment` */
 
@@ -329,7 +329,7 @@ CREATE TABLE `onlinepayment` (
   `installment_number` varchar(100) DEFAULT NULL,
   `syid` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`tblid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `onlinepayment` */
 
@@ -345,7 +345,7 @@ CREATE TABLE `onlinepaymentstudents` (
   `student_id` varchar(100) DEFAULT NULL,
   `amount_paid` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`tblid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `onlinepaymentstudents` */
 
@@ -367,7 +367,7 @@ CREATE TABLE `payment` (
   `type` varchar(100) DEFAULT NULL,
   `installment_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`payment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `payment` */
 
@@ -392,7 +392,7 @@ CREATE TABLE `payment_installment` (
   `paid` varchar(100) DEFAULT NULL,
   `amount_due` varchar(100) DEFAULT NULL,
   KEY `tbl_id` (`tbl_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `payment_installment` */
 
@@ -410,7 +410,7 @@ DROP TABLE IF EXISTS `payment_settings`;
 CREATE TABLE `payment_settings` (
   `installment_number` varchar(100) DEFAULT NULL,
   `dueDate` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `payment_settings` */
 
@@ -435,7 +435,7 @@ CREATE TABLE `schedule` (
   `wednesday` varchar(100) DEFAULT NULL,
   `thursday` varchar(100) DEFAULT NULL,
   `friday` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `schedule` */
 
@@ -453,7 +453,7 @@ CREATE TABLE `school_year` (
   `syid` varchar(100) DEFAULT NULL,
   `school_year` varchar(100) DEFAULT NULL,
   `active_status` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `school_year` */
 
@@ -470,7 +470,7 @@ CREATE TABLE `section` (
   `section` varchar(100) DEFAULT NULL,
   `grade_level` varchar(100) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `section` */
 
@@ -487,7 +487,7 @@ DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `grading_period` varchar(100) DEFAULT NULL,
   `active_status` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `settings` */
 
@@ -547,7 +547,7 @@ CREATE TABLE `student` (
   `current_enrollment_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `auto_id` (`auto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `student` */
 
@@ -573,7 +573,7 @@ CREATE TABLE `student_grades` (
   `average` varchar(100) DEFAULT NULL,
   `remarks` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`grade_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `student_grades` */
 
@@ -628,7 +628,7 @@ CREATE TABLE `subjects` (
   `subject_head_id` varchar(100) DEFAULT NULL COMMENT 'mao ni mabutang sa grade card na subject jud',
   `subject_type` enum('PARENT','CHILD') DEFAULT NULL,
   `subject_parent_id` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `subjects` */
 
@@ -668,7 +668,7 @@ CREATE TABLE `teacher` (
   `teacher_gender` varchar(100) DEFAULT NULL,
   `teacher_emailaddress` varchar(100) DEFAULT NULL,
   `teacher_contactNumber` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `teacher` */
 
@@ -692,7 +692,7 @@ CREATE TABLE `users` (
   `gender` varchar(100) DEFAULT NULL,
   `profile_image` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 

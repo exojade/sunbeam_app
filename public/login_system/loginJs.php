@@ -3,7 +3,7 @@
 $(function () {
 			$('#login_form').submit(function(e) {
 			  e.preventDefault();
-			  swal({title: 'Please wait...', imageUrl: './public/images/loader/green-loader.gif', showConfirmButton: false});
+			  swal({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
 			  $.ajax({
 				type: 'post',
 				url: 'login',

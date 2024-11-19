@@ -188,18 +188,21 @@
                       <tr>
                         <td>
 
-                        <div class="btn-group">
-                        <form class="generic_form_trigger" style="display:inline-block;" data-url="teacherAdvisory">
+                        <div class="btn-group btn-block">
+                        <form class="generic_form_trigger" data-url="teacherAdvisory">
                             <input type="hidden" name="action" value="generateGradeExcel">
                             <input type="hidden" name="advisory_id" value="<?php echo($advisory["advisory_id"]); ?>">
                             <input type="hidden" name="student_id" value="<?php echo($row["student_id"]); ?>">
                               <button class="btn btn-sm btn-success" type="submit">Print</button>
+                              
                           </form>
-                          <a href="#" type="button"
+
+                          <a href="#"
                               data-student_id="<?php echo($row["student_id"]); ?>" 
                               data-advisory_id="<?php echo($advisory["advisory_id"]); ?>" 
                               data-toggle="modal" 
                               data-target="#gradesModal" class="btn btn-info btn-sm ">View</a>
+                         
                       </div>
 
 

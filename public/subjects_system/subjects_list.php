@@ -29,7 +29,7 @@
               <input type="hidden" name="action" value="addSubject">
 
 
-              <?php $subject_main = query("select * from subject_main"); ?>
+              <?php $subject_main = query("select * from subject_main where main_subject = 1"); ?>
               <div class="form-group">
                 <label for="exampleInputEmail1">Subject Type</label>
                 <select required class="form-control" name="subject_head_id">

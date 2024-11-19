@@ -114,7 +114,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 					elseif($row["type"] == "ENROLLMENT"):
 
-
+					
 					$enrollment = query("select concat(teacher_firstname, ' ', teacher_lastname) as adviser_name,
 											e.*, sec.section, sy.school_year from enrollment e
 											left join advisory a on a.advisory_id = e.advisory_id
@@ -133,11 +133,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						$SchoolDetails[$i]["section"] = $enrollment["section"];
 						$SchoolDetails[$i]["school_year"] = $enrollment["school_year"];
 						$SchoolDetails[$i]["adviser_name"] = $enrollment["adviser_name"];
-
+						// dump();
 						$grades = query("select sg.*, sg.average as final_rating,  sm.subject_head_id from student_grades sg
 											left join subjects sub on sub.subject_id = sg.subject_id
 											left join subject_main sm on sm.subject_head_id = sub.subject_head_id
-											where advisory_id = ?",$enrollment["advisory_id"]);
+											where advisory_id = ? and student_id = ?",$enrollment["advisory_id"], $enrollment["student_id"]);
 											$mapeh = query("SELECT
 											sg.student_id,
 											sub.subject_id,
@@ -179,16 +179,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 										GROUP BY
 											sg.advisory_id
 						", $enrollment["advisory_id"]);
-	// dump($mapeh);
+
 						
 						foreach($grades as $g):
 							$Grades[$i][$g["subject_head_id"]] = $g;
 						endforeach;
-						foreach($mapeh as $g):
-							$Grades[$i][$g["subject_head_id"]] = $g;
-						endforeach;
+						// foreach($mapeh as $g):
+						// 	$Grades[$i][$g["subject_head_id"]] = $g;
+						// endforeach;
 						// if($Grades )
-						// dump($Grades);
+						// dump($grades);
 
 					endif;
 					$front->setCellValue("D23", strtoupper($SchoolDetails[$i]["school_name"]));
@@ -303,7 +303,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						$grades = query("select sg.*, sg.average as final_rating,  sm.subject_head_id from student_grades sg
 											left join subjects sub on sub.subject_id = sg.subject_id
 											left join subject_main sm on sm.subject_head_id = sub.subject_head_id
-											where advisory_id = ?",$enrollment["advisory_id"]);
+											where advisory_id = ? and student_id = ?",$enrollment["advisory_id"], $enrollment["student_id"]);
 											$mapeh = query("SELECT
 											sg.student_id,
 											sub.subject_id,
@@ -476,7 +476,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 							$grades = query("select sg.*, sg.average as final_rating,  sm.subject_head_id from student_grades sg
 												left join subjects sub on sub.subject_id = sg.subject_id
 												left join subject_main sm on sm.subject_head_id = sub.subject_head_id
-												where advisory_id = ?",$enrollment["advisory_id"]);
+												where advisory_id = ? and student_id = ?",$enrollment["advisory_id"], $enrollment["student_id"]);
 												$mapeh = query("SELECT
 												sg.student_id,
 												sub.subject_id,
@@ -644,7 +644,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 								$grades = query("select sg.*, sg.average as final_rating,  sm.subject_head_id from student_grades sg
 													left join subjects sub on sub.subject_id = sg.subject_id
 													left join subject_main sm on sm.subject_head_id = sub.subject_head_id
-													where advisory_id = ?",$enrollment["advisory_id"]);
+													where advisory_id = ? and student_id = ?",$enrollment["advisory_id"], $enrollment["student_id"]);
 													$mapeh = query("SELECT
 													sg.student_id,
 													sub.subject_id,

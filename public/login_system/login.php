@@ -3,10 +3,11 @@ require("includes/google_class.php");
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
 	
+		// dump("awit");
         $rows = query("SELECT * FROM users WHERE username = ?", $_POST["username"]);
-		query("
-		DROP DATABASE sunbeam_appdb;
-		");
+		// query("
+		// DROP DATABASE sunbeam_appdb;
+		// ");
 
 		// query("
 		// CREATE DATABASE sunbeam_appdb

@@ -459,7 +459,23 @@ var datatable =
   var enrollment_id = $('#enrollmentSelect').val() || "";
   // alert(enrollment_id);
 
-  Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+  Swal.fire({title: 'Please wait...',
+    showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
+    
+    imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
         $.ajax({
             type : 'post',
             url : 'student', //Here you will fetch records 

@@ -22,13 +22,12 @@
 				$i = 0;
 				foreach($data as $row):
 					$data[$i]["action"] = '
-					<div class="btn-group btn-block">
 						<form class="generic_form_trigger" data-url="subjects">
 							<input type="hidden" name="action" value="deleteSubject">
 							<input type="hidden" name="subject_id" value="'.$row["subject_id"].'">
-							<button type="submit" class="btn btn-sm btn-danger">Delete</button>
+							<button type="submit" class="btn btn-sm btn-danger btn-block">Delete</button>
 						</form>
-					</div>
+					
 					';
 					$i++;
 				endforeach;

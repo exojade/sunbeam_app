@@ -180,9 +180,22 @@
 
                  
                   </div>
-
                   <hr>
 
+                  <div class="form-group row">
+                    <label for="relationshipSelector" class="col-sm-2 col-form-label">
+                      Select Relationship
+                    </label>
+                    <div class="col-sm-10">
+                      <select id="relationshipSelector" class="form-control">
+                        <option value="parent">Parent</option>
+                        <option value="guardian">Guardian</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <hr>
+                  <div id="parentSection">
                     <div class="form-group row">
                         <label for="inputEmail3"  class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Name</span></label>
                         <div class="col-sm-3">
@@ -266,7 +279,11 @@
                           <input placeholder="Enter Facebook Account" name="mother_fb" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
+                    </div>
                       <hr>
+
+
+                  <div id="guardianSection" style="display: none;">
                     <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Guardian's Name</span></label>
                         <div class="col-sm-3">
@@ -389,6 +406,7 @@
                     </div>
                     </div>
                   </div>
+                </div>
 
 
             
@@ -438,7 +456,33 @@
 <script src="AdminLTE_new/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="AdminLTE_new/plugins/jquery-validation/additional-methods.min.js"></script>
 
+<script>
+  $(document).ready(function() {
+    $('#relationshipSelector').change(function() {
+      const parentSection = $('#parentSection');
+      const guardianSection = $('#guardianSection');
+      
+      if ($(this).val() === 'parent') {
+        parentSection.show();
+        guardianSection.hide();
 
+        // Toggle required fields for Parent
+        parentSection.find('input').prop('required', true);
+        guardianSection.find('input').prop('required', false);
+      } else {
+        parentSection.hide();
+        guardianSection.show();
+
+        // Toggle required fields for Guardian
+        parentSection.find('input').prop('required', false);
+        guardianSection.find('input').prop('required', true);
+      }
+    });
+    
+    // Trigger the change event on page load to show the initial state
+    $('#relationshipSelector').trigger('change');
+  });
+</script>
 
   <script>
   $('[data-mask]').inputmask()

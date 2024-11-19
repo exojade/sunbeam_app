@@ -14,8 +14,8 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
       prompttitle = $(this).data('title');
     }
     else{
-      promptmessage = 'This form will be submitted. Are you sure you want to continue?';
-      prompttitle = 'Data submission';
+      promptmessage = '';
+      prompttitle = 'Are you sure?';
     }
 
 
@@ -24,6 +24,20 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
 
     Swal.fire({
         title: prompttitle,
+        showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
         text: promptmessage,
         icon: 'info',
         showCancelButton: true,
@@ -31,7 +45,22 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({ title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false });
+            Swal.fire({ title: 'Please wait...', 
+                
+                showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false });
             $.ajax({
                 type: 'post',
                 url: url,
@@ -45,6 +74,20 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
                         swal.close();
                         Swal.fire({
                             title: "Submit success",
+                            showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
                             text: o.message,
                             icon: "success"
                         }).then(function () {
