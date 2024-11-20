@@ -160,36 +160,42 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 		query("insert INTO enrollment_requirements (
 			enrollment_id,
 			document_name,
-			status
+			status,
+			student_id
 			) 
-			VALUES(?,?,?)", 
+			VALUES(?,?,?,?)", 
 			$enrollmentId,
 			"BIRTH CERTIFICATE",
-			$_POST["birthCertificate"]
+			$_POST["birthCertificate"],
+			$student_id
 		);
 
 
 		query("insert INTO enrollment_requirements (
 			enrollment_id,
 			document_name,
-			status
+			status,
+			student_id
 			) 
-			VALUES(?,?,?)", 
+			VALUES(?,?,?,?)", 
 			$enrollmentId,
 			"GOOD MORAL",
-			$_POST["goodMoral"]
+			$_POST["goodMoral"],
+			$student_id
 		);
 
 
 		query("insert INTO enrollment_requirements (
 			enrollment_id,
 			document_name,
-			status
+			status,
+			student_id
 			) 
-			VALUES(?,?,?)", 
+			VALUES(?,?,?,?)", 
 			$enrollmentId,
 			"FORM 137",
-			$_POST["form137"]
+			$_POST["form137"],
+			$student_id
 		);
 		
 

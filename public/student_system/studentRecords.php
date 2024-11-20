@@ -256,9 +256,9 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
 
 
-            <div class="card card-primary card-outline">
-            <div class="card-header bg-primary">
-                <h3 >Student Info</h3>
+            <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Student Info</h3>
               </div>
               <div class="card-body box-profile">
                 <div class="text-center">
@@ -292,11 +292,53 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
               </div>
             </div>
-            <form class="generic_form_trigger" data-url="form137">
+            <form class="generic_form_trigger mb-3" data-url="form137">
               <input type="hidden" name="action" value="printForm137">
               <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
               <button type="submit" class="btn btn-info btn-block">Print Form 137</button>
             </form>
+
+
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Requirements</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- <style>
+                #reqTable tbody td {
+                  font-size: 15px !important;
+                }
+              </style> -->
+              <table id="reqTable" class="table table-bordered">
+                <tbody>
+                  <?php $requirements = query("select * from enrollment_requirements where student_id = ?", $_GET["id"]); ?>
+                  <?php foreach($requirements as $row): ?>
+                    <tr>
+                      <td><b><?php echo($row["document_name"]); ?></b></td>
+                      <?php if($row["status"] == "NOT APPLICABLE"):
+                              $row["status"] = "N/A";
+                            endif; ?>
+                      <td class="text-right"><?php echo($row["status"]); ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3"><a href="#" data-toggle="modal" data-target="#updateRequirements" class="btn btn-warning btn-block">Update Requirements</a></td>
+                  </tr>
+                </tfoot>
+
+              </table>
+              <!-- /.card-body -->
+            </div>
+
+
+
+
+
+
+
+
           </div>
 
 
@@ -321,7 +363,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     <div class="col-12">
 
 
-                    <div class="card p-3">
 
                     <table class="table table-bordered" id="sectionTable">
                  
@@ -384,7 +425,6 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     </tr>
                   </table>
 
-                    </div>
                     </div>
                     <!-- <div class="col-5">
 

@@ -84,7 +84,7 @@
               <h4 class="modal-title">Add Child Subject</h4>
             </div>
             <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
+              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
               <input type="hidden" name="action" value="addSubSubject">
               <div class="fetched-data"></div>
             </div>

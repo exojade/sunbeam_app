@@ -66,7 +66,6 @@
 		elseif($_POST["action"] == "addSubject"):
 			// dump($_POST);
 
-
 			if(intval($_POST["subject_head_id"]) != 8):
 				$subject_id = create_trackid("SUBJ");
 				query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type) 
@@ -80,9 +79,12 @@
 
 				$mapeh_subjects = array("Music", "Arts", "Physical Education", "Health");
 				$i=0;
+				$childMain_id = $_POST["subject_head_id"];
 				foreach($mapeh_subjects as $row):
 					$i++;
-					$childMain_id = $_POST["subject_head_id"] ."." . $i;
+					 + 0.1;
+					// dump($childMain_id);
+					$childMain_id += 0.1;
 					$childSubjects = create_trackid("SUBJ");
 					query("insert INTO subjects (subject_id, subject_code, subject_title, subject_description, subject_head_id, subject_type, subject_parent_id) 
 					VALUES(?,?,?,?,?,?,?)", 
