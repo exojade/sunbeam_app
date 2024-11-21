@@ -94,16 +94,12 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
             <!-- Profile Image -->
 
 
-            <div class="small-box bg-info">
-              <div class="inner">
 
-       
-              <?php 
+            <?php 
 
             // dump(get_defined_vars());
             // if($currentInstallmentNumber != 0)
             $payment_balance = query("
-            
             SELECT 
                 SUM(CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END) AS total_amount
             FROM 
@@ -115,13 +111,59 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 and ins.syid = ?
                 and e.student_id = ?
             ", $currentInstallmentNumber, $sy["syid"], $_GET["id"]);
-      
               ?>
 
-
-
+            <?php if(floatval($payment_balance[0]["total_amount"]) != 0): ?>
+            <div class="small-box bg-warning">
+              <div class="inner">
                 <h3>₱ <?php echo(number_format(floatval($payment_balance[0]["total_amount"]),2)); ?></h3>
-                <p>Due Balance as of <?php echo(date("F d, Y")); ?></p>
+                <p>Due on <?php echo(date('F d, Y', strtotime($payment_settings[0]["dueDate"]))); ?></p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+            </div>
+            <?php endif; ?>
+
+
+
+            <div class="small-box bg-info">
+              <div class="inner">
+
+       
+              <?php 
+
+            // dump(get_defined_vars());
+            // if($currentInstallmentNumber != 0)
+            $payment_balance = query("
+            SELECT 
+                SUM(CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END) AS total_amount
+            FROM 
+                installment ins
+            left join enrollment e
+            on e.enrollment_id = ins.enrollment_id
+            WHERE 
+                ins.installment_number <= ?
+                and ins.syid = ?
+                and e.student_id = ?
+            ", $currentInstallmentNumber, $sy["syid"], $_GET["id"]);
+
+
+            $outstanding_balance = query("
+            SELECT 
+                SUM(CASE WHEN is_paid = 'CREDIT' OR is_paid = 'NOT DONE' THEN amount_due ELSE 0 END) AS total_amount
+            FROM 
+                installment ins
+            left join enrollment e
+            on e.enrollment_id = ins.enrollment_id
+            WHERE 
+                ins.installment_number <= 11
+                and ins.syid = ?
+                and e.student_id = ?
+            ", $sy["syid"], $_GET["id"]);
+              ?>
+                <h3>₱ <?php echo(number_format(floatval($outstanding_balance[0]["total_amount"]),2)); ?></h3>
+                <p>Outstanding Balance as of <?php echo(date("F d, Y")); ?></p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
