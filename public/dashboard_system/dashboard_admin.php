@@ -108,7 +108,8 @@
                 $lacking = query("
                 SELECT 
                     concat(s.lastname, ', ', s.firstname) as student_name,
-                    GROUP_CONCAT(document_name SEPARATOR ', ') AS documents_tagged_no
+                    GROUP_CONCAT(document_name SEPARATOR ', ') AS documents_tagged_no,
+                    er.student_id
                 FROM 
                     enrollment_requirements er
                 left join enrollment e
@@ -140,7 +141,7 @@
                   <tbody>
                     <?php foreach($lacking as $row): ?>
                       <tr>
-                        <td><a href="#" class="btn btn-warning btn-block btn-sm">Update</a></td>
+                        <td><a href="student?action=records&id=<?php echo($row["student_id"]); ?>" class="btn btn-warning btn-block btn-sm">Update</a></td>
                         <td><?php echo($row["student_name"]); ?></td>
                         <td><?php echo($row["documents_tagged_no"]); ?></td>
                       </tr>
