@@ -132,15 +132,7 @@
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Action</th>
-                    <th>Username / Email</th>
-                    <th>Role</th>
-                    <th>Fullname</th>
-                    <th>Status</th>
-                  </tr>
-                  </tfoot>
+    
                 </table>
               </div>
               <!-- /.card-body -->
