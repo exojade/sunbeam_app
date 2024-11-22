@@ -41,42 +41,51 @@
       </a>
   </li>
   <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Data Entry Lib
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="subjects" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Subjects</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="section" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Sections</p>
-                </a>
-              </li>
+    <a href="#" class="nav-link">
+      <i class="nav-icon fas fa-table"></i>
+      <p>
+        Data Entry Lib
+        <i class="fas fa-angle-left right"></i>
+      </p>
+    </a>
+    <ul class="nav nav-treeview">
+      <li class="nav-item">
+        <a href="subjects" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Subjects</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="section" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Sections</p>
+        </a>
+      </li>
 
-              <li class="nav-item">
-                <a href="teacher" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Teachers</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="student" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Student Masterlist File</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+      <li class="nav-item">
+        <a href="teacher" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Teachers</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="student" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Student Masterlist File</p>
+        </a>
+      </li>
+    </ul>
+  </li>
 
+  <li class="nav-item">
+      <a href="announcement" class="nav-link">
+        <i class="nav-icon fas fa-bullhorn"></i>
+        <p>
+          Announcements
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
 
 
 

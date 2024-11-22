@@ -61,6 +61,10 @@
 			else if ($request == 'cashier')
 				require 'public/cashier_system/cashier.php';
 
+
+			else if ($request == 'announcement')
+				require 'public/announcement_system/announcement.php';
+
 			else if ($request == 'onlinePayment')
 				require 'public/onlinePayment_system/onlinePayment.php';
 			else if ($request == 'onlinePaymentCashier')
