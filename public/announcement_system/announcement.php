@@ -40,7 +40,7 @@
                 <div class="user-block">
                   <img class="img-circle" src="AdminLTE_new/dist/img/user1-128x128.jpg" alt="User Image">
                   <span class="username"><a href="#">'.$Users[$row["from_sender"]]["fullname"].'</a></span>
-                  <span class="description">School Advisory - '.date('F d, Y h:i a', strtotime('2024-11-22 08:00:00')).'</span>
+                  <span class="description">School Advisory - '.date('F d, Y h:i a', strtotime($row["dateTimePosted"])).'</span>
                 </div>
               </div>
               <div class="card-body">
@@ -75,6 +75,35 @@
 					"aaData" => $data
 				);
 				echo json_encode($json_data);
+
+		elseif($_POST["action"] == "addAnnouncement"):
+			// dump($_POST);
+
+
+			query("insert INTO announcement (
+				announcement,
+				from_sender,
+				type,
+				syid,
+				dateTimePosted
+				) 
+			VALUES(?,?,?,?,?)", 
+			$_POST["announcement"],
+			$_POST["from_sender"],
+			"school",
+			$_POST["school_year"],
+			date("Y-m-d H:i:s")
+		);
+
+		$res_arr = [
+			"result" => "success",
+			"title" => "Success",
+			"message" => "Saved Successfully",
+			"link" => "refresh",
+			// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+			];
+			echo json_encode($res_arr); exit();
+
 		endif;
 		
     }

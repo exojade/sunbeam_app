@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="AdminLTE_new/plugins/summernote/summernote-bs4.min.css">
 
 
 
@@ -20,6 +21,39 @@
         </div>
       </div>
     </section>
+
+
+    <div class="modal fade" id="newAnnouncement">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+              <h4 class="modal-title">New Announcement</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+  
+              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="announcement">
+                <input type="hidden" name="action" value="addAnnouncement">
+                <input type="hidden" name="school_year" value="<?php echo($school_year[0]["syid"]); ?>">
+                <input type="hidden" name="from_sender" value="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>">
+
+
+              <textarea id="summernote" name="announcement">
+                 
+              </textarea>
+              
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+                  </form>
+          </div>
+        </div>
+      </div>
 
     <!-- Main content -->
     <section class="content">
@@ -90,16 +124,19 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script src="AdminLTE_new/plugins/summernote/summernote-bs4.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
 
 
-
+$('#summernote').summernote({
+  minHeight: 200
+});
 
 var datatable = 
             $('#ajaxDatatable').DataTable({
                 "searching": false,
-                "pageLength": 5,
+                "pageLength": 10,
                 language: {
                     searchPlaceholder: "Search Teacher's Name"
                 },
