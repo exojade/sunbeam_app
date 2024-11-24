@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="AdminLTE_new/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -10,16 +9,16 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <!-- <div class="container-fluid">
+      <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-          <h1>School Announcement</h1>
+          <h1>Section Announcement</h1>
           </div>
-         <div class="col-sm-6">
+          <div class="col-sm-6">
             <a href="#" data-toggle="modal" class="btn btn-primary float-right" data-target="#newAnnouncement">New Annoucement</a>
           </div>
         </div>
-      </div> -->
+      </div>
     </section>
 
 
@@ -35,9 +34,10 @@
             <div class="modal-body">
   
               <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="announcement">
-                <input type="hidden" name="action" value="addAnnouncement">
+                <input type="hidden" name="action" value="addAnnouncementAdviser">
                 <input type="hidden" name="school_year" value="<?php echo($school_year[0]["syid"]); ?>">
                 <input type="hidden" name="from_sender" value="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>">
+                <input type="hidden" name="advisory_id" value="<?php echo($_GET["id"]); ?>">
 
 
               <textarea id="summernote" name="announcement">
@@ -98,47 +98,14 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
-
-      <div class="row">
-        <div class="col">
-
-        <div class="card">
-              <div class="card-header bg-info">
-                <h3 class="card-title">School Announcements</h3>
-              </div>
-              <div class="card-body">
-              <table id="ajaxDatatable" width="100%;">
-                  <thead>
-                  <tr>
-                    <th></th>
-                  </tr>
-                  </thead>
-                </table>
-              </div>
-        </div>
-
-        </div>
-
-        <div class="col">
-        <div class="card">
-              <div class="card-header bg-primary">
-                <h3 class="card-title">Section Announcement</h3>
-              </div>
-              <div class="card-body">
-              <table id="ajaxDatatable2" width="100%;">
-                  <thead>
-                  <tr>
-                    <th></th>
-                  </tr>
-                  </thead>
-                </table>
-              </div>
-        </div>
-
-        </div>
-      </div>
     
-      
+      <table id="ajaxDatatable" width="100%;">
+                  <thead>
+                  <tr>
+                    <th></th>
+                  </tr>
+                  </thead>
+                </table>
 </div>
   </section>
   </div>
@@ -186,7 +153,8 @@ var datatable =
                     'url':'announcement',
                      'type': "POST",
                      "data": function (data){
-                        data.action = "announcementList";
+                        data.action = "announcementListAdviser";
+                        data.adviser_id = "<?php echo($_GET["id"]); ?>";
                      }
                 },
                 dom: '<"top"fpl>rt<"bottom"p><"clear">',
@@ -217,58 +185,6 @@ var datatable =
         // destroy: true,
             });
 
-
-            var datatable = 
-            $('#ajaxDatatable2').DataTable({
-                "searching": false,
-                "pageLength": 10,
-                language: {
-                    searchPlaceholder: "Search Teacher's Name"
-                },
-                "bLengthChange": true,
-                "ordering": false,
-                'processing': true,
-                'serverSide': true,
-                'paging': true,
-        // 'searching': false, // Disable searching if unnecessary
-        'info': false, // Disable table info text
-        'ordering': false,
-                'serverMethod': 'post',
-                'ajax': {
-                    'url':'announcement',
-                     'type': "POST",
-                     "data": function (data){
-                        data.action = "announcementListParent";
-                        data.parent = "<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>";
-                     }
-                },
-                dom: '<"top"fpl>rt<"bottom"p><"clear">',
-                initComplete: function () {
-            // Add float-right to pagination controls
-            $('.dataTables_paginate').addClass('float-right');
-
-            // Add float-left to the length menu
-            $('#ajaxDatatable_length').addClass('float-left');
-        },
-                columns: [
-            {
-                data: 'announcementText',
-                render: function (data) {
-                    return data; // Render the timeline HTML directly
-                },
-                orderable: false
-            }
-        ],
-        // createdRow: function (row, data, dataIndex) {
-        //     // Inject the HTML directly into the container
-        //     $('#ajaxDatatable').append(data.announcementText);
-        // },
-        // paging: true,
-        // searching: false,
-        // info: false,
-        // ordering: false,
-        // destroy: true,
-            });
             $('.selectFilter').on('change', function() {
               var student_id = $('#studentSelect').val() || "";
               datatable.ajax.url('enrollment?action=enrollmentList&student_id='+student_id).load();

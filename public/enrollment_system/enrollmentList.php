@@ -11,7 +11,7 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Enrollment Masterlist</h1>
-            <small>For School Year: 2023 - 2024</small>
+            <!-- <small>For School Year: 2023 - 2024</small> -->
           </div>
           <?php if($_SESSION["sunbeam_app"]["role"] == "admin"): ?>
           <div class="col-sm-6">
@@ -130,15 +130,16 @@
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
+              <div class="card-body table-responsive">
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Code</th>
                     <th>Student Name</th>
+                    <th>Date Enrolled</th>
                     <th>Grade Level</th>
                     <th>Section</th>
-                    <th>Adviser</th>
+                    <!-- <th>Adviser</th> -->
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -198,9 +199,10 @@ var datatable =
                 'columns': [
                     { data: 'student_id', "orderable": false  },
                     { data: 'student', "orderable": false  },
+                    { data: 'dateEnrolled', "orderable": false  },
                     { data: 'grade_level', "orderable": false  },
                     { data: 'section', "orderable": false  },
-                    { data: 'teacher', "orderable": false  },
+                    // { data: 'teacher', "orderable": false  },
                     { data: 'status', "orderable": false  },
                     { data: 'action', "orderable": false },
 

@@ -171,7 +171,9 @@
           <h3 class="card-title">PENDING ENROLLMENT</h3>
         </div>
         <div class="card-body d-flex justify-content-center align-items-center">
-          <?php $enrollment = query("select e.enrollment_id, concat(s.lastname, ', ', s.firstname) as fullname,
+          <?php
+          // dump(get_defined_vars());
+          $enrollment = query("select e.enrollment_id, concat(s.lastname, ', ', s.firstname) as fullname,
                                       sec.section, e.grade_level
                                      from enrollment e
                                       left join student s
@@ -180,7 +182,8 @@
                                       on a.advisory_id = e.advisory_id
                                       left join section sec
                                       on sec.section_id = a.section_id
-                                      where e.status = 'PENDING'"); ?>
+                                      where e.status = 'PENDING'
+                                      and e.syid = ?", $sy["syid"]); ?>
           <?php if(!empty($enrollment)): ?>
           <table class="table table-bordered">
             <thead>

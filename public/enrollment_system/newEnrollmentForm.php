@@ -199,13 +199,13 @@
                     <div class="form-group row">
                         <label for="inputEmail3"  class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Name</span></label>
                         <div class="col-sm-3">
-                          <input required placeholder="First Name" name="father_firstname" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="First Name" name="father_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
                           <input  placeholder="Middle Name" name="father_middlename" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-4">
-                          <input required placeholder="Last Name" name="father_lastname" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="Last Name" name="father_lastname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -213,7 +213,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Father's Occupation</span></label>
                         <div class="col-sm-10">
-                          <input required placeholder="---" name="father_occupation" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="---" name="father_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -223,7 +223,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Educational Attainment</span></label>
                         <div class="col-sm-10">
-                          <input required placeholder="---" name="father_education" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="---" name="father_education" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -242,13 +242,13 @@
                     <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Mother's Maiden Name</span></label>
                         <div class="col-sm-3">
-                          <input required placeholder="First Name" name="mother_firstname" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="First Name" name="mother_firstname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-3">
                           <input  placeholder="Middle Name" name="mother_middlename" type="text" class="form-control" id="inputEmail3" >
                         </div>
                         <div class="col-sm-4">
-                          <input required placeholder="Last Name" name="mother_lastname" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="Last Name" name="mother_lastname" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -256,7 +256,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Mother's Occupation</span></label>
                         <div class="col-sm-10">
-                          <input required placeholder="---" name="mother_occupation" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="---" name="mother_occupation" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -266,7 +266,7 @@
                       <div class="form-group row">
                         <label for="inputEmail3" value="EF2023-908201XN" class="col-sm-2 col-form-label"><span style="text-align:right !important;">Educational Attainment</span></label>
                         <div class="col-sm-10">
-                          <input required placeholder="---" name="mother_education" type="text" class="form-control" id="inputEmail3" >
+                          <input  placeholder="---" name="mother_education" type="text" class="form-control" id="inputEmail3" >
                         </div>
                       </div>
 
@@ -323,6 +323,9 @@
               
                 </div>
 
+                <h2 class="mb-3 mt-5">REQUIREMENTS</h2>
+
+
 
                 <div class="row">
                     <div class="col">
@@ -334,21 +337,21 @@
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="yes" id="birthRadio1" name="birthCertificate">
                         <label for="birthRadio1">
-                          Yes
+                          Provided
                         </label>
                       </div>
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="no" id="birthRadio2" name="birthCertificate">
                         <label for="birthRadio2">
-                          No
+                          Not Provided
                         </label>
                       </div>
-                      <div class="icheck-primary d-inline">
+                      <!-- <div class="icheck-primary d-inline">
                         <input required type="radio" value="na" id="birthRadio3" name="birthCertificate">
                         <label for="birthRadio3">
                           Not Applicable
                         </label>
-                      </div>
+                      </div> -->
                     </div>
                     </div>
 
@@ -363,13 +366,13 @@
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="yes" id="goodmoralRadio1" name="goodMoral">
                         <label for="goodmoralRadio1">
-                          Yes
+                        Provided
                         </label>
                       </div>
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="no" id="goodmoralRadio2" name="goodMoral">
                         <label for="goodmoralRadio2">
-                          No
+                        Not Provided
                         </label>
                       </div>
                       <div class="icheck-primary d-inline">
@@ -392,13 +395,13 @@
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="yes" id="form137Radio1" name="form137">
                         <label for="form137Radio1">
-                          Yes
+                        Provided
                         </label>
                       </div>
                       <div class="icheck-primary d-inline">
                         <input required type="radio" value="no" id="form137Radio2" name="form137">
                         <label for="form137Radio2">
-                          No
+                          Not Provided
                         </label>
                       </div>
                       <div class="icheck-primary d-inline">
@@ -467,15 +470,15 @@
         guardianSection.hide();
 
         // Toggle required fields for Parent
-        parentSection.find('input').prop('required', true);
-        guardianSection.find('input').prop('required', false);
+        // parentSection.find('input').prop('required', true);
+        // guardianSection.find('input').prop('required', false);
       } else {
         parentSection.hide();
         guardianSection.show();
 
         // Toggle required fields for Guardian
-        parentSection.find('input').prop('required', false);
-        guardianSection.find('input').prop('required', true);
+        // parentSection.find('input').prop('required', false);
+        // guardianSection.find('input').prop('required', true);
       }
     });
     

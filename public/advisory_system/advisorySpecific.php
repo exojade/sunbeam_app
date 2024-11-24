@@ -69,7 +69,7 @@
                     <div class="fetched-data"></div>
                     <br>
                       <div class="box-footer">
-                        <button type="button" class=" btn btn-danger btn-flat pull-right" data-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="button" class=" btn btn-danger float-right" data-dismiss="modal" aria-label="Close">Close</button>
                       </div>
               </div>
             </div>
@@ -82,7 +82,72 @@
         <div class="row">
           <div class="col-md-12">
 
-          <div class="card card-info">
+
+          <div class="row">
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-exclamation"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Advisory Information</span>
+                <span class="info-box-number">
+                  <?php echo($advisory["grade_level"] . " : " . $advisory["section"]); ?>
+                </span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Adviser</span>
+                <span class="info-box-number">
+                  <?php echo($advisory["teacher"]); ?>
+                </span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+
+          <!-- fix for small devices only -->
+          <div class="clearfix hidden-md-up"></div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-male"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Male</span>
+                <span class="info-box-number">760</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-female"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Female</span>
+                <span class="info-box-number">2,000</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>
+
+          <!-- <div class="card card-info">
               <div class="card-header">
                 <h3 class="card-title">Advisory Class Information</h3>
               </div>
@@ -115,7 +180,7 @@
                 
                 </div>
                
-            </div>
+            </div> -->
 
 
             <!-- Profile Image -->
@@ -123,7 +188,6 @@
               <!-- /.card-header -->
                
 
-                  <hr>
                
               <!-- /.card-body -->
         
@@ -162,62 +226,26 @@
           </form>
           <?php endif; ?>
 
-
-            <div class="card">
-              <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Classroom Schedule</a></li>
-                </ul>
-              </div><!-- /.card-header -->
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="active tab-pane" id="activity">
-                    <!-- Post -->
-                  <table id="" class="table exampleDatatable table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th width="15%">Action</th>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                    <th>Sex</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach($students as $row): ?>
-                      <tr>
-                        <td>
-                          <a href="#" 
-                          data-student_id="<?php echo($row["student_id"]); ?>" 
-                          data-advisory_id="<?php echo($advisory["advisory_id"]); ?>" 
-                          data-toggle="modal" 
-                          data-target="#gradesModal" class="btn btn-info btn-block btn-sm ">View Grades</a>
-                        </td>
-                        <td><?php echo($row["student_id"]); ?></td>
-                        <td><?php echo($row["student"]); ?></td>
-                        <td><?php echo($row["sex"]); ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                  </tbody>
-                 
-                </table>
-                    <!-- /.post -->
-                  </div>
-                  <div class="tab-pane" id="timeline">
-                  <table id="" class="table exampleDatatable table-bordered table-striped">
+          <div class="row">
+              <div class="col">
+              <div class="card">
+        <div class="card-header bg-primary">
+          <h3 class="card-title">Classroom Schedule</h3>
+        </div>
+        <div class="card-body">
+        <table id="" class="table exampleDatatable table-bordered table-striped">
                       <thead>
                         <tr>
-                          <th>Code</th>
                           <th>Subject</th>
                           <th>Teacher</th>
                           <th>Schedule</th>
                         </tr>
                       </thead>
                     <tbody>
-                      <?php $schedules = query("select * from schedule s left join subjects sub
-                                                on sub.subject_id = s.subject_id
-                                                left join teacher t
-                                                on s.teacher_id = t.teacher_id
+                      <?php $schedules = query("select s.*, t.*, sub.*, sm.subject_head_name from schedule s 
+                                                left join subjects sub on sub.subject_id = s.subject_id
+                                                left join subject_main sm on sm.subject_head_id = sub.subject_head_id
+                                                left join teacher t on s.teacher_id = t.teacher_id
                                                 where s.advisory_id = ?
                                                 order by STR_TO_DATE(from_time, '%h:%i %p') asc", $_GET["id"]); ?>
 
@@ -245,72 +273,73 @@
                         
                         ?>
                         <tr>
-                          <td><?php echo($row["subject_code"]); ?></td>
-                          <td><?php echo($row["subject_title"]); ?></td>
+                          <td><?php echo($row["subject_head_name"]); ?></td>
                           <td><?php echo($row["teacher_lastname"] . ", " . $row["teacher_firstname"]); ?></td>
                           <td><?php echo($row["from_time"] . " - " . $row["to_time"] . " | " . $days_string); ?></td>
                         </tr>
                       <?php endforeach; ?>
-                  
                     </tbody>
-              
                 </table>
-                  </div>
-                  <!-- /.tab-pane -->
+        </div>
+      </div>
 
-                  <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputName" placeholder="Name">
-                        </div>
+              </div>
+              <div class="col">
+              <div class="card">
+        <div class="card-header bg-primary">
+          <h3 class="card-title">Students</h3>
+        </div>
+        <div class="card-body">
+        <table id="" class="table exampleDatatable table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th width="15%">Action</th>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Sex</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach($students as $row): ?>
+                      <tr>
+                        <td>
+
+                        <div class="btn-group btn-block">
+                        <form class="generic_form_trigger" data-url="teacherAdvisory">
+                            <input type="hidden" name="action" value="generateGradeExcel">
+                            <input type="hidden" name="advisory_id" value="<?php echo($advisory["advisory_id"]); ?>">
+                            <input type="hidden" name="student_id" value="<?php echo($row["student_id"]); ?>">
+                              <button class="btn btn-sm btn-success" type="submit">Print</button>
+                              
+                          </form>
+
+                          <a href="#"
+                              data-student_id="<?php echo($row["student_id"]); ?>" 
+                              data-advisory_id="<?php echo($advisory["advisory_id"]); ?>" 
+                              data-toggle="modal" 
+                              data-target="#gradesModal" class="btn btn-info btn-sm ">View</a>
+                         
                       </div>
-                      <div class="form-group row">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                        <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Submit</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <!-- /.tab-pane -->
-                </div>
-                <!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div>
+
+
+
+                        </td>
+                        <td><?php echo($row["student_id"]); ?></td>
+                        <td><?php echo($row["student"]); ?></td>
+                        <td><?php echo($row["sex"]); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                 
+                </table>
+        </div>
+      </div>
+
+              </div>
+          </div>
+
+
+          
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -346,7 +375,7 @@ $('#gradesModal').on('show.bs.modal', function (e) {
         Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE/dist/img/loader.gif', showConfirmButton: false});
         $.ajax({
             type : 'post',
-            url : 'advisory', //Here you will fetch records 
+            url : 'teacherAdvisory', //Here you will fetch records 
             data: {
               advisory_id: advisory_id,
               student_id: student_id,

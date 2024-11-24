@@ -261,7 +261,12 @@ WHERE
                   <div class="active tab-pane" id="payment_history">
                   <div class="row">
                     <div class="col-4">
-                    <a href="#" data-toggle="modal" data-target="#newPaymentModal" class="btn btn-info btn-block" style="margin-right:3px;">NEW PAYMENT</a>
+                    <a href="#" data-toggle="modal"
+                    <?php if(floatval($outstanding_balance[0]["total_amount"]) == 0):
+                      echo('style="margin-right:3px; pointer-events: none; opacity: 0.6;"');
+                    endif;
+                      ?>
+                    data-target="#newPaymentModal" class="btn btn-info btn-block" style="margin-right:3px;">NEW PAYMENT</a>
                     </div>
                     
                     <div class="col-8">
@@ -274,9 +279,20 @@ WHERE
                 <div class="col-6">
                   <div class="form-group">
                   <select name="enrollment_id" required id="enrollmentSelect" class="form-control select2 selectFilter">
-                          <?php foreach($enrollmentList as $eList): ?>
-                            <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
-                          <?php endforeach; ?>
+                  <?php foreach($enrollmentList as $eList):?>
+
+<?php
+  if($sy["syid"] == $eList["syid"]):
+?>
+<option selected value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  else: ?>
+
+<option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  endif;
+  ?>
+<?php endforeach; ?>
                         </select>
                   </div>
                           
@@ -297,7 +313,8 @@ WHERE
                     <table id="ajaxDatatable" class="table table-bordered table-striped">
                       <thead>
                         <tr>
-                          <th>School Year</th>
+                          <th></th>
+                          <th>SY</th>
                           <th>Date Paid</th>
                           <th>OR Number</th>
                           <th>From</th>
@@ -406,22 +423,18 @@ var datatable =
                     'url':'studentAccounts',
                      'type': "POST",
                      "data": function (data){
-                        data.action = "paymentHistoryList";
+                        data.action = "paymentHistoryListCashier";
                         data.enrollment_id = enrollment_id;
                      }
                 },
                 'columns': [
+                    { data: 'action', "orderable": false  },
                     { data: 'school_year', "orderable": false  },
                     
                     { data: 'date_paid', "orderable": false  },
                     { data: 'or_number', "orderable": false  },
-                    {
-                        data: 'from_balance', 
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
-                        }
-                    },
+                    { data: 'type', "orderable": false  },
+                    
                     {
                         data: 'amount_due', 
                         orderable: false,
@@ -430,7 +443,7 @@ var datatable =
                         }
                     },
                     {
-                        data: 'to_balance', 
+                        data: 'running_balance', 
                         orderable: false,
                         render: function (data, type, row) {
                             return '<span class="float-right">₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';

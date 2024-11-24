@@ -1,6 +1,7 @@
 <script src="AdminLTE_new/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- <script src="AdminLTE_new/dist/js/demo.js"></script> -->
 <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
+
 <script>
 $(document).on('submit', '.generic_form_trigger', function(e) {
     e.preventDefault(); // Prevent the default form submission
@@ -130,6 +131,118 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
         }
     });
 });
+
+
+
+$(document).on('submit', '.generic_form_no_trigger', function(e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    var form = $(this)[0];
+    var formData = new FormData(form);
+    var promptmessage = "";
+    var prompttitle = "";
+    if(typeof($(this).data('title')) != "undefined" ) {
+      promptmessage = $(this).data('message');
+      prompttitle = $(this).data('title');
+    }
+    else{
+      promptmessage = '';
+      prompttitle = 'Are you sure?';
+    }
+
+
+    
+    var url = $(this).data('url');
+
+    Swal.fire({ title: 'Please wait...', 
+                
+                showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false });
+            $.ajax({
+                type: 'post',
+                url: url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function(results) {
+                    var o = jQuery.parseJSON(results);
+                    console.log(o);
+                    if (o.result === "success") {
+                        swal.close();
+                        Swal.fire({
+                            title: "Submit success",
+                            showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
+                            text: o.message,
+                            icon: "success"
+                        }).then(function () {
+                          if(typeof(o.newlink) != "undefined" && o.newlink !== null) {
+                          if(o.newlink == "newlink"){
+                            console.log(o);
+                            if(o.link == "refresh")
+                            window.location.reload();
+                            else if(o.link == "not_refresh")
+                              console.log("");
+                            else
+                              window.open(o.link, '_blank');
+                              // window.location.replace(o.link, "_blank");
+                          }
+                      }
+                      else{
+                        if(o.link == "refresh")
+                        window.location.reload();
+                        else if(o.link == "not_refresh")
+                          console.log("");
+                        else
+                          window.location.replace(o.link);
+
+                      }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: o.message,
+                            type: "error"
+                        });
+                        console.log(results);
+                    }
+                },
+                error: function(results) {
+                    console.log(results);
+                    Swal.fire("Error!", "Unexpected error occured!", "error");
+                }
+            });
+
+
+
+    
+});
+
+
 
 
 

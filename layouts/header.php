@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="AdminLTE_new/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <link rel="icon" href="public/static_system/uploads/logo.png">
   <link rel="stylesheet" href="resources/animate.css" />
+  <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 </head>
 <style>
   .content-wrapper{
@@ -76,6 +78,7 @@
 <script src="AdminLTE_new/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="AdminLTE_new/dist/js/adminlte.min.js"></script>
+<script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 <!-- <script src="AdminLTE/bower_components/jquery-ui/jquery-ui.min.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 

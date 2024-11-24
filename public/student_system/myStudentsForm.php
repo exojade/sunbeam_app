@@ -4,7 +4,6 @@
 
   <!-- Theme style -->
 
-  <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
 <!-- <style>
   #sectionTable td{
@@ -45,13 +44,15 @@ $student = query("select s.*, sy.school_year, e.grade_level, e.status as enrollm
                         where s.student_id = ?", $_GET["id"]);
                         $student = $student[0];
 
-// dump(get_defined_vars());
-$boolEnrolled = 0;
-if($student["school_year"] == $school_year[0]["school_year"]):
-  if($student["enrollment_status"] == 'ENROLLED'):
-    $boolEnrolled = 1;
-  endif;
-endif;
+
+                        $StudentEnrollment = query("select * from enrollment where student_id = ?", $_GET["id"]);
+                        // dump($school_year[0]);
+                        $boolEnrolled = 0;
+                        foreach($StudentEnrollment as $s):
+                          if($s["syid"] == $school_year[0]["syid"]):
+                            $boolEnrolled = 1;
+                          endif;
+                        endforeach;
 
 $enrollment = query("select * from enrollment e
                     left join advisory a
@@ -306,9 +307,20 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                       <div class="row">
                         <div class="col-3">
                         <select style="width: 100%;" required id="enrollmentSelect" class="form-control select2 selectFilter">
-                          <?php foreach($enrollmentList as $eList): ?>
-                            <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
-                          <?php endforeach; ?>
+                        <?php foreach($enrollmentList as $eList):?>
+
+<?php
+  if($sy["syid"] == $eList["syid"]):
+?>
+<option selected value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  else: ?>
+
+<option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  endif;
+  ?>
+<?php endforeach; ?>
                         </select>
                         </div>
                       
@@ -364,9 +376,20 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 <div class="col-6">
                   <div class="form-group">
                   <select style="width:100%;" name="enrollment_id" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
-                            <?php foreach($enrollmentList as $eList): ?>
-                              <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
-                            <?php endforeach; ?>
+                  <?php foreach($enrollmentList as $eList):?>
+
+<?php
+  if($sy["syid"] == $eList["syid"]):
+?>
+<option selected value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  else: ?>
+
+<option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  endif;
+  ?>
+<?php endforeach; ?>
                           </select>
                   </div>
                           
@@ -383,6 +406,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <table style="width: 100%;" id="ajaxDatatable2" class="table table-bordered table-striped">
                     <thead>
                       <tr>
+                        <th></th>
                         <th>School Year</th>
                         <th>Date Paid</th>
                         <th>OR Number</th>
@@ -402,7 +426,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
     </section>
   </div>
 
-  <script src="AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
+
   <script src="AdminLTE_new/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -436,8 +460,8 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
 loadDetails()
 
-$('.select2').select2({
-    });
+// $('.select2').select2({
+//     });
 
 
 var enrollment_id = $('#enrollmentSelect').val() || "";
@@ -589,6 +613,7 @@ var datatable =
                      }
                 },
                 'columns': [
+                    { data: 'action', "orderable": false  },
                     { data: 'school_year', "orderable": false  },
                     
                     { data: 'date_paid', "orderable": false  },

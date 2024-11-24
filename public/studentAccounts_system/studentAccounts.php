@@ -51,7 +51,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
             );
             echo json_encode($json_data);
 
-		elseif($_POST["action"] == "paymentHistoryList"):
+		elseif($_POST["action"] == "paymentHistoryListCashier"):
 			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
             $offset = $_POST["start"];
             $limit = $_POST["length"];
@@ -71,15 +71,37 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 
-			$where = " where enrollment_id = '".$_REQUEST["enrollment_id"]."'";
-			$baseQuery = "select * from payment_installment";
+			$where1 = " where enrollment_id = '".$_REQUEST["enrollment_id"]."'";
+			$where2 = " where p.enrollment_id = '".$_REQUEST["enrollment_id"]."'";
+			$baseQuery = "
+			SELECT 
+				p.*,
+				ef.total_fee,
+				(ef.total_fee - SUM(p2.amount_paid)) AS running_balance
+			FROM 
+				payment p
+			LEFT JOIN 
+				-- Subquery to calculate the total fees for the specific enrollment_id
+				(SELECT enrollment_id, SUM(amount) AS total_fee
+				FROM enrollment_fees
+				$where1 -- Filter for the specific enrollment_id
+				GROUP BY enrollment_id) ef
+			ON 
+				ef.enrollment_id = p.enrollment_id
+			LEFT JOIN 
+				-- Self-join to calculate cumulative payments for the same enrollment_id
+				payment p2 
+			ON 
+				p2.enrollment_id = p.enrollment_id AND p2.payment_id <= p.payment_id
+			$where2 -- Filter for the specific enrollment_id
+			GROUP BY 
+				p.payment_id, p.enrollment_id, ef.total_fee, p.amount_paid
+			ORDER BY 
+				p.payment_id DESC;
+			";
 			// dump($baseQuery);
 
-			$payment = query("select * from payment");
-			$Payment = [];
-			foreach($payment as $row):
-				$Payment[$row["payment_id"]] = $row;
-			endforeach;
+	
 
 
 
@@ -89,20 +111,22 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$SY[$row["syid"]] = $row;
 			endforeach;
 
-			$data=query($baseQuery . $where . $orderString . $limitString . $offsetString);
-			$all_data=query($baseQuery . $where . $orderString);
+			$data=query($baseQuery);
+			$all_data=query($baseQuery);
 
 			$i=0;
 			foreach($data as $row):
-				$payment_id = $row["payment_id"];
-				$syid = $Payment[$payment_id]["syid"];
 
+				$syid = $row["syid"];
 
+				$data[$i]["action"]='<form class="generic_form_trigger" data-url="cashier">
+											<input type="hidden" name="action" value="printInvoice">
+											<input type="hidden" name="payment_id" value="'.$row["payment_id"].'">
+											<button class="btn btn-block btn-info btn-sm">Print Invoice</button>
+										</form>';
 				$data[$i]["school_year"] = $SY[$syid]["school_year"];
-				$data[$i]["date_paid"] = $Payment[$row["payment_id"]]["date_paid"];
-				$data[$i]["or_number"] = $Payment[$row["payment_id"]]["or_number"];
-				$data[$i]["type"] = $Payment[$row["payment_id"]]["type"];
-				$data[$i]["amount_due"] = $row["paid"];
+				$data[$i]["date_paid"] = date("F d, Y", strtotime($row["date_paid"]));
+				$data[$i]["amount_due"] = $row["amount_paid"];
 				$i++;
 			endforeach;
 
@@ -114,6 +138,65 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+
+			elseif($_POST["action"] == "paymentHistoryList"):
+				$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+				$offset = $_POST["start"];
+				$limit = $_POST["length"];
+				$search = $_POST["search"]["value"];
+	
+				$limitString = " limit " . $limit;
+				$offsetString = " offset " . $offset;
+				$orderString = " order by payment_id desc"; 
+				// dump($_POST);
+	
+	
+				// if()
+	
+				if(isset($_REQUEST["enrollmentFilterID"])):
+					$_REQUEST["enrollment_id"] = $_REQUEST["enrollmentFilterID"];
+				endif;
+	
+	
+	
+				$where = " where enrollment_id = '".$_REQUEST["enrollment_id"]."'";
+				$baseQuery = "select * from payment";
+				// dump($baseQuery);
+	
+				$school_year = query("select * from school_year");
+				$SY = [];
+				foreach($school_year as $row):
+					$SY[$row["syid"]] = $row;
+				endforeach;
+	
+				$data=query($baseQuery . $where . $orderString . $limitString . $offsetString);
+				$all_data=query($baseQuery . $where . $orderString);
+	
+				$i=0;
+				foreach($data as $row):
+					$payment_id = $row["payment_id"];
+					$data[$i]["action"]='<form class="generic_form_trigger" data-url="cashier">
+												<input type="hidden" name="action" value="printInvoice">
+												<input type="hidden" name="payment_id" value="'.$row["payment_id"].'">
+												<button class="btn btn-block btn-info btn-sm">Print Invoice</button>
+											</form>';
+					$data[$i]["school_year"] = $SY[$row["syid"]]["school_year"];
+					$data[$i]["date_paid"] = date('F d, Y h:i a', strtotime($row["date_paid"]));
+					$data[$i]["or_number"] = $row["or_number"];
+					$data[$i]["type"] = $row["method_of_payment"];
+					$data[$i]["amount_due"] = $row["amount_paid"];
+					$i++;
+				endforeach;
+	
+	
+				$json_data = array(
+					"draw" => $draw + 1,
+					"iTotalRecords" => count($all_data),
+					"iTotalDisplayRecords" => count($all_data),
+					"aaData" => $data
+				);
+				echo json_encode($json_data);
 
 		elseif($_POST["action"] == "soaList"):
 				$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;

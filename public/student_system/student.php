@@ -1,7 +1,12 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 
-
+		if($_POST["action"] == "getData"):
+			// dump($_GET);
+			$pds = query("select * from student where student_id = ?", $_REQUEST["student_id"]);
+			$data = $pds[0];
+			echo json_encode($pds);
+		endif;
 		if($_POST["action"] == "studentList"):
 			// dump($_POST);
 			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
@@ -48,6 +53,88 @@
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+		endif;
+
+		if($_POST["action"] == "updateStudentInfo"):
+			// dump($_POST);
+
+			$student = $_POST["student"];
+
+			query("
+			update student
+			set 
+				lastname = ?,
+				firstname = ?,
+				middlename = ?,
+				name_extension = ?,
+				region = ?,
+				province = ?,
+				city_mun = ?,
+				barangay = ?,
+				address = ?,
+				birthDate = ?,
+				birthPlace = ?,
+				sex = ?,
+				religion = ?,
+				father_lastname = ?,
+				father_middlename = ?,
+				father_firstname = ?,
+				father_contact = ?,
+				father_fb = ?,
+				father_occupation = ?,
+				father_education = ?,
+				mother_lastname = ?,
+				mother_middlename = ?,
+				mother_firstname = ?,
+				mother_contact = ?,
+				mother_fb = ?,
+				mother_occupation = ?,
+				mother_education = ?,
+				guardian_lastname = ?,
+				guardian_middlename = ?,
+				guardian_firstname = ?,
+				guardian_phone = ?,
+				guardian_occupation = ?
+			where student_id = ?
+			",
+			$student["lastname"],
+			$student["firstname"],
+			$student["middlename"],
+			$student["name_extension"],
+			$student["region"],
+			$student["province"],
+			$student["city_mun"],
+			$student["barangay"],
+			$student["address"],
+			$student["birthDate"],
+			$student["birthPlace"],
+			$student["sex"],
+			$student["religion"],
+			$student["father_lastname"],
+			$student["father_middlename"],
+			$student["father_firstname"],
+			$student["father_contact"],
+			$student["father_fb"],
+			$student["father_occupation"],
+			$student["father_education"],
+			$student["mother_lastname"],
+			$student["mother_middlename"],
+			$student["mother_firstname"],
+			$student["mother_contact"],
+			$student["mother_fb"],
+			$student["mother_occupation"],
+			$student["mother_education"],
+			$student["guardian_lastname"],
+			$student["guardian_middlename"],
+			$student["guardian_firstname"],
+			$student["guardian_phone"],
+			$student["guardian_occupation"],
+			$student["student_id"]
+		
+		);
+
+		echo(1);
 
 		endif;
 
@@ -129,15 +216,42 @@
 
 
 			$i=0;
-			foreach($data as $row):
-				$data[$i]["action"] = '<a href="#" data-toggle="modal" data-target="#subjectDetailsModal" class="btn btn-sm btn-block btn-info">Details</a>';
+			foreach($data as $i => $row):
+				// Adding the action button
+				$data[$i]["action"] = '
+					<a href="#" data-id="'.$row["grade_id"].'" data-toggle="modal" data-target="#updateGradesModal" class="btn btn-sm btn-block btn-warning">Update Grade</a>
+				';
+				
+				// Determining the subject title
 				$subject_title = "";
-				if($Subjects[$row["subject_id"]]["subject_type"] == "CHILD"):
-					$subject_title = $Subjects[$Subjects[$row["subject_id"]]["subject_parent_id"]]["subject_head_name"] . " - " . $Subjects[$row["subject_id"]]["subject_title"]   ;
+				if ($Subjects[$row["subject_id"]]["subject_type"] == "CHILD"):
+					$subject_title = $Subjects[$Subjects[$row["subject_id"]]["subject_parent_id"]]["subject_head_name"] . " - " . $Subjects[$row["subject_id"]]["subject_title"];
 				else:
 					$subject_title = $Subjects[$row["subject_id"]]["subject_head_name"];
 				endif;
 				$data[$i]["subject"] = $subject_title;
+				
+				// Check if all grades are present
+				if (!empty($row["first_grading"]) && !empty($row["second_grading"]) && !empty($row["third_grading"]) && !empty($row["fourth_grading"])) {
+					// If all grades are present, calculate the average
+					$grades = [
+						$row["first_grading"], 
+						$row["second_grading"], 
+						$row["third_grading"], 
+						$row["fourth_grading"]
+					];
+			
+					$average = array_sum($grades) / count($grades);  // Calculate the average
+					$data[$i]["average"] = round($average);  // Round to the nearest whole number
+			
+					// Set remarks based on the average grade
+					$data[$i]["remarks"] = ($average >= 75) ? "PASSED" : "FAILED";
+				} else {
+					// If any grade is missing, do not compute the average
+					$data[$i]["average"] = null;
+					$data[$i]["remarks"] = "";  // Remarks will be empty if grades are incomplete
+				}
+				
 				$i++;
 			endforeach;
             $json_data = array(
@@ -149,7 +263,67 @@
             echo json_encode($json_data);
 
 		}
+		
+		if($_POST["action"] == "updateGradesModal"):
+			// dump($_POST);
+			$myGrades = query("select sg.*, sm.subject_head_name from student_grades sg 
+								left join subjects sub on sub.subject_id = sg.subject_id
+								left join subject_main sm on sm.subject_head_id = sub.subject_head_id where grade_id = ?", $_POST["grade_id"]);
+			$myGrade = $myGrades[0];
+			$mySchedule = query("select sch.*, concat(teacher_lastname, ', ', teacher_firstname) as teacher from schedule sch
+									left join teacher t on t.teacher_id = sch.teacher_id
+									where schedule_id = ?", $myGrade["schedule_id"]);
+			$mySchedule = $mySchedule[0];
+			// dump($myGrade);
 
+
+			$hint = '
+			<input type="hidden" name="grade_id" value="'.$_POST["grade_id"].'">
+			<table class="table table-bordered">
+				<thead>
+					<tr>	
+						<th colspan="2">'.$mySchedule["teacher"].'</th>
+						<th colspan="3">'.$mySchedule["from_time"].' - '.$mySchedule["to_time"].'</th>
+					</tr>
+					<tr>	
+						<th width="20%">Subject</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>'.$myGrade["subject_head_name"].'</td>
+						<td><input class="form-control" type="number" name="first_grading" value="'.$myGrade["first_grading"].'"></td>
+						<td><input class="form-control" type="number" name="second_grading" value="'.$myGrade["second_grading"].'"></td>
+						<td><input class="form-control" type="number" name="third_grading" value="'.$myGrade["third_grading"].'"></td>
+						<td><input class="form-control" type="number" name="fourth_grading" value="'.$myGrade["fourth_grading"].'"></td>
+					</tr>
+				</tbody>
+			</table>
+			';
+echo($hint);
+
+
+		endif;
+
+		if($_POST["action"] == "updateAllGrades"):
+			// dump($_POST);
+			query("update student_grades set first_grading = ?, second_grading = ?, third_grading = ?, fourth_grading = ?
+			where grade_id = ?", $_POST["first_grading"], $_POST["second_grading"], $_POST["third_grading"], $_POST["fourth_grading"],
+			$_POST["grade_id"]);
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+		endif;
 		
 		if($_POST["action"] == "captureForm137"){
 			// dump($_POST);
@@ -201,6 +375,57 @@
 			endforeach;
 			echo json_encode($data);
 		}
+
+		if($_POST["action"] == "updateRequirementsModal"):
+			// dump($_POST);
+			$hint = "";
+			$requirements = query("select * from enrollment_requirements where student_id = ?", $_POST["student_id"]);
+			// dump($requirements);
+			$options = ["YES", "NO", "NOT APPLICABLE"];
+			foreach($requirements as $row):
+				$hint.='
+				<div class="form-group">
+					<label>'.$row["document_name"].'</label>
+					<select class="form-control" name="'.$row["tblid"].'">';
+						foreach($options as $o):
+							// dump($options);
+							if($o == "YES")
+								$hint.='<option ' . ($row["status"] == $o ? 'selected' : '') . ' value="'.$o.'"><i class="fa fa-check"></i> PROVIDED</option>';
+							if($o == "NO")
+								$hint.='<option ' . ($row["status"] == $o ? 'selected' : '') . ' value="'.$o.'"><i class="fa fa-check"></i> NOT PROVIDED</option>';
+							if($o == "NOT APPLICABLE")
+								$hint.='<option ' . ($row["status"] == $o ? 'selected' : '') . ' value="'.$o.'"><i class="fa fa-check"></i> NOT APPLICABLE</option>';
+						endforeach;
+					$hint.='
+					</select>
+				</div>
+				';
+			endforeach;
+			// dump($hint);
+
+			echo($hint);
+			
+		endif;
+
+		if($_POST["action"] == "updateRequirements"):
+			// dump($_POST);
+
+			$requirements = query("select * from enrollment_requirements where student_id = ?", $_POST["student_id"]);
+			foreach($requirements as $row):
+				query("update enrollment_requirements set status = ?
+				where tblid = ?", $_POST[$row["tblid"]], $row["tblid"]);
+			endforeach;
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating data",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+		endif;
 		
     }
 

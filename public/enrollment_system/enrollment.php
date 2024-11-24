@@ -383,7 +383,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					$where .= " and student_id = '".$_REQUEST["student_id"]."'";
 				endif;
 			endif;
-			$baseQuery = "select * from enrollment " . $where;
+			$baseQuery = "select * from enrollment " . $where . " order by dateEnrolled desc";
 
 			if($search == ""):
                 $data = query($baseQuery . " " . $limitString . " " . $offsetString);
@@ -423,7 +423,17 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 				if($_SESSION["sunbeam_app"]["role"] == "admin"):
 					$data[$i]["action"] = '
-						<a href="enrollment?action=specific&id='.$row["enrollment_id"].'" class="btn btn-sm btn-info btn-block">View</a>
+
+				
+
+						<form class="generic_form_no_trigger" data-url="enrollment">
+							<input type="hidden" name="action" value="printEnrollmentForm">
+							<input type="hidden" name="enrollmentId" value="'.$row["enrollment_id"].'">
+							<div class="btn-group btn-block">
+								<button class="btn btn-success btn-sm" type="submit">Print Form</button>
+								<a href="student?action=records&id='.$row["student_id"].'" class="btn btn-sm btn-info">View</a>
+							</div>
+						</div>
 					';
 				else:
 					$data[$i]["action"] = '
@@ -434,6 +444,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$student = $Students[$row["student_id"]];
 
 				$data[$i]["student"] = $student["lastname"] .", " . $student["firstname"];		
+				$data[$i]["dateEnrolled"] = date("Y-m-d h:i a", strtotime($row["dateEnrolled"]));		
 				$data[$i]["section"] = "";
 				$data[$i]["teacher"] = "";
 				// $data[$i]["balance"] = to_peso($data[$i]["balance"]);
@@ -887,11 +898,32 @@ $subjects = query("
 			$payment_installment = query("
 			
 			
-			select * from payment_installment pi
-			left join payment p
-			on p.payment_id = pi.payment_id
-			where pi.enrollment_id = ? order by tbl_id desc
-			", $_POST["enrollment_id"]);
+			SELECT 
+    p.*,
+    ef.total_fee,
+    (ef.total_fee - SUM(p2.amount_paid)) AS running_balance
+FROM 
+    payment p
+LEFT JOIN 
+    -- Subquery to calculate the total fees for the specific enrollment_id
+    (SELECT enrollment_id, SUM(amount) AS total_fee
+     FROM enrollment_fees
+     WHERE enrollment_id = ? -- Filter for the specific enrollment_id
+     GROUP BY enrollment_id) ef
+ON 
+    ef.enrollment_id = p.enrollment_id
+LEFT JOIN 
+    -- Self-join to calculate cumulative payments for the same enrollment_id
+    payment p2 
+ON 
+    p2.enrollment_id = p.enrollment_id AND p2.payment_id <= p.payment_id
+WHERE 
+    p.enrollment_id = ? -- Filter for the specific enrollment_id
+GROUP BY 
+    p.payment_id, p.enrollment_id, ef.total_fee, p.amount_paid
+ORDER BY 
+    p.payment_id DESC;
+			", $_POST["enrollment_id"], $_POST["enrollment_id"]);
 
 
 			// $installment = query("select * from installment i
@@ -1042,7 +1074,7 @@ $subjects = query("
 							<td><b>Amount</b></td>
 							<td><b>Remarks</b></td>
 							<td><b>OR Number</b></td>
-							<td><b>Outstanding Balance</b></td>
+							<td><b>Balance</b></td>
 						</tr>
 						';	
 						$total = 0;
@@ -1053,10 +1085,10 @@ $subjects = query("
 							// dump(date("F d, Y", strtotime($row["date_paid"])));
 							$html.='<tr>';
 							$html .= '<td>' . date("F d, Y", strtotime($row["date_paid"])) . '</td>';
-								$html.='<td >'.to_peso($row["paid"]).'</td>';
+								$html.='<td >'.to_peso($row["amount_paid"]).'</td>';
 								$html.='<td >'.($row["type"]).'</td>';
 								$html.='<td >'.($row["or_number"]).'</td>';
-								$html.='<td >'.to_peso($row["to_balance"]).'</td>';
+								$html.='<td >'.to_peso($row["running_balance"]).'</td>';
 							$html.='</tr>';
 						endforeach;
 					$html.='</tbody>

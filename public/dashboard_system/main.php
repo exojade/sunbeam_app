@@ -27,6 +27,35 @@ use Google\Service\Calendar;
 
 		endif;
 
+
+		if($_POST["action"] == "switchUser"):
+
+			// dump($_POST);
+			$user = query("select * from users where id = ?", $_POST["user"]);
+			$user = $user[0];
+			// dump($user);
+
+			$_SESSION["sunbeam_app"] = [
+				"userid" => $user["id"],
+				"uname" => $user["username"],
+				"role" => $user["role"],
+				"fullname" => $user["fullname"],
+				"profile_image" => "",
+				"application" => "sunbeam_app"
+			];
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Switch Success",
+				"link" => "index",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+		endif;
+
 		
 
 	

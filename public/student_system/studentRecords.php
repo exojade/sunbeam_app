@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="AdminLTE/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="AdminLTE_new/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="AdminLTE_new/plugins/toastr/toastr.min.css">
 
 
   
@@ -123,51 +124,48 @@
 
 
 
-      <div class="modal fade" id="modalUpdateGrades">
-        <div class="modal-dialog modal-xl">
+      <div class="modal fade" id="updateGradesModal">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header bg-success">
               <h4 class="modal-title">Update Grades</h4>
             </div>
-            <div class="modal-body fetched-data" id="updateGrades">
-                    <!-- Render the grades data using Vue here -->
-                  <table class="table table-bordered">
-                    <tr v-for="(grade, i) in grades" :key="i">
-                      <td><input class="form-control" v-model="grade.subject"  type="text" placeholder="Subject"></td>
-                      <td><input class="form-control" v-model="grade.first_grading"  type="number" placeholder="1st Grading"></td>
-                      <td><input class="form-control" v-model="grade.second_grading"  type="number" placeholder="2nd Grading"></td>
-                      <td><input class="form-control" v-model="grade.third_grading"  type="number" placeholder="3rd Grading"></td>
-                      <td><input class="form-control" v-model="grade.fourth_grading"  type="number" placeholder="4th Grading"></td>
-                      <td><input class="form-control" v-model="grade.final_rating"  type="number" placeholder="Final Rating"></td>
-                      <td><input class="form-control" v-model="grade.remarks"  type="text" placeholder="Remarks"></td>
-                      <td>
-                        <button @click="remGrade(i)" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i> Remove</button>
-                      </td>
-                    </tr>
-
-                    <!-- Display message when there are no grades -->
-                    <tr v-if="numOfGrades === 0">
-                      <td colspan="8" style="text-align: center; color: lightgrey;">-- No grades available --</td>
-                    </tr>
-
-                    <!-- Add button (only visible if not in read-only mode) -->
-                    <tr>
-                      <td colspan="8">
-                        <button class="btn btn-primary" @click="addGrade">
-                          <i class="fa fa-plus"></i> Add Grade
-                        </button>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-url="student">
+                <input type="hidden" name="action" value="updateAllGrades">
+                  <div class="fetched-data"></div>
+            </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+</form>
           </div>
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
+      </div>
+
+
+      <div class="modal fade" id="updateRequirementsModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h4 class="modal-title">Update Requirements</h4>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-url="student">
+                <input type="hidden" name="action" value="updateRequirements">
+                <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
+              <div class="fetched-data"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Save changes</button>
+            </div>
+          </form>
+          </div>
+        </div>
       </div>
 
 
@@ -205,13 +203,23 @@ $student = query("select s.*, sy.school_year, e.grade_level, e.status as enrollm
                         where s.student_id = ?", $_GET["id"]);
                         $student = $student[0];
 
-// dump(get_defined_vars());
+$StudentEnrollment = query("select * from enrollment where student_id = ?", $_GET["id"]);
+// dump($school_year[0]);
 $boolEnrolled = 0;
-if($student["school_year"] == $school_year[0]["school_year"]):
-  if($student["enrollment_status"] == 'ENROLLED'):
+$theStatus = "";
+foreach($StudentEnrollment as $s):
+  if($s["syid"] == $school_year[0]["syid"]):
     $boolEnrolled = 1;
+    $theStatus = $s["status"];
   endif;
-endif;
+endforeach;
+
+
+// if($student["school_year"] == ):
+//   if($student["enrollment_status"] == 'ENROLLED'):
+//     $boolEnrolled = 1;
+//   endif;
+// endif;
 
 $enrollment = query("select * from enrollment e
                     left join advisory a
@@ -219,6 +227,7 @@ $enrollment = query("select * from enrollment e
                     left join section s
                     on s.section_id = a.section_id
                     where e.enrollment_id = ?", $student["current_enrollment_id"]);
+if(!empty($enrollment))
 $enrollment = $enrollment[0];
 
 
@@ -250,6 +259,22 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
             <h5><i class="icon fas fa-ban"></i> Alert!</h5>
             Student Not Enrolled in this School Year
           </div>
+
+          <?php else: ?>
+            <?php if($theStatus == "PENDING"): ?>
+              <div class="alert alert-warning alert-block">
+                <h5><i class="icon fas fa-ban"></i> PENDING !</h5>
+              </div>
+              <?php elseif($theStatus == "ENROLLED"): ?>
+                <div class="alert alert-primary alert-block">
+                <h5><i class="icon fas fa-check"></i> ENROLLED !</h5>
+              </div>
+              <?php elseif($theStatus == "CANCELLED"): ?>
+                <div class="alert alert-danger alert-block">
+                <h5><i class="icon fas fa-close"></i> CANCELLED !</h5>
+              </div>
+              <?php endif; ?>
+
           <?php endif; ?>
             <!-- Profile Image -->
 
@@ -275,18 +300,20 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
              
 
-                
-                <div class="text-center">
+                <?php if(!empty($enrollment)): ?>
+                  <div class="text-center">
 
-                <strong> Grade Level</strong>
-                <p class="text-muted">
-                  <?php echo($enrollment["grade_level"]); ?>
-                </p>
-                <strong> Section</strong>
-                <p class="text-muted">
-                  <?php echo($enrollment["section"]); ?>
-                </p>
-        </div>
+                    <strong> Grade Level</strong>
+                    <p class="text-muted">
+                      <?php echo($enrollment["grade_level"]); ?>
+                    </p>
+                    <strong> Section</strong>
+                    <p class="text-muted">
+                      <?php echo($enrollment["section"]); ?>
+                    </p>
+                  </div>
+                <?php endif; ?>
+                
 
 
 
@@ -317,6 +344,10 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                       <td><b><?php echo($row["document_name"]); ?></b></td>
                       <?php if($row["status"] == "NOT APPLICABLE"):
                               $row["status"] = "N/A";
+                            elseif($row["status"] == "YES"):
+                              $row["status"] = '<i class="fa fa-check"></i>';
+                            else:
+                              $row["status"] = '<i class="fa fa-times"></i>';
                             endif; ?>
                       <td class="text-right"><?php echo($row["status"]); ?></td>
                     </tr>
@@ -324,7 +355,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="3"><a href="#" data-toggle="modal" data-target="#updateRequirements" class="btn btn-warning btn-block">Update Requirements</a></td>
+                    <td colspan="3"><a href="#" data-id="<?php echo($_GET["id"]); ?>" data-toggle="modal" data-target="#updateRequirementsModal" class="btn btn-warning btn-block">Update Requirements</a></td>
                   </tr>
                 </tfoot>
 
@@ -361,35 +392,133 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
                   <div class="row">
                     <div class="col-12">
-
-
-
+                    <div id="pds_elig">
+                      <div id="form_pds_elig" class="ui tiny form">
+                        <button @click="goUpdate" class="btn btn-primary btn-sm btn_pds_elig_update"><i class="fa fa-edit"></i> Update</button>
+                        <div class="btns_pds_elig_update btn-group" style="display:none">
+                            <button @click="goSave" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
+                                <div class="or"></div>
+                            <button @click="goCancel" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Discard</button>
+                        </div>
+                        <br>
+                        <br>
                     <table class="table table-bordered" id="sectionTable">
                  
                     <tr>
                       <th>Student Code:</th>
-                      <td colspan="3"><?php echo($student["student_id"]); ?></td>
+                      <td colspan="3"><input readonly v-model="student.student_id" type="text" class="form-control form-control-border"></td>
                     </tr>
                     <tr>
-                      <th>Student Name:</th>
-                      <td colspan="3"><?php echo($student["lastname"] . ", " . $student["firstname"]); ?></td>
+                      <th width="15%">Student Name:</th>
+                      <td colspan="3">
+                        <div class="row">
+                            <div class="col">
+                              <input placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.lastname" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.firstname" type="text" class="form-control form-control-border">
+                            </div> 
+                            <div class="col"> 
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Middle Name" :readonly = "readonly" :required="!readonly" v-model="student.middlename" type="text" class="form-control form-control-border">
+                            </div> 
+                            <div class="col"> 
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Name Extension" :readonly = "readonly" :required="!readonly" v-model="student.name_extension" type="text" class="form-control form-control-border">
+                            </div>
+                        </div>
+                      </td>
                     </tr>
                     
                     <tr>
                       <th>Birth Date:</th>
-                      <td><?php echo($student["birthDate"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Birth Date" :readonly = "readonly" :required="!readonly" v-model="student.birthDate" type="date" class="form-control form-control-border"></td>
                       <th>Birth Place:</th>
-                      <td><?php echo($student["birthPlace"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Birth Place" :readonly = "readonly" :required="!readonly" v-model="student.birthPlace" type="text" class="form-control form-control-border"></td>
                     </tr>
                     <tr>
                       <th>Religion:</th>
-                      <td><?php echo($student["religion"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Religion" :readonly = "readonly" :required="!readonly" v-model="student.religion" type="text" class="form-control form-control-border"></td>
                       <th>Sex:</th>
-                      <td><?php echo($student["sex"]); ?></td>
+                      <td><select 
+                            v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+                            :disabled="readonly" 
+                            :required="!readonly" 
+                            v-model="student.sex" 
+                            class="custom-select form-control-border" 
+                          >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select></td>
                     </tr>
                     <tr>
                       <th>Address:</th>
-                      <td colspan="3"><?php echo($student["province"] . " , " . $student["city_mun"] . " , " . $student["barangay"] . " , " . $student["address"]); ?></td>
+                      <td colspan="3">
+                      <div class="row">
+
+<div class="col">
+<div class="form-group">
+<select 
+v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+:disabled="readonly" 
+v-model="student.region" 
+@change="updateProvinces" 
+class="custom-select form-control-border"
+>
+<option value="" disabled>Select a region</option>
+<option v-for="region in regions" :key="region.reg_code" :value="region.reg_code">{{ region.name }}</option>
+</select>
+</div>
+</div>
+
+<div class="col">
+<div class="form-group">
+<select 
+v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+:disabled="readonly" 
+v-model="student.province" 
+@change="updateCities" 
+class="custom-select form-control-border"
+>
+<option value="" disabled>Select a province</option>
+<option v-for="province in provinces" :key="province.prov_code" :value="province.prov_code">{{ province.name }}</option>
+</select>
+</div>
+</div>
+
+<div class="col">
+<div class="form-group">
+<select 
+v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+:disabled="readonly || !cities.length" 
+v-model="student.city_mun" 
+@change="updateBarangays" 
+class="custom-select form-control-border"
+>
+<option value="" disabled>Select a city/municipality</option>
+<option v-for="city in cities" :key="city.mun_code" :value="city.mun_code">{{ city.name }}</option>
+</select>
+</div>
+</div>
+
+<div class="col">
+<div class="form-group">
+<select 
+v-bind:class="{ editState: !readonly, readOnly: readonly }" 
+:disabled="readonly || !barangays.length" 
+v-model="student.barangay" 
+class="custom-select form-control-border"
+>
+<option value="" disabled>Select a barangay</option>
+<option v-for="barangay in barangays" :key="barangay.mun_code" :value="barangay.name">{{ barangay.name }}</option>
+</select>
+</div>
+</div>
+</div>
+<div class="form-group">
+<input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.address" type="text" class="form-control form-control-border">
+</div>
+
+
+                      </td>
                     </tr>
                     <tr>
                       <th colspan="4">-</th>
@@ -397,15 +526,36 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
                     <tr>
                       <th>Father:</th>
-                      <td><?php echo($student["father_lastname"] . ", " . $student["father_firstname"]); ?></td>
+                      <td>
+                        
+                      <div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.father_lastname" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.father_firstname" type="text" class="form-control form-control-border">
+                            </div> 
+                            <div class="col"> 
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Middle Name" :readonly = "readonly" :required="!readonly" v-model="student.father_middlename" type="text" class="form-control form-control-border">
+                            </div> 
+                            
+                        </div>
+                      </td>
                       <th>Contact / FB:</th>
-                      <td><?php echo($student["father_contact"] . " / " . $student["father_fb"]); ?></td>
+                      <td><div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.father_contact" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.father_fb" type="text" class="form-control form-control-border">
+                            </div> 
+                        </div></td>
                     </tr>
                     <tr>
                       <th>Occupation:</th>
-                      <td><?php echo($student["father_occupation"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.father_occupation" type="text" class="form-control form-control-border"></td>
                       <th>Education:</th>
-                      <td><?php echo($student["father_education"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.father_education" type="text" class="form-control form-control-border"></td>
                     </tr>
                     <tr>
                       <th colspan="4">-</th>
@@ -413,19 +563,78 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
                     <tr>
                       <th>Mother:</th>
-                      <td><?php echo($student["mother_lastname"] . ", " . $student["mother_firstname"]); ?></td>
+                      <td>
+                      <div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_lastname" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_firstname" type="text" class="form-control form-control-border">
+                            </div> 
+                            <div class="col"> 
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Middle Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_middlename" type="text" class="form-control form-control-border">
+                            </div> 
+                        </div>
+                      </td>
                       <th>Contact / FB:</th>
-                      <td><?php echo($student["mother_contact"] . " / " . $student["mother_fb"]); ?></td>
+                      <td><div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_contact" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_fb" type="text" class="form-control form-control-border">
+                            </div> 
+                        </div></td>
                     </tr>
                     <tr>
                       <th>Occupation:</th>
-                      <td><?php echo($student["mother_occupation"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_occupation" type="text" class="form-control form-control-border"></td>
                       <th>Education:</th>
-                      <td><?php echo($student["mother_education"]); ?></td>
+                      <td><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.mother_education" type="text" class="form-control form-control-border"></td>
+                    </tr>
+                    <tr>
+                      <th colspan="4">-</th>
+                    </tr>
+
+                    <tr>
+                      <th>Guardian:</th>
+                      <td>
+                      <div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Last Name" :readonly = "readonly" :required="!readonly" v-model="student.guardian_lastname" type="text" class="form-control form-control-border">
+                            </div>
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="First Name" :readonly = "readonly" :required="!readonly" v-model="student.guardian_firstname" type="text" class="form-control form-control-border">
+                            </div> 
+                            <div class="col"> 
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Middle Name" :readonly = "readonly" :required="!readonly" v-model="student.guardian_middlename" type="text" class="form-control form-control-border">
+                            </div> 
+                        </div>
+                      </td>
+                      <th>Contact:</th>
+                      <td><div class="row">
+                            <div class="col">
+                              <input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Contact" :readonly = "readonly" :required="!readonly" v-model="student.guardian_phone" type="text" class="form-control form-control-border">
+                            </div>
+                        </div></td>
+                    </tr>
+                    <tr>
+                      <th>Occupation:</th>
+                      <td colspan="3"><input v-bind:class="{editState:!readonly,readOnly:readonly}" placeholder="Occupation" :readonly = "readonly" :required="!readonly" v-model="student.guardian_occupation" type="text" class="form-control form-control-border"></td>
+      
                     </tr>
                   </table>
 
+                  <button @click="goUpdate" class="btn btn-primary btn-sm btn_pds_elig_update"><i class="fa fa-edit"></i> Update</button>
+                        <div class="btns_pds_elig_update btn-group" style="display:none">
+                            <button @click="goSave" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
+                                <div class="or"></div>
+                            <button @click="goCancel" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Discard</button>
+                        </div>
+
+                      </div>
                     </div>
+                  </div>
                     <!-- <div class="col-5">
 
                     <div class="card p-3">
@@ -463,14 +672,26 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
                   <div class=" tab-pane" id="grades">
                   <div class="row">
-                
+                 
+               
                     
                     <div class="col-12">
                       <div class="row">
                         <div class="col-3">
                         <select style="width: 100%;" required id="enrollmentSelect" class="form-control select2 selectFilter">
-                          <?php foreach($enrollmentList as $eList): ?>
-                            <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+                          <?php foreach($enrollmentList as $eList):?>
+
+                            <?php
+                              if($sy["syid"] == $eList["syid"]):
+?>
+                            <option selected value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+                              else: ?>
+
+<option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+                              endif;
+                              ?>
                           <?php endforeach; ?>
                         </select>
                         </div>
@@ -499,17 +720,29 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                </table>
 
 
-
                   <table style="width: 100%;" id="ajaxDatatable" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th></th>
+                        <th>
+                          
+                          <form class="generic_form_trigger" id="gradeCardForm" data-url="teacherAdvisory">
+                            <input type="hidden" name="action" value="generateGradeExcel">
+                            <input type="hidden" id="advisory_idTextbox" name="advisory_id">
+                            <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
+                              <button class="btn btn-sm btn-block btn-success" type="submit">Print Grade Card</button>
+                          </form>
+                        
+                        
+                        
+                        </th>
+                        <th>Subject</th>
                         <th>Subject</th>
                         <th>G1</th>
                         <th>G2</th>
                         <th>G3</th>
                         <th>G4</th>
                         <th>Final</th>
+                        <th>Remarks</th>
                       </tr>
                     </thead>
                   </table>
@@ -527,9 +760,20 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                 <div class="col-6">
                   <div class="form-group">
                   <select style="width:100%;" name="enrollment_id" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
-                            <?php foreach($enrollmentList as $eList): ?>
-                              <option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
-                            <?php endforeach; ?>
+                  <?php foreach($enrollmentList as $eList):?>
+
+<?php
+  if($sy["syid"] == $eList["syid"]):
+?>
+<option selected value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  else: ?>
+
+<option value="<?php echo($eList["enrollment_id"]); ?>"><?php echo($eList["school_year"]); ?></option>
+<?php
+  endif;
+  ?>
+<?php endforeach; ?>
                           </select>
                   </div>
                           
@@ -624,6 +868,9 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
   <script src="AdminLTE_new/plugins/inputmask/jquery.inputmask.min.js"></script>
 <script src="AdminLTE_new/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="AdminLTE_new/plugins/jquery-validation/additional-methods.min.js"></script>
+<script type="text/javascript" src="node_modules/philippine-location-json-for-geer/build/phil.min.js"></script>
+<script src="AdminLTE_new/plugins/toastr/toastr.min.js"></script>
+<?php require("public/student_system/updateStudent_js.php"); ?>
   <script>
 
 
@@ -672,17 +919,40 @@ var datatable =
                 },
                 'columns': [
                     { data: 'action', "orderable": false  },
+                    { data: 'advisory_id', "orderable": false, "visible": false  },
                     { data: 'subject', "orderable": false  },
                     { data: 'first_grading', "orderable": false  },
                     { data: 'second_grading', "orderable": false  },
                     { data: 'third_grading', "orderable": false  },
                     { data: 'fourth_grading', "orderable": false  },
                     { data: 'average', "orderable": false  },
+                    { data: 'remarks', "orderable": false  },
 
 
                 ],
+
+                
                 "footerCallback": function (row, data, start, end, display) {
     var api = this.api();
+
+
+    var advisory_id = api
+    .cell( { row: 0, column: 1 } )  // Get advisory_id from the first row
+    .data();
+
+// Check if advisory_id is undefined or empty
+if (typeof advisory_id === 'undefined' || advisory_id === '') {
+    $('#gradeCardForm').hide();  // Hide the form if advisory_id is undefined or empty
+} else {
+  $('#gradeCardForm').show();
+  $('#advisory_idTextbox').val(advisory_id); // Optionally, show the form if advisory_id is available
+}  // Get the data in the first cell of column 1 (index 1)
+      // alert(advisory_id);
+
+      gradeCardForm
+
+
+   
 
     // Remove the formatting to get integer data for summation
     var intVal = function (i) {
@@ -691,6 +961,8 @@ var datatable =
             typeof i === 'number' ?
                 i : 0;
     };
+
+    
 
     // Total over all pages
     var received = api
@@ -879,6 +1151,44 @@ var datatable =
         }
       });
   });
+
+
+  $('#updateRequirementsModal').on('show.bs.modal', function (e) {
+        var id = $(e.relatedTarget).data('id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'student', //Here you will fetch records 
+            data: {
+               action: "updateRequirementsModal",
+               student_id: id,
+            },
+            success : function(data){
+                $('#updateRequirementsModal .fetched-data').html(data);
+                Swal.close();
+            }
+        });
+     });
+
+
+     $('#updateGradesModal').on('show.bs.modal', function (e) {
+        var id = $(e.relatedTarget).data('id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'student', //Here you will fetch records 
+            data: {
+               action: "updateGradesModal",
+               grade_id: id,
+            },
+            success : function(data){
+                $('#updateGradesModal .fetched-data').html(data);
+                Swal.close();
+            }
+        });
+     });
+
+     
 
 
 

@@ -67,6 +67,9 @@
 
 			else if ($request == 'onlinePayment')
 				require 'public/onlinePayment_system/onlinePayment.php';
+
+			else if ($request == 'documentRequest')
+				require 'public/documentRequest_system/documentRequest.php';
 			else if ($request == 'onlinePaymentCashier')
 				require 'public/onlinePaymentCashier_system/onlinePaymentCashier.php';
 			else if ($request == 'studentAccounts')

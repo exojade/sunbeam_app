@@ -77,6 +77,8 @@
     </ul>
   </li>
 
+  
+
   <li class="nav-item">
       <a href="announcement" class="nav-link">
         <i class="nav-icon fas fa-bullhorn"></i>
@@ -117,6 +119,20 @@
         <p>
           Enrollment
           <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
+  <li class="nav-item">
+      <a href="documentRequest" class="nav-link">
+        <i class="nav-icon fas fa-file"></i>
+        <p>
+          Doc Request
+          <?php $documentCount = query("select count(*) as count from documentrequest where request_status in ('PENDING', 'FOR CLAIM')"); ?>
+          <?php if($documentCount[0]["count"] != 0): ?>
+            <span class="right badge badge-danger"><?php echo($documentCount[0]["count"]); ?></span>
+          <?php endif; ?>
+          
         </p>
       </a>
   </li>
@@ -215,7 +231,7 @@
       <a href="fees" class="nav-link">
         <i class="nav-icon fas fa-database"></i>
         <p>
-          Fees Database
+          Fees Utility
           <span class="right badge badge-danger"></span>
         </p>
       </a>
@@ -265,6 +281,16 @@
       </a>
   </li>
 
+  <li class="nav-item">
+      <a href="documentRequest" class="nav-link">
+        <i class="nav-icon fas fa-file"></i>
+        <p>
+          Document Request
+          <span class="right badge badge-danger"></span>
+        </p>
+      </a>
+  </li>
+
   <?php elseif($_SESSION["sunbeam_app"]["role"] == "teacher"): ?>
 
 <li class="nav-item">
@@ -301,7 +327,15 @@
   <?php endif; ?>
 
   
-
+<li class="nav-item">
+    <a href="#" data-toggle="modal" data-target="#modalSwitchUser" class="nav-link">
+      <i class="nav-icon fas fa-users"></i>
+      <p>
+        Switch User
+        <span class="right badge badge-danger"></span>
+      </p>
+    </a>
+</li>
   <li class="nav-item">
       <a href="logout" class="nav-link">
         <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -356,3 +390,40 @@
           </div>
         </div>
       </div> -->
+
+      <div class="modal fade" id="modalSwitchUser">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+              <h4 class="modal-title">Switch User</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+  
+              <form class="generic_form_no_trigger" role="form" enctype="multipart/form-data" data-url="index">
+                <input type="hidden" name="action" value="switchUser">
+                <select style="width: 100%;" name="user" required id="userSelectList" class="form-control">
+                  <?php
+                  $theUsers = query("select * from users");
+                  foreach($theUsers as $theUser): ?>
+                    <option value="<?php echo($theUser["id"]); ?>"><?php echo($theUser["role"]."-".$theUser["username"]); ?></option>
+                  <?php endforeach; ?>
+                </select>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+                  </form>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+$('#userSelectList').select2({
+});
+      </script>

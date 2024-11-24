@@ -26,6 +26,62 @@
         </div>
       <!-- </div>/.container-fluid -->
     </section>
+    <?php
+$percentage = query("
+SELECT 
+    teacher_id,
+    teacher,
+    AVG(grading_percentage) AS average_grading_percentage,
+    SUM(total_students) AS total_students,
+    SUM(graded_students) AS graded_students
+FROM (
+SELECT 
+    t.teacher_id,
+    concat(teacher_lastname, ', ', teacher_firstname ) as teacher,
+    sg.subject_id,
+    COUNT(DISTINCT sg.student_id) AS total_students,
+    COUNT(DISTINCT CASE 
+        WHEN 
+            (s.grading_period = 'first_grading' AND s.active_status = 'active' AND (IFNULL(sg.first_grading, '') != '')) OR
+            (s.grading_period = 'second_grading' AND s.active_status = 'active' AND (IFNULL(sg.second_grading, '') != '')) OR
+            (s.grading_period = 'third_grading' AND s.active_status = 'active' AND (IFNULL(sg.third_grading, '') != '')) OR
+            (s.grading_period = 'fourth_grading' AND s.active_status = 'active' AND (IFNULL(sg.fourth_grading, '') != ''))
+        THEN sg.student_id 
+    END) AS graded_students,
+    ROUND(
+        (COUNT(DISTINCT CASE 
+            WHEN 
+                (s.grading_period = 'first_grading' AND s.active_status = 'active' AND (IFNULL(sg.first_grading, '') != '')) OR
+                (s.grading_period = 'second_grading' AND s.active_status = 'active' AND (IFNULL(sg.second_grading, '') != '')) OR
+                (s.grading_period = 'third_grading' AND s.active_status = 'active' AND (IFNULL(sg.third_grading, '') != '')) OR
+                (s.grading_period = 'fourth_grading' AND s.active_status = 'active' AND (IFNULL(sg.fourth_grading, '') != ''))
+            THEN sg.student_id 
+        END) / COUNT(DISTINCT sg.student_id)) * 100, 2
+    ) AS grading_percentage
+FROM 
+    settings s
+JOIN 
+    student_grades sg
+
+JOIN 
+    schedule sch
+    ON sg.schedule_id = sch.schedule_id
+JOIN 
+    teacher t
+    ON sch.teacher_id = t.teacher_id
+WHERE
+    s.active_status = 'active'
+    AND sch.syid = ?
+GROUP BY 
+    t.teacher_id, sg.subject_id
+    )
+    as table2
+    group by teacher_id
+", $sy["syid"]);
+// dump($percentage);
+
+
+    ?>
 
       <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
@@ -47,7 +103,6 @@
               <div class="info-box-content">
                 <span class="info-box-number">10</span>
                 <span class="info-box-text">Teachers</span>
-
               </div>
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
 
@@ -82,10 +137,39 @@
 
           <div class="card card-danger">
               <div class="card-header">
-                <h3 class="card-title">Student Population</h3>
+                <h3 class="card-title">Teacher Grade Tracker</h3>
               </div>
               <div class="card-body">
-                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+
+              <table class="table table-bordered">
+                <thead>
+                  <th>Teacher</th>
+                  <th>Total Students</th>
+                  <th>With Grades</th>
+                  <th>Progress</th>
+                </thead>
+
+                <tbody>
+                  <?php foreach($percentage as $row): ?>
+                      <tr>
+                        <td><?php echo($row["teacher"]); ?></td>
+                        <td><?php echo($row["total_students"]); ?></td>
+                        <td><?php echo($row["graded_students"]); ?></td>
+                        <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                              aria-valuenow="<?php echo(round($row["average_grading_percentage"],2)); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo(round($row["average_grading_percentage"],2)); ?>%">
+                            <!-- <span class="sr-only"><?php echo(round($row["average_grading_percentage"],2)); ?>% Complete</span> -->
+                          </div>
+                        </div>
+                        <code><?php echo(round($row["average_grading_percentage"],2)); ?>%</code>
+                        </td>
+                      </tr>
+                  <?php endforeach; ?>
+                </tbody>
+
+              </table>
+                <!-- <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
               </div>
               <!-- /.card-body -->
             </div>

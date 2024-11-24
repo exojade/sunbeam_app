@@ -202,7 +202,7 @@
 		// dump($PaymentBalance);
 		// dump($PaymentBalance);
 
-			function handleInstallmentPayments($enrollment_id, $amount_paid, $or_number, $paid_by, $latest_payment, $school_year, $theInstallmentId,$theDueBalance) {
+			function handleInstallmentPayments($enrollment_id, $amount_paid, $or_number, $paid_by, $latest_payment, $school_year, $theInstallmentId,$theDueBalance, $onlinePayment) {
 				// Get the latest installment's details
 				$result = query("SELECT * FROM installment WHERE enrollment_id = ? and is_paid IN ('DONE', 'PROMISSORY', 'CREDIT') ORDER BY installment_number DESC LIMIT 1", $enrollment_id);
 				$result = $result[0];
@@ -323,7 +323,7 @@
 			
 				// Insert the payment record
 				$payment_type = $is_promissory ? 'PROMISSORY' : 'INSTALLMENT';
-				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'CASH', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."')";
+				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid, onlinePaymentId) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'BANK', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."', '".$onlinePayment["tblid"]."')";
 				
 				
 				// $stmt = $conn->prepare($query);
@@ -402,7 +402,7 @@
 			$school_year = $student["sy_id"];
 			$myInstallmentId = $onlinePayment["installment_number"];
 			// Call the function to handle installment payments
-			handleInstallmentPayments($enrollment_id, $amount_paid, $or_number, $paid_by, $latest_payment, $school_year, $myInstallmentId,$PaymentBalance[$student["student_id"]]["urgent_amount"]);
+			handleInstallmentPayments($enrollment_id, $amount_paid, $or_number, $paid_by, $latest_payment, $school_year, $myInstallmentId,$PaymentBalance[$student["student_id"]]["urgent_amount"],$onlinePayment);
 			endif;
 		endforeach;
 		query("update onlinepayment set status = 'DONE' where tblid = ?", $_POST["tblid"]);

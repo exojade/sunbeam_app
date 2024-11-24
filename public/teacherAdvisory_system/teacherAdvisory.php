@@ -77,7 +77,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 			$i = 0;
 			foreach($data as $row):
-				$data[$i]["action"] = '<a href="teacherAdvisory?action=specific&id='.$row["advisory_id"].'" class="btn btn-block btn-sm btn-success">View</a>';
+				$data[$i]["action"] = '
+				<div class="btn btn-group btn-block">
+					<a href="teacherAdvisory?action=specific&id='.$row["advisory_id"].'" class="btn btn-info">View Advisory</a>
+					<a href="announcement?action=announcementAdviser&id='.$row["advisory_id"].'" class="btn btn-warning">Announcement</a>
+
+				</div>
+				
+				';
                 $i++;
             endforeach;
             $json_data = array(
@@ -237,8 +244,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			// }
 			$age = calculateAge($student["birthDate"]);
 
+			if($student["middlename"] != ""):
+				$student["middlename"] = $student["middlename"][0] . ".";
+			else:
+				$student["middlename"] = "";
+			endif;
 
-			$sheet->setCellValue("B10", strtoupper($student["lastname"] .", " . $student["firstname"] . " " . $student["middlename"][0] . "."));
+
+			$sheet->setCellValue("B10", strtoupper($student["lastname"] .", " . $student["firstname"] . " " . $student["middlename"]));
 			$sheet->setCellValue("F10", $student["student_id"]);
 			$sheet->setCellValue("B11", $student["birthDate"]);
 			$sheet->setCellValue("H10", $student["grade_level"]);
