@@ -589,7 +589,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			
 				// Insert the payment record
 				$payment_type = $is_promissory ? 'PROMISSORY' : 'INSTALLMENT';
-				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'CASH', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."')";
+				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid, cashier) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'CASH', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."', '".$_SESSION["sunbeam_app"]["userid"]."')";
 				
 				
 				// $stmt = $conn->prepare($query);

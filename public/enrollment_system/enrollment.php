@@ -939,6 +939,11 @@ ORDER BY
 
 			
 			$downpayment = query("select * from payment where enrollment_id = ? and type='DOWNPAYMENT'", $_POST["enrollment_id"]);
+			$users = query("select * from users");
+			$Users = [];
+			foreach($users as $row):
+				$Users[$row["id"]] = $row;
+			endforeach;
 			// dump($downpayment);
 			$downpayment = $downpayment[0];
 					$mpdf = new \Mpdf\Mpdf([
@@ -1075,6 +1080,7 @@ ORDER BY
 							<td><b>Remarks</b></td>
 							<td><b>OR Number</b></td>
 							<td><b>Balance</b></td>
+							<td><b>Cashier</b></td>
 						</tr>
 						';	
 						$total = 0;
@@ -1089,6 +1095,7 @@ ORDER BY
 								$html.='<td >'.($row["type"]).'</td>';
 								$html.='<td >'.($row["or_number"]).'</td>';
 								$html.='<td >'.to_peso($row["running_balance"]).'</td>';
+								$html.='<td >'.$Users[$row["cashier"]]["fullname"].'</td>';
 							$html.='</tr>';
 						endforeach;
 					$html.='</tbody>
