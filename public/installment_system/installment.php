@@ -87,6 +87,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$data[$i]["school_year"] = $SchoolYear[$row["syid"]]["school_year"];
 				$data[$i]["section"] = $Advisory[$row["advisory_id"]]["section"];
 
+				if(strtoupper($row["is_paid"]) == "DONE")
+					$data[$i]["is_paid"] = "PAID";
+				if(strtoupper($row["is_paid"]) == "NOT DONE")
+					$data[$i]["is_paid"] = "NOT PAID";
 
 
 				$i++;
