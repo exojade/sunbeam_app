@@ -352,7 +352,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                   <table style="width: 100%;" id="ajaxDatatable" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Subject</th>
                         <th>G1</th>
                         <th>G2</th>
@@ -487,7 +487,7 @@ var datatable =
                      }
                 },
                 'columns': [
-                    { data: 'action', "orderable": false  },
+                    // { data: 'action', "orderable": false  },
                     { data: 'subject', "orderable": false  },
                     { data: 'first_grading', "orderable": false  },
                     { data: 'second_grading', "orderable": false  },
