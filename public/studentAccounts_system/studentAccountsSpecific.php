@@ -317,7 +317,6 @@ WHERE
                           <th>SY</th>
                           <th>Date Paid</th>
                           <th>OR Number</th>
-                          <th>From</th>
                           <th>Paid</th>
                           <th>Remaining</th>
                           <!-- <th>Type</th> -->
@@ -433,7 +432,6 @@ var datatable =
                     
                     { data: 'date_paid', "orderable": false  },
                     { data: 'or_number', "orderable": false  },
-                    { data: 'type', "orderable": false  },
                     
                     {
                         data: 'amount_due', 
