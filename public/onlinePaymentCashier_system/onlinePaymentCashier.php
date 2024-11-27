@@ -323,7 +323,7 @@
 			
 				// Insert the payment record
 				$payment_type = $is_promissory ? 'PROMISSORY' : 'INSTALLMENT';
-				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid, onlinePaymentId) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'BANK', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."', '".$onlinePayment["tblid"]."')";
+				$query = "INSERT INTO payment (enrollment_id, amount_paid, date_paid, method_of_payment, or_number, type, paid_by, syid, onlinePaymentId, cashier) VALUES ('".$enrollment_id."', '".$amount_paid."', NOW(), 'BANK', '".$or_number."', '".$payment_type."', '".$paid_by."', '".$school_year."', '".$onlinePayment["tblid"]."', '".$_SESSION["sunbeam_app"]["userid"]."')";
 				
 				
 				// $stmt = $conn->prepare($query);
