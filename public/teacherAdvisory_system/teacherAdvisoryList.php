@@ -15,7 +15,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTeacher">Add Advisory</button>
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTeacher">Add Advisory</button> -->
             </ol>
           </div>
         
