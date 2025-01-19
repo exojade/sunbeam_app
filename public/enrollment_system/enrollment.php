@@ -470,7 +470,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
             echo json_encode($json_data);
 
 			elseif($_POST["action"] == "proceedDownpayment"):
-				dump($_SESSION);
+				// dump($_SESSION);
 				$enrollment = query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
 				$fixedFees = query("select * from fees where grade_level = ? and fee_type = 'MAIN' and status = 'ACTIVE'", $enrollment[0]["grade_level"]);
 				$otherFees = query("select * from enrollment_fees where enrollment_id = ?", $_POST["enrollment_id"]);
@@ -532,9 +532,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				"CASH",
 				$_POST["or_number"],
 				"DOWNPAYMENT",
-				$_SESSION[""]
+				$_SESSION["sunbeam_app"]["userid"]
 			);
-
 			$payment_id = query("SELECT LAST_INSERT_ID() as payment_id");
 			$payment_id = $payment_id[0]["payment_id"];
 				query("insert INTO installment (

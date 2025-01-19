@@ -73,6 +73,20 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
             );
             echo json_encode($json_data);
 
+		elseif($_POST["action"] == "deleteFee"):
+			// dump($_POST);
+
+			query("delete from fees where fees_id = ?", $_POST["fees_id"]);
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Fee Deleted Successully",
+				"link" => "fees",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
 		elseif($_POST["action"] == "modalUpdateFee"):
 
 			$fee = query("select * from fees where fees_id = ?", $_POST["fees_id"]);
