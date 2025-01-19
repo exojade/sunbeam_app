@@ -38,6 +38,7 @@
                     <th>Age</th>
                     <th>Birthdate</th>
                     <th>Address</th>
+                    <th>Grade View</th>
                   </tr>
                   </thead>
                 </table>
@@ -98,6 +99,7 @@ var datatable =
                     { data: 'age', "orderable": false  },
                     { data: 'birthDate', "orderable": false  },
                     { data: 'address', "orderable": false },
+                    { data: 'grade_settings', "orderable": false },
 
                 ],
                 "footerCallback": function (row, data, start, end, display) {

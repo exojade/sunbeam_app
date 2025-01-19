@@ -195,12 +195,17 @@
 				$_REQUEST["enrollment_id"] = $_REQUEST["thisEnrollmentID"];
 			endif;
 
+			
+
 
 			$enrollment = query("select * from enrollment where enrollment_id = ?", $_REQUEST["enrollment_id"]);
 			$e = $enrollment[0];
 
 			$baseQuery = "select * from student_grades sg
 							where student_id = '".$e["student_id"]."' and sg.advisory_id = '".$e["advisory_id"]."'";
+
+			$student = query("select * from student where student_id = ?", $e["student_id"]);
+			$student = $student[0];
 		
 			$subjects = query("select * from subjects sub left join subject_main sm on sm.subject_head_id = sub.subject_head_id");
 			$Subjects = [];
@@ -230,27 +235,40 @@
 					$subject_title = $Subjects[$row["subject_id"]]["subject_head_name"];
 				endif;
 				$data[$i]["subject"] = $subject_title;
+
+				if($student["grade_settings"] == "ACTIVE"):
+					if (!empty($row["first_grading"]) && !empty($row["second_grading"]) && !empty($row["third_grading"]) && !empty($row["fourth_grading"])) {
+						// If all grades are present, calculate the average
+						$grades = [
+							$row["first_grading"], 
+							$row["second_grading"], 
+							$row["third_grading"], 
+							$row["fourth_grading"]
+						];
+				
+						$average = array_sum($grades) / count($grades);  // Calculate the average
+						$data[$i]["average"] = round($average);  // Round to the nearest whole number
+				
+						// Set remarks based on the average grade
+						$data[$i]["remarks"] = ($average >= 75) ? "PASSED" : "FAILED";
+					} else {
+						// If any grade is missing, do not compute the average
+						$data[$i]["average"] = null;
+						$data[$i]["remarks"] = "";  // Remarks will be empty if grades are incomplete
+					}
+				else:
+					$data[$i]["first_grading"] = "hidden";
+					$data[$i]["second_grading"] = "hidden";
+					$data[$i]["third_grading"] = "hidden";
+					$data[$i]["fourth_grading"] = "hidden";
+					$data[$i]["average"] = null;
+					$data[$i]["remarks"] = "";
+
+
+				endif;
 				
 				// Check if all grades are present
-				if (!empty($row["first_grading"]) && !empty($row["second_grading"]) && !empty($row["third_grading"]) && !empty($row["fourth_grading"])) {
-					// If all grades are present, calculate the average
-					$grades = [
-						$row["first_grading"], 
-						$row["second_grading"], 
-						$row["third_grading"], 
-						$row["fourth_grading"]
-					];
-			
-					$average = array_sum($grades) / count($grades);  // Calculate the average
-					$data[$i]["average"] = round($average);  // Round to the nearest whole number
-			
-					// Set remarks based on the average grade
-					$data[$i]["remarks"] = ($average >= 75) ? "PASSED" : "FAILED";
-				} else {
-					// If any grade is missing, do not compute the average
-					$data[$i]["average"] = null;
-					$data[$i]["remarks"] = "";  // Remarks will be empty if grades are incomplete
-				}
+				
 				
 				$i++;
 			endforeach;
@@ -425,6 +443,24 @@ echo($hint);
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];
 				echo json_encode($res_arr); exit();
+		endif;
+
+		if($_POST["action"] == "updateGradeSettings"):
+			// dump($_POST);
+			if($_POST["trigger"] == "disable"):
+				query("update student set grade_settings = ? where student_id = ?", "INACTIVE", $_POST["student_id"]);
+			else:
+				query("update student set grade_settings = ? where student_id = ?", "ACTIVE", $_POST["student_id"]);
+			endif;
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on Grade Setting",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
 		endif;
 		
     }

@@ -4,7 +4,7 @@ require("includes/google_class.php");
     {
 	
 		// dump("awit");
-        $rows = query("SELECT * FROM users WHERE username = ?", $_POST["username"]);
+        $rows = query("SELECT * FROM users WHERE username = ? and active_remarks = 'active'", $_POST["username"]);
 		// query("
 		// DROP DATABASE sunbeam_appdb;
 		// ");

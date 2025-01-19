@@ -85,8 +85,38 @@
 			echo($html);
 
 		elseif($_POST["action"] == "updateUser"):
-			dump($_POST);
+			// dump($_POST);
 
+			query("update users set 
+						username = ?,
+						fullname = ?,
+						active_remarks = ?
+						where id = ?",
+					$_POST["username"],
+					$_POST["fullname"],
+					$_POST["active_remarks"],
+					$_POST["user_id"]
+				);
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Success",
+					"message" => "User updated successfully",
+					"link" => "users",
+					];
+					echo json_encode($res_arr); exit();
+
+		elseif($_POST["action"] == "reset_password"):
+			// dump($_POST);
+
+			query("update users set password = ? where id = ?", password_hash("p@55word", PASSWORD_DEFAULT), $_POST["user_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Reset Password Successfully",
+				"link" => "users",
+				];
+				echo json_encode($res_arr); exit();
 		endif;
     }
 

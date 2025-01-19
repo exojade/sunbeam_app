@@ -116,7 +116,7 @@
               </button>
             </div>
               <div class="modal-body">
-                <form class="generic_form_files_trigger" autocomplete="off" role="form" enctype="multipart/form-data" data-url="users">
+                <form class="generic_form_trigger" autocomplete="off" role="form" enctype="multipart/form-data" data-url="users">
                 <input type="hidden" name="action" value="updateUser">
                 <div class="fetched-data"></div>
               </div>
@@ -156,9 +156,14 @@
                   <?php foreach($users as $u):  ?>
                     <tr>
                       <td>
-                        <div class="btn-group btn-block">
-                          <a href="#" data-id="<?php echo($u["id"]); ?>" data-toggle="modal" data-target="#modalUpdateUser" class="btn btn-warning btn-sm">Update</a>
-                        </div>
+                        <form class="generic_form_trigger" data-url="users">
+                          <input type="hidden" name="user_id" value="<?php echo($u["id"]); ?>">
+                          <input type="hidden" name="action" value="reset_password">
+                          <div class="btn-group btn-block">
+                            <a href="#" data-id="<?php echo($u["id"]); ?>" data-toggle="modal" data-target="#modalUpdateUser" class="btn btn-warning btn-sm">Update</a>
+                            <button class="btn btn-info btn-sm">Reset Pass</button>
+                          </div>
+                        </form>
                       </td>
                       <td><?php echo($u["username"]); ?></td>
                       <td><?php echo(strtoupper($u["role"])); ?></td>

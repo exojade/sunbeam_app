@@ -361,6 +361,27 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
               </table>
               <!-- /.card-body -->
+
+              <?php if($student["grade_settings"] == "ACTIVE"): ?>
+              <form class="generic_form_trigger" data-url="student">
+                <input type="hidden" name="action" value="updateGradeSettings">
+                <input type="hidden" name="trigger" value="disable">
+                <input type="hidden" name="student_id" value="<?php echo($student["student_id"]); ?>">
+                <button class="btn btn-block btn-danger">Disable Grade Viewing</button>
+
+              </form>
+
+              <?php else: ?>
+
+                <form class="generic_form_trigger" data-url="student">
+                <input type="hidden" name="action" value="updateGradeSettings">
+                <input type="hidden" name="trigger" value="enable">
+                <input type="hidden" name="student_id" value="<?php echo($student["student_id"]); ?>">
+                <button class="btn btn-block btn-success">Enable Grade Viewing</button>
+
+              </form>
+              <?php endif; ?>
+
             </div>
 
 
