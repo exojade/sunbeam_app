@@ -394,9 +394,9 @@ $html.='
 
 					// dump(date("F d, Y", strtotime($row["date_paid"])));
 
-					$original_fee_amount +=$row["original_fee_amount"];
-					$cumulative_allocation +=$row["cumulative_allocation"];
-					$remaining_balance +=$row["remaining_balance"];
+					$original_fee_amount +=floatval($row["original_fee_amount"]);
+					$cumulative_allocation +=floatval($row["cumulative_allocation"]);
+					$remaining_balance +=floatval($row["remaining_balance"]);
 					$html.='<tr>';
 						$html.='<td >'.($row["fee"]).'</td>';
 						$html.='<td class="text-right">'.to_peso($row["original_fee_amount"]).'</td>';

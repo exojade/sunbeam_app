@@ -47,7 +47,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$i = 0;
 			foreach($data as $row):
 				$data[$i]["action"] = '
-				<a href="" class="btn btn-sm btn-danger btn-block">Delete</a>
+				<form class="generic_form_trigger" data-url="fees">
+					<input type="hidden" name="action" value="deleteFee">
+					<input type="hidden" name="fees_id" value="'.$row["fees_id"].'">
+					<div class="btn-group btn-block">
+						<a href="#" data-toggle="modal" data-target="#modalUpdateFee" data-id="'.$row["fees_id"].'" class="btn btn-sm btn-warning">Update</a>
+						<button class="btn btn-sm btn-danger" type="submit">Delete</button>
+					</div>
+				</form>
 				';
 
 	
@@ -65,6 +72,69 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+		elseif($_POST["action"] == "modalUpdateFee"):
+
+			$fee = query("select * from fees where fees_id = ?", $_POST["fees_id"]);
+			// dump($fee);
+			$fee = $fee[0];
+
+			$html = '
+				<input type="hidden" name="fees_id" value="'.$_POST["fees_id"].'">
+				<div class="form-group">
+					<label>Grade Level</label>
+					<input type="text" class="form-control" disabled value="'.$fee["grade_level"].'">
+				</div>
+				<div class="form-group">
+					<label>Title</label>
+					<input required type="text" class="form-control" name="fee_title" value="'.$fee["fee_title"].'">
+				</div>
+				<div class="form-group">
+					<label>Amount</label>
+					<input type="number" class="form-control" name="fee_amount" value="'.$fee["fee_amount"].'">
+				</div>
+				<div class="form-group">
+					<label>Type</label>
+					<select required class="form-control" name="fee_type">
+						<option value="'.$fee["fee_type"].'" selected>'.$fee["fee_type"].'</option>
+						<option value="MAIN" >MAIN</option>
+						<option value="OTHERS" >OTHERS</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Status</label>
+					<select required class="form-control" name="status">
+						<option value="'.$fee["status"].'" selected>'.$fee["status"].'</option>
+						<option value="ACTIVE" >ACTIVE</option>
+						<option value="INACTIVE" >INACTIVE</option>
+					</select>
+				</div>
+			';
+
+			echo($html);
+
+		elseif($_POST["action"] == "updateFee"):
+
+			query("update fees set
+					fee_title = '".$_POST["fee_title"]."',
+					fee_amount = '".$_POST["fee_amount"]."',
+					fee_type = '".$_POST["fee_type"]."',
+					status = '".$_POST["status"]."'
+					where fees_id = '".$_POST["fees_id"]."'
+			
+			");
+
+
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Fee Updated Successully",
+				"link" => "fees",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+			dump($_POST);
 
 
 		elseif($_POST["action"] == "addFees"):

@@ -23,6 +23,42 @@
     <section class="content">
       <div class="container-fluid">
 
+
+
+
+
+
+
+      <div class="modal fade" id="modalUpdateFee">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h4 class="modal-title">Edit Fee</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <form class="generic_form_trigger" data-url="fees">
+                <input type="hidden" name="action" value="updateFee">
+                   <div class="fetched-data"></div>
+                   <hr>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+      
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
+
+
+
       <?php  $grade_level = query("select * from grade_level"); ?>
 
 
@@ -168,6 +204,24 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
+
+
+
+$('#modalUpdateFee').on('show.bs.modal', function (e) {
+        var rowid = $(e.relatedTarget).data('id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'fees', //Here you will fetch records 
+            data: {
+                fees_id: rowid, action: "modalUpdateFee"
+            },
+            success : function(data){
+                $('#modalUpdateFee .fetched-data').html(data);
+                Swal.close();
+            }
+        });
+     });
 
 
 $('.select2').select2({

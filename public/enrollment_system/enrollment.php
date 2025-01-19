@@ -472,12 +472,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			elseif($_POST["action"] == "proceedDownpayment"):
 				// dump($_POST);
 				$enrollment = query("select * from enrollment where enrollment_id = ?", $_POST["enrollment_id"]);
-				$fixedFees = query("select * from fees where grade_level = ?", $enrollment[0]["grade_level"]);
+				$fixedFees = query("select * from fees where grade_level = ? and fee_type = 'MAIN' and status = 'ACTIVE'", $enrollment[0]["grade_level"]);
 				$otherFees = query("select * from enrollment_fees where enrollment_id = ?", $_POST["enrollment_id"]);
 
 				$total_fee = 0;
 				foreach($fixedFees as $row):
-					$total_fee += $row["fee_amount"];
+					$total_fee += floatval($row["fee_amount"]);
 					query("insert INTO enrollment_fees (
 						enrollment_id,
 						fee,
@@ -497,7 +497,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				endforeach;
 
 				foreach($otherFees as $row):
-					$total_fee += $row["amount"];
+					$total_fee += floatval($row["amount"]);
 				endforeach;
 
 				$newTotal = $total_fee - $_POST["downpayment"];
@@ -701,17 +701,33 @@ $subjects = query("
 				$enrollment_id = $_POST["enrollment_id"];
 
 				$data = query("
-				SELECT ef.fee, ef.amount as fee_amount, 'ADD-ONS' as fee_type, ef.fee_id
-				FROM enrollment_fees ef
-				WHERE ef.enrollment_id = ?
+				SELECT 
+    f.fee_title AS fee,
+    f.fee_amount,
+    f.fee_type,
+    f.fees_id AS fee_id
+FROM 
+    fees f
+WHERE 
+    f.fee_type = 'MAIN'
+    AND f.status = 'ACTIVE'
+    AND f.grade_level = ?
 
-					UNION ALL
+UNION ALL
 
-				SELECT f.fee_title as fee, f.fee_amount, f.fee_type, NULL as fee_id
-				FROM fees f
-				WHERE f.grade_level = ?
-				and status = 'ACTIVE'
-				", $enrollment_id, $grade_level);
+SELECT 
+    f.fee_title AS fee,
+    ef.amount AS  fee_amount,
+    f.fee_type,
+    f.fees_id AS fee_id
+FROM 
+    fees f
+JOIN 
+    enrollment_fees ef 
+    ON ef.fees_id = f.fees_id
+WHERE 
+    ef.enrollment_id = ?
+				",  $grade_level, $enrollment_id);
 				// dump($sql);
 
 				// $data = query($baseQuery);
@@ -757,16 +773,18 @@ $subjects = query("
 				fee,
 				type,
 				amount,
-				status
+				status,
+				fees_id
 				) 
 			VALUES(
-				?,?,?,?,?
+				?,?,?,?,?,?
 				)", 
 			$_POST["enrollment_id"],
 			$addon["fee_title"],
 			$addon["fee_type"],
 			$_POST["amount"],
-			"PAYMENT"
+			"PAYMENT",
+			$addon["fees_id"]
 		);
 
 
@@ -780,8 +798,8 @@ $subjects = query("
 				echo json_encode($res_arr); exit();
 
 		elseif($_POST["action"] == "deleteFee"):
-
-			query("delete from enrollment_fees where fee_id = ?", $_POST["fee_id"]);				
+			// dump($_POST);
+			query("delete from enrollment_fees where fees_id = ?", $_POST["fee_id"]);				
 			$res_arr = [
 				"result" => "success",
 				"title" => "Success",
@@ -1041,7 +1059,7 @@ ORDER BY
 						';
 						$total = 0;
 						foreach($enrollment_fees as $row):
-							$total+=$row["amount"];
+							$total+=floatval($row["amount"]);
 							$html.='<tr>';
 								$html.='<td><b>'.$row["fee"].'</b></td>';
 								$html.='<td class="text-right">'.to_peso($row["amount"]).'</td>';
