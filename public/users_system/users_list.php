@@ -91,6 +91,40 @@
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+</form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
+
+
+
+
+
+      <div class="modal fade" id="modalUpdateUser">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h4 class="modal-title">Update User</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+              <div class="modal-body">
+                <form class="generic_form_files_trigger" autocomplete="off" role="form" enctype="multipart/form-data" data-url="users">
+                <input type="hidden" name="action" value="updateUser">
+                <div class="fetched-data"></div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+              </form>
           </div>
           <!-- /.modal-content -->
         </div>
@@ -122,7 +156,9 @@
                   <?php foreach($users as $u):  ?>
                     <tr>
                       <td>
-                        <a href="#" class="btn btn-warning">Update</a>
+                        <div class="btn-group btn-block">
+                          <a href="#" data-id="<?php echo($u["id"]); ?>" data-toggle="modal" data-target="#modalUpdateUser" class="btn btn-warning btn-sm">Update</a>
+                        </div>
                       </td>
                       <td><?php echo($u["username"]); ?></td>
                       <td><?php echo(strtoupper($u["role"])); ?></td>
@@ -158,6 +194,24 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script>
+
+
+    
+$('#modalUpdateUser').on('show.bs.modal', function (e) {
+        var rowid = $(e.relatedTarget).data('id');
+        Swal.fire({title: 'Please wait...', imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+        $.ajax({
+            type : 'post',
+            url : 'users', //Here you will fetch records 
+            data: {
+                user_id: rowid, action: "modalUpdateUser"
+            },
+            success : function(data){
+                $('#modalUpdateUser .fetched-data').html(data);
+                Swal.close();
+            }
+        });
+     });
 
 
 $('#example1').DataTable({

@@ -1,7 +1,7 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] === "POST") {
 
-		if($_POST["action"] == "addUser"){
+		if($_POST["action"] == "addUser"):
 			// dump($_POST);
 			$fullname = $_POST["username"];
 			$fullname = str_replace(' ', '_', $fullname);
@@ -47,8 +47,51 @@
 			"link" => "users",
 			];
 			echo json_encode($res_arr); exit();
-		}
+		
+		elseif($_POST["action"] == "modalUpdateUser"):
+			// dump($_POST);
+			// dump($_POST);
+
+			$user = query("select * from users where id = ?", $_POST["user_id"]);
+			$user = $user[0];
+
+			$html = "";
+
+			$html .= '
+				<input type="hidden" name="user_id" value="'.$_POST["user_id"].'">
+				<div class="form-group">
+					<label>Username</label>
+					<input class="form-control" name="username" required value="'.$user["username"].'">
+				</div>
+
+				<div class="form-group">
+					<label>Full Name</label>
+					<input class="form-control" name="fullname" required value="'.$user["fullname"].'">
+				</div>
+				
+
+				<div class="form-group">
+					<label>Active Status</label>
+					<select class="form-control" required name="active_remarks">
+					<option value="'.$user["active_remarks"].'" selected>'.$user["active_remarks"].'</option>
+					<option value="active" >active</option>
+					<option value="inactive" >inactive</option>
+
+					</select>
+				</div>
+			
+			';
+
+			echo($html);
+
+		elseif($_POST["action"] == "updateUser"):
+			dump($_POST);
+
+		endif;
     }
+
+
+
 	else {
 			$users = query("select * from users");
 			render("public/users_system/users_list.php",[

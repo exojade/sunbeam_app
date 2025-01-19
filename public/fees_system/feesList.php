@@ -76,7 +76,6 @@
             <div class="modal-body">
             <form class="generic_form_trigger" data-url="fees">
                 <input type="hidden" name="action" value="addFees">
-                      
                           <div class="form-group">
                             <label>Grade Level </label>
                             <select style="width: 100%;" name="grade_level" class="form-control select2" >
@@ -86,14 +85,10 @@
                               <?php endforeach; ?>
                             </select>
                           </div>
-
-
-                            <div class="form-group">
-                              <label>Fee Title <span class="color-red">*</span></label>
-                                <input value="" name="fee_title" required type="text" class="form-control"  placeholder="Enter Fee Title Here ..">
-                            </div>
-
-
+                          <div class="form-group">
+                            <label>Fee Title <span class="color-red">*</span></label>
+                              <input value="" name="fee_title" required type="text" class="form-control"  placeholder="Enter Fee Title Here ..">
+                          </div>
                             <div class="form-group">
                               <label>Fee Type <span class="color-red">*</span></label>
                               <select style="width: 100%;" required name="fee_type" class="form-control select2" >
