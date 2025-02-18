@@ -490,18 +490,17 @@ $html.='
 		</div>
 			';
 
-			
-
-			$filename = "invoice";
+				// dump($payment);
+			$filename = "Invoice - " . $student["lastname"] . ", " . $student["firstname"] . " - " . $payment[0]["or_number"];
 			$path = "reports/".$filename.".pdf";
 			$mpdf->WriteHTML($html);
 			$mpdf->Output($path, \Mpdf\Output\Destination::FILE);
 
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
+				"title" => "Downloaded Successfully",
 				"newlink" => "newlink",
-				"message" => "PDF success",
+				"message" => "You have successfully downloaded the invoice! Please click OK to continue.",
 				"link" => $path,
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];

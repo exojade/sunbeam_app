@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Students Masterlist</h1>
+            <h1>Students List</h1>
           </div>
         
         </div>
@@ -28,7 +28,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 
-                <table id="ajaxDatatable" class="table table-bordered table-striped">
+                <table id="ajaxDatatable" class="table table-bordered table-striped" style="width: 100%;">
                   <thead>
                   <tr>
                     <th>Action</th>

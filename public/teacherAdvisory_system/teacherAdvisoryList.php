@@ -115,7 +115,7 @@
                 <table id="ajaxDatatable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th width="20%">Action</th>
+                    <th width="30%">Action</th>
                     <th>Section</th>
                     <th>Grade Level</th>
                     <th>Students</th>

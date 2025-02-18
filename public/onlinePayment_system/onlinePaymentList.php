@@ -11,7 +11,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
         <div class="col">
-            <h1>Online Payment Module</h1>
+            <h1>Online Payment</h1>
           </div>
             <div class="col">
               <a href="#" data-target="#modalPayOnline" data-toggle="modal" class="btn btn-primary float-right">Pay Online</a>
@@ -22,7 +22,7 @@
 
 
     <div class="modal fade" id="modalPayOnline">
-          <div class="modal-dialog modal-xl">
+          <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content ">
               <div class="modal-header bg-primary">
 					    <h3 class="modal-title text-center">Pay Online Module</h3>

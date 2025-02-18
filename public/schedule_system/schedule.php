@@ -277,8 +277,8 @@
 			endforeach;
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
-				"message" => "Success on updating data",
+				"title" => "Updated Successfully",
+				"message" => "Thank you! The student’s grade is now updated. Press OK to continue.",
 				"link" => "schedule?action=gradeTeacher&id=".$_POST["schedule_id"]."&subject_id=".$_POST["subject_id"],
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];

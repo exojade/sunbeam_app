@@ -1133,16 +1133,18 @@ ORDER BY
 				</div>
 					';
 
-					$filename = "SOA";
+					$fullname = $student["lastname"] . ", " . $student["firstname"];
+
+					$filename = "SOA - " . $fullname;
 					$path = "reports/".$filename.".pdf";
 					$mpdf->WriteHTML($html);
 					$mpdf->Output($path, \Mpdf\Output\Destination::FILE);
 
 					$res_arr = [
 						"result" => "success",
-						"title" => "Success",
+						"title" => "Submitted Successfully",
 						"newlink" => "newlink",
-						"message" => "PDF success",
+						"message" => "You have successfully downloaded the Statement of Account! Please click OK to continue.",
 						"link" => $path,
 						// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 						];

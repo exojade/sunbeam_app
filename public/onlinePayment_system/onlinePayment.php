@@ -256,7 +256,7 @@ GROUP BY
 
 			$i = 0;
 			foreach($data as $row):
-				$data[$i]["action"] = '<a href="#" class="btn btn-block btn-info">Details</a>';
+				$data[$i]["action"] = '<a href="#" class="btn btn-block btn-info btn-sm">View Details</a>';
 				$data[$i]["bank"] = $Bank[$row["bankDetailsId"]]["bankName"];
                 $i++;
             endforeach;

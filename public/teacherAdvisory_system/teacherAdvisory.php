@@ -352,17 +352,15 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			// $sheet->removeRow(26);
 
 
-
-
-
+			$fullname = $student["lastname"] . ", " . $student["firstname"];
 			$writer = new Xlsx($spreadsheet);
-			$filename = "grade.xlsx";
+			$filename = "Grade Card - ".$fullname.".xlsx";
 			$path = 'reports/'.$filename;
 			$writer->save($path);
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
-				"message" => "Success on updating data",
+				"title" => "Downloaded Successfully",
+				"message" => "You have successfully downloaded the Grade Card! Please click OK to continue.",
 				"link" => $path,
 				"newlink" => "newlink",
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'

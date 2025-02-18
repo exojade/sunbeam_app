@@ -57,7 +57,7 @@
 			$baseQuery = "select dr.*, concat(s.lastname, ', ', s.firstname) as student from documentrequest dr
 							left join student s
 							on s.student_id = dr.student_id
-			" . $where;
+			" . $where . " order by dateRequested desc";
 
 			// dump($baseQuery);
 
@@ -81,7 +81,7 @@
 					<form class="generic_form_trigger" data-url="documentRequest">
 						<input type="hidden" name="action" value="deleteDocument">
 						<input type="hidden" name="tblid" value="'.$row["tblid"].'">
-						<button class="btn btn-sm btn-danger btn-block" type="submit">Delete</button>
+						<button class="btn btn-sm btn-danger btn-block" type="submit">Cancel</button>
 					</form>
 					';
 				else:
@@ -89,7 +89,7 @@
 					<form class="generic_form_trigger" data-url="documentRequest">
 						<input type="hidden" name="action" value="deleteDocument">
 						<input type="hidden" name="tblid" value="'.$row["tblid"].'">
-						<button disabled class="btn btn-sm btn-danger btn-block" type="submit">Delete</button>
+						<button disabled class="btn btn-sm btn-danger btn-block" type="submit">Cancel</button>
 					</form>
 					';
 
@@ -118,7 +118,7 @@
 								left join student s
 								on s.student_id = dr.student_id
 								left join users u on u.id = dr.parent_id
-				" . $where;
+				" . $where . " order by dateRequested desc";
 	
 				// dump($baseQuery);
 	

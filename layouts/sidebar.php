@@ -12,13 +12,27 @@
 .sidebar-dark-primary a{
   color: #fff !important;
 }
+
+
+@media (min-width: 992px) {
+    .sidebar-mini.sidebar-collapse #sidebar-logo-mine {
+      width: 3rem !important;
+    }
+}
 </style>
 <aside class="main-sidebar sidebar-dark-primary bg-primary elevation-4" >
     <!-- Brand Logo -->
     <div class="user-panel mt-3 pb-3 mb-3 text-center">
         <div class="image" style="display:block;">
-            <img style="width: 5rem;" src="resources/logo.png" class="img-circle elevation-2" alt="User Image">
+            <img id="sidebar-logo-mine" style="width: 5rem;" src="resources/logo.png" class="img-circle elevation-2" alt="User Image">
         </div>
+
+
+        <!-- <a href="index3.html" class="brand-link">
+      <img src="resources/sunbeam_logo_new.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+     
+    </a> -->
+
       </div>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -41,45 +55,6 @@
       </a>
   </li>
   <li class="nav-item">
-    <a href="#" class="nav-link">
-      <i class="nav-icon fas fa-table"></i>
-      <p>
-        Data Entry Lib
-        <i class="fas fa-angle-left right"></i>
-      </p>
-    </a>
-    <ul class="nav nav-treeview">
-      <li class="nav-item">
-        <a href="subjects" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Subjects</p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="section" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Sections</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="teacher" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Teachers</p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="student" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Student Masterlist File</p>
-        </a>
-      </li>
-    </ul>
-  </li>
-
-  
-
-  <li class="nav-item">
       <a href="announcement" class="nav-link">
         <i class="nav-icon fas fa-bullhorn"></i>
         <p>
@@ -88,30 +63,71 @@
         </p>
       </a>
   </li>
-
-
-
-
   <li class="nav-item">
-      <a href="advisory" class="nav-link">
-        <i class="nav-icon fas fa-school"></i>
+        <a href="teacher" class="nav-link">
+          <i class="fas fa-graduation-cap nav-icon"></i>
+          <p>Teachers</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="student" class="nav-link">
+          <i class="fas fa-chalkboard-teacher nav-icon"></i>
+          <p>Students</p>
+        </a>
+      </li>
+      <li class="nav-item">
+      <a href="parents" class="nav-link">
+        <i class="nav-icon fas fa-users"></i>
         <p>
-          Advisory
+          Parent's Portal
           <span class="right badge badge-danger"></span>
         </p>
       </a>
   </li>
-
-
   <li class="nav-item">
-      <a href="schedule" class="nav-link">
-        <i class="nav-icon fas fa-calendar"></i>
-        <p>
-          Class Schedule
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
+    <a href="#" class="nav-link">
+      <i class="nav-icon fas fa-table"></i>
+      <p>
+        Academics
+        <i class="fas fa-angle-left right"></i>
+      </p>
+    </a>
+    <ul class="nav nav-treeview">
+    <li class="nav-item">
+        <a href="section" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Class</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="subjects" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Subjects</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="schedule" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Class Schedule</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="advisory" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Advisory</p>
+        </a>
+      </li>
+
+
+   
+
+
+      
+    </ul>
   </li>
+
+
+
 
   <li class="nav-item">
       <a href="enrollment" class="nav-link">
@@ -127,7 +143,7 @@
       <a href="documentRequest" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
         <p>
-          Doc Request
+          Document Request
           <?php $documentCount = query("select count(*) as count from documentrequest where request_status in ('PENDING', 'FOR CLAIM')"); ?>
           <?php if($documentCount[0]["count"] != 0): ?>
             <span class="right badge badge-danger"><?php echo($documentCount[0]["count"]); ?></span>
@@ -137,15 +153,7 @@
       </a>
   </li>
 
-  <li class="nav-item">
-      <a href="parents" class="nav-link">
-        <i class="nav-icon fas fa-users"></i>
-        <p>
-          Parent's Portal
-          <span class="right badge badge-danger"></span>
-        </p>
-      </a>
-  </li>
+
 
 
   <li class="nav-item">

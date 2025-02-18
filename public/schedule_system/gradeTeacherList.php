@@ -66,7 +66,9 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
                   on sub.subject_id = g.subject_id
                   where schedule_id = ?
                   and g.subject_id = ?
-                  group by schedule_id, student_id", $schedule["schedule_id"], $_GET["subject_id"]);
+                  group by schedule_id, student_id
+                  order by s.lastname asc, s.firstname asc
+                  ", $schedule["schedule_id"], $_GET["subject_id"]);
 // dump($grades);
                           ?>
 
@@ -93,7 +95,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
     </section>
     <section class="content">
     <div class="modal fade" id="modalUpdateGrades">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
               <div class="modal-header bg-warning">
 					    <h3 class="modal-title text-center">Update Grade</h3>
@@ -101,7 +103,7 @@ $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_na
               <div class="modal-body" style="-webkit-user-select: none;  /* Chrome all / Safari all */
               -moz-user-select: none;     /* Firefox all */
               -ms-user-select: none;  ">
-                  <form class="generic_form_trigger" data-url="schedule" autocomplete="off">
+                  <form class="generic_form_trigger" data-title="Update Grade" data-message="Are you sure you want to update the grade?" data-url="schedule" autocomplete="off">
                     <div class="fetched-data"></div>
                     <br>
                       <div class="box-footer">

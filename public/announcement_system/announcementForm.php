@@ -23,7 +23,7 @@
 
 
     <div class="modal fade" id="newAnnouncement">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header bg-primary">
               <h4 class="modal-title">New Announcement</h4>
@@ -33,7 +33,8 @@
             </div>
             <div class="modal-body">
   
-              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="announcement">
+              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="announcement" data-url="subjects" data-title="You are almost done!" 
+              data-message="Are you sure you want to post the announcement?">
                 <input type="hidden" name="action" value="addAnnouncement">
                 <input type="hidden" name="school_year" value="<?php echo($school_year[0]["syid"]); ?>">
                 <input type="hidden" name="from_sender" value="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>">
@@ -67,7 +68,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form class="generic_form_files_trigger" role="form" enctype="multipart/form-data" data-url="subjects">
+              <form class="generic_form_trigger" enctype="multipart/form-data" >
               <div class="form-group">
                     <label for="exampleInputEmail1">Balance</label>
                     <input type="text" readonly value="13,760.00" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
@@ -98,7 +99,7 @@
         <!-- /.modal-dialog -->
       </div>
     
-      <table id="ajaxDatatable" width="100%;">
+      <table id="ajaxDatatable" style="width: 100%;">
                   <thead>
                   <tr>
                     <th></th>

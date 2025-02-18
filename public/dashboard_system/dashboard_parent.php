@@ -100,14 +100,14 @@
       </div>
 
       <div class="row">
-        <div class="col">
+        <div class="col-12">
 
         <div class="card">
               <div class="card-header bg-info">
-                <h3 class="card-title">School Announcements</h3>
+                <h3 class="card-title">School Announcement</h3>
               </div>
               <div class="card-body">
-              <table id="ajaxDatatable" width="100%;">
+              <table id="ajaxDatatable" style="width: 100%;">
                   <thead>
                   <tr>
                     <th></th>
@@ -119,13 +119,13 @@
 
         </div>
 
-        <div class="col">
+        <div class="col-12">
         <div class="card">
               <div class="card-header bg-primary">
                 <h3 class="card-title">Section Announcement</h3>
               </div>
               <div class="card-body">
-              <table id="ajaxDatatable2" width="100%;">
+              <table id="ajaxDatatable2" style="width: 100%;">
                   <thead>
                   <tr>
                     <th></th>

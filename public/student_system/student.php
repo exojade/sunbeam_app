@@ -236,7 +236,7 @@
 				endif;
 				$data[$i]["subject"] = $subject_title;
 
-				if($student["grade_settings"] == "ACTIVE"):
+				// if($student["grade_settings"] == "ACTIVE"):
 					if (!empty($row["first_grading"]) && !empty($row["second_grading"]) && !empty($row["third_grading"]) && !empty($row["fourth_grading"])) {
 						// If all grades are present, calculate the average
 						$grades = [
@@ -256,16 +256,16 @@
 						$data[$i]["average"] = null;
 						$data[$i]["remarks"] = "";  // Remarks will be empty if grades are incomplete
 					}
-				else:
-					$data[$i]["first_grading"] = "hidden";
-					$data[$i]["second_grading"] = "hidden";
-					$data[$i]["third_grading"] = "hidden";
-					$data[$i]["fourth_grading"] = "hidden";
-					$data[$i]["average"] = null;
-					$data[$i]["remarks"] = "";
+				// else:
+				// 	$data[$i]["first_grading"] = "hidden";
+				// 	$data[$i]["second_grading"] = "hidden";
+				// 	$data[$i]["third_grading"] = "hidden";
+				// 	$data[$i]["fourth_grading"] = "hidden";
+				// 	$data[$i]["average"] = null;
+				// 	$data[$i]["remarks"] = "";
 
 
-				endif;
+				// endif;
 				
 				// Check if all grades are present
 				
@@ -335,8 +335,8 @@ echo($hint);
 
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
-				"message" => "Success on updating data",
+				"title" => "Submitted Successfully",
+				"message" => "You have successfully updated the grade of your student! Please click OK to continue.",
 				"link" => "refresh",
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];
@@ -449,13 +449,17 @@ echo($hint);
 			// dump($_POST);
 			if($_POST["trigger"] == "disable"):
 				query("update student set grade_settings = ? where student_id = ?", "INACTIVE", $_POST["student_id"]);
+				$title="Disabled Successfully!";
+				$message = "You have successfully disabled the grade viewing! Please click OK to continue.";
 			else:
 				query("update student set grade_settings = ? where student_id = ?", "ACTIVE", $_POST["student_id"]);
+				$title="Enabled Successfully!";
+				$message = "You have successfully enabled the grade viewing! Please click OK to continue.";
 			endif;
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
-				"message" => "Success on Grade Setting",
+				"title" => $title,
+				"message" => $message,
 				"link" => "refresh",
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];

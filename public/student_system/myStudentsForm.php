@@ -347,12 +347,10 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                  </tr>
                </table>
 
-
-
+               <?php if($student["grade_settings"] == "ACTIVE"): ?>
                   <table style="width: 100%;" id="ajaxDatatable" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <!-- <th></th> -->
                         <th>Subject</th>
                         <th>G1</th>
                         <th>G2</th>
@@ -362,6 +360,19 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                       </tr>
                     </thead>
                   </table>
+               <?php else: ?>
+
+                <div class="alert alert-danger alert-dismissible">
+                  <h5><i class="icon fas fa-ban"></i> System Notification!</h5>
+                  Your child's grade(s) are subject for revision due some data error. We ask for an apology on this concern. Once the the grade(s) are finally done, 
+                  we will enable it again so that you will see the final and updated grades(s) of your child.
+                </div>
+
+               <?php endif; ?>
+
+
+
+                  
 
 
                  
@@ -397,7 +408,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     </div>
                     
                     <div class="col-6">
-                      <button type="submit" class="btn btn-info float-right" >PRINT Statement of Account</button>
+                      <button type="submit" class="btn btn-info float-right" >Print Statement of Account</button>
                     </div>
                     
                   </div>

@@ -15,7 +15,7 @@
           <h1>Section Announcement</h1>
           </div>
           <div class="col-sm-6">
-            <a href="#" data-toggle="modal" class="btn btn-primary float-right" data-target="#newAnnouncement">New Annoucement</a>
+            <a href="#" data-toggle="modal" class="btn btn-primary float-right" data-target="#newAnnouncement">New Announcement</a>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
 
 
     <div class="modal fade" id="newAnnouncement">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header bg-primary">
               <h4 class="modal-title">New Announcement</h4>
@@ -33,7 +33,7 @@
             </div>
             <div class="modal-body">
   
-              <form class="generic_form_trigger" role="form" enctype="multipart/form-data" data-url="announcement">
+              <form class="generic_form_trigger" data-title="Announcement" data-message="You are almost done! Are you sure you want post the announcement?" role="form" enctype="multipart/form-data" data-url="announcement">
                 <input type="hidden" name="action" value="addAnnouncementAdviser">
                 <input type="hidden" name="school_year" value="<?php echo($school_year[0]["syid"]); ?>">
                 <input type="hidden" name="from_sender" value="<?php echo($_SESSION["sunbeam_app"]["userid"]); ?>">
@@ -99,7 +99,7 @@
         <!-- /.modal-dialog -->
       </div>
     
-      <table id="ajaxDatatable" width="100%;">
+      <table id="ajaxDatatable" style="width: 100%;">
                   <thead>
                   <tr>
                     <th></th>

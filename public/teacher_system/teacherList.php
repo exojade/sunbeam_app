@@ -27,7 +27,7 @@
 
 
     <div class="modal fade" id="addTeacher">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Add Teacher</h4>
@@ -226,7 +226,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 
-                <table id="ajaxDatatable" class="table table-bordered table-striped">
+                <table id="ajaxDatatable" class="table table-bordered table-striped" style="width: 100%;">
                   <thead>
                   <tr>
                     <th>Code</th>

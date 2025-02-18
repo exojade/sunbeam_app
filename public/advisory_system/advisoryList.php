@@ -110,7 +110,7 @@
               
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="ajaxDatatable" class="table table-bordered table-striped">
+                <table id="ajaxDatatable" class="table table-bordered table-striped" style="width: 100%;">
                   <thead>
                   <tr>
                     <th width="10%">Action</th>

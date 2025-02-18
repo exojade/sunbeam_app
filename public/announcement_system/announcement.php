@@ -270,8 +270,8 @@
 
 		$res_arr = [
 			"result" => "success",
-			"title" => "Success",
-			"message" => "Saved Successfully",
+			"title" => "Thank You!",
+				"message" => "The announcement has been successfully posted!",
 			"link" => "refresh",
 			// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 			];
@@ -299,8 +299,8 @@
 	
 			$res_arr = [
 				"result" => "success",
-				"title" => "Success",
-				"message" => "Saved Successfully",
+				"title" => "Thank You!",
+				"message" => "The announcement has been successfully posted!",
 				"link" => "refresh",
 				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 				];

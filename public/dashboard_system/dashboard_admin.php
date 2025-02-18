@@ -83,56 +83,138 @@ GROUP BY
 
     ?>
 
-      <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <div class="info-box-content">
-               
-                <span class="info-box-number">
-                  200
-                </span>
-                <span class="info-box-text">Students Enrolled</span>
-              </div>
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-graduation-cap"></i></span>
+<?php $alltime_payment = query("select sum(amount_paid) as total from payment where or_number is not null"); ?>
+<?php $today_payment = query("select sum(amount_paid) as total from payment where or_number is not null
+                              and DATE(date_paid) = CURDATE()"); ?>
+<?php $all_students = query("select count(student_id) as total from student"); ?>
+<?php $all_teacher = query("select count(teacher_id) as total from teacher"); ?>
+<?php $all_parents = query("select count(id) as total from users where role = 'parent'"); ?>
 
+<div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?php echo(to_peso($alltime_payment[0]["total"])); ?></h3>
+                <p>All Time Received Payment</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <div class="info-box-content">
-                <span class="info-box-number">10</span>
-                <span class="info-box-text">Teachers</span>
-              </div>
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?php echo(to_peso($today_payment[0]["total"])); ?><sup style="font-size: 20px"></sup></h3>
 
+                <p>Today Received Payment</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3><?php echo($all_students[0]["total"]); ?></h3>
 
-          <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <div class="info-box-content">
-                <span class="info-box-number">12</span>
-                <span class="info-box-text">Grade Sections</span>
+                <p>Total Student</p>
               </div>
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-school"></i></span>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <div class="info-box-content">
-                <span class="info-box-number">2023-2024</span>
-                <span class="info-box-text">Current School Year</span>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3><?php echo($all_teacher[0]["total"]); ?></h3>
+                <p>Total Teachers</p>
               </div>
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-calendar"></i></span>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+          <!-- ./col -->
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+              <div class="inner">
+                <h3><?php echo($all_parents[0]["total"]); ?></h3>
+                <p>Total Parent</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>10</h3>
+
+                <p>Active Exam Installment</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>44</h3>
+
+                <p>Total Class</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>65</h3>
+
+                <p>Total Subjects</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+      
         </div>
 
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-6">
 
           <div class="card card-danger">
@@ -159,7 +241,7 @@ GROUP BY
                         <div class="progress">
                           <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
                               aria-valuenow="<?php echo(round($row["average_grading_percentage"],2)); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo(round($row["average_grading_percentage"],2)); ?>%">
-                            <!-- <span class="sr-only"><?php echo(round($row["average_grading_percentage"],2)); ?>% Complete</span> -->
+                          <?php echo(round($row["average_grading_percentage"],2)); ?>% Complete</span>
                           </div>
                         </div>
                         <code><?php echo(round($row["average_grading_percentage"],2)); ?>%</code>
@@ -169,16 +251,8 @@ GROUP BY
                 </tbody>
 
               </table>
-                <!-- <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
               </div>
-              <!-- /.card-body -->
             </div>
-
-
-
-
-           
-            <!-- Default box -->
            
           </div>
 
@@ -236,20 +310,11 @@ GROUP BY
               <?php else: ?>
                 <img src="resources/no_result.gif" class="img-fluid" alt="Responsive Image" style="max-height: 250px; max-width: 100%;">
               <?php endif; ?>
-
-                <!-- <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> -->
               </div>
-              <!-- /.card-body -->
             </div>
-
-
-
-
-           
-            <!-- Default box -->
            
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
   </div>

@@ -176,7 +176,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 				$i=0;
 				foreach($data as $row):
 					$payment_id = $row["payment_id"];
-					$data[$i]["action"]='<form class="generic_form_trigger" data-url="cashier">
+					$data[$i]["action"]='<form class="generic_form_trigger" data-url="cashier" data-title="Print Invoice" data-message="Are you sure you want to download and print the invoice?">
 												<input type="hidden" name="action" value="printInvoice">
 												<input type="hidden" name="payment_id" value="'.$row["payment_id"].'">
 												<button class="btn btn-block btn-info btn-sm">Print Invoice</button>

@@ -74,7 +74,7 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
                     if (o.result === "success") {
                         swal.close();
                         Swal.fire({
-                            title: "Submit success",
+                          title: o.title,
                             showClass: {
     popup: `
       animate__animated
@@ -182,7 +182,7 @@ $(document).on('submit', '.generic_form_no_trigger', function(e) {
                     if (o.result === "success") {
                         swal.close();
                         Swal.fire({
-                            title: "Submit success",
+                            title: o.title,
                             showClass: {
     popup: `
       animate__animated
@@ -454,7 +454,7 @@ $('.generic_form_pdf_dropping').submit(function(e) {
 <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
     </div>
-    <strong>Copyright &copy; <?php echo(date("Y")); ?> Sunbeam Christian School of Panabo Student Information System
+    <strong>Copyright &copy; <?php echo(date("Y")); ?> Sunbeam Christian School of Panabo | Registrar Management Information System
   </footer>
     <aside class="control-sidebar control-sidebar-dark">
   </aside>

@@ -125,13 +125,13 @@
 
 
       <div class="modal fade" id="updateGradesModal">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header bg-success">
               <h4 class="modal-title">Update Grades</h4>
             </div>
             <div class="modal-body">
-              <form class="generic_form_trigger" data-url="student">
+              <form class="generic_form_trigger" data-title="Update Grade" data-message="Are you sure you want to change the grade of your student?" data-url="student">
                 <input type="hidden" name="action" value="updateAllGrades">
                   <div class="fetched-data"></div>
             </div>
@@ -319,7 +319,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
               </div>
             </div>
-            <form class="generic_form_trigger mb-3" data-url="form137">
+            <form class="generic_form_trigger mb-3" data-url="form137" data-title="Print Form 137" data-message="Are you sure you want to download and print the Form 137?">
               <input type="hidden" name="action" value="printForm137">
               <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
               <button type="submit" class="btn btn-info btn-block">Print Form 137</button>
@@ -363,7 +363,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
               <!-- /.card-body -->
 
               <?php if($student["grade_settings"] == "ACTIVE"): ?>
-              <form class="generic_form_trigger" data-url="student">
+              <form class="generic_form_trigger" data-url="student" data-title="Grade Viewing" data-message="Are you sure you want to disable grade viewing? The parent will not be able to view the grade of the child.">
                 <input type="hidden" name="action" value="updateGradeSettings">
                 <input type="hidden" name="trigger" value="disable">
                 <input type="hidden" name="student_id" value="<?php echo($student["student_id"]); ?>">
@@ -373,7 +373,7 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
 
               <?php else: ?>
 
-                <form class="generic_form_trigger" data-url="student">
+                <form class="generic_form_trigger" data-url="student" data-title="Grade Viewing" data-message="Are you sure you want to enable grade viewing? The parent will be able to view the grade of the child.">
                 <input type="hidden" name="action" value="updateGradeSettings">
                 <input type="hidden" name="trigger" value="enable">
                 <input type="hidden" name="student_id" value="<?php echo($student["student_id"]); ?>">
@@ -415,14 +415,14 @@ $enrollmentList = query("select e.*, sy.school_year from enrollment e
                     <div class="col-12">
                     <div id="pds_elig">
                       <div id="form_pds_elig" class="ui tiny form">
-                        <button @click="goUpdate" class="btn btn-primary btn-sm btn_pds_elig_update"><i class="fa fa-edit"></i> Update</button>
+                        <!-- <button @click="goUpdate" class="btn btn-primary btn-sm btn_pds_elig_update"><i class="fa fa-edit"></i> Update</button>
                         <div class="btns_pds_elig_update btn-group" style="display:none">
                             <button @click="goSave" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
                                 <div class="or"></div>
                             <button @click="goCancel" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Discard</button>
                         </div>
                         <br>
-                        <br>
+                        <br> -->
                     <table class="table table-bordered" id="sectionTable">
                  
                     <tr>
@@ -746,7 +746,7 @@ class="custom-select form-control-border"
                       <tr>
                         <th>
                           
-                          <form class="generic_form_trigger" id="gradeCardForm" data-url="teacherAdvisory">
+                          <form class="generic_form_trigger" data-title="Print Grade Card" data-message="Are you sure you want to download and print the grade card?" id="gradeCardForm" data-url="teacherAdvisory">
                             <input type="hidden" name="action" value="generateGradeExcel">
                             <input type="hidden" id="advisory_idTextbox" name="advisory_id">
                             <input type="hidden" name="student_id" value="<?php echo($_GET["id"]); ?>">
@@ -775,7 +775,7 @@ class="custom-select form-control-border"
                   </div>
 
                   <div class=" tab-pane" id="payment_history">
-                  <form class="generic_form_trigger" data-url="enrollment">
+                  <form class="generic_form_trigger" data-title="Print Statement of Account!" data-message="Are you sure you want to download and print the statement of account?”" data-url="enrollment">
                   <div class="row mb-2">
                   <input type="hidden" name="action" value="printSOA">
                 <div class="col-6">
@@ -802,7 +802,7 @@ class="custom-select form-control-border"
                     </div>
                     
                     <div class="col-6">
-                      <button type="submit" class="btn btn-info float-right" >PRINT Statement of Account</button>
+                      <button type="submit" class="btn btn-info float-right" >Print Statement of Account</button>
                     </div>
                     
                   </div>
