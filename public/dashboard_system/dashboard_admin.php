@@ -89,6 +89,28 @@ GROUP BY
 <?php $all_students = query("select count(student_id) as total from student"); ?>
 <?php $all_teacher = query("select count(teacher_id) as total from teacher"); ?>
 <?php $all_parents = query("select count(id) as total from users where role = 'parent'"); ?>
+<?php $all_sections = query("select count(section_id) as total from section"); ?>
+<?php $all_subjects = query("select count(subject_id) as total from subjects"); ?>
+
+<?php $payment_settings = query("select * from payment_settings"); 
+$installment = "";
+for ($i = 2; $i <= 11; $i++) {
+  // Define suffix based on the installment number
+  $suffix = match($i) {
+     1 => 'st',
+      2 => 'nd',
+      3 => 'rd',
+      default => 'th'
+  };
+
+  if($payment_settings[0]["installment_number"] == $i):
+    $installment = $i.$suffix . " installment";
+  endif;
+  // Display each option with numeric value and text
+}
+
+?>
+
 
 <div class="row">
           <div class="col-lg-3 col-6">
@@ -170,7 +192,7 @@ GROUP BY
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>10</h3>
+                <h3><?php echo($installment); ?></h3>
 
                 <p>Active Exam Installment</p>
               </div>
@@ -185,7 +207,7 @@ GROUP BY
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3><?php echo($all_sections[0]["total"]); ?></h3>
 
                 <p>Total Class</p>
               </div>
@@ -200,7 +222,7 @@ GROUP BY
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3><?php echo($all_subjects[0]["total"]); ?></h3>
 
                 <p>Total Subjects</p>
               </div>
