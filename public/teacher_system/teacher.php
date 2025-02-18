@@ -21,8 +21,8 @@
 
 				$res_arr = [
 					"result" => "success",
-					"title" => "Success",
-					"message" => "Success on updating data",
+					"title" => "Submitted Successfully",
+					"message" => "Thank you! The new teacher has been successfully added.",
 					"link" => "teacher",
 					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
 					];

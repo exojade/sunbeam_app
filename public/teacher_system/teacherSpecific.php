@@ -296,7 +296,7 @@ $teacher = $teacher[0];
                 <ul class="nav nav-pills">
                   <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
                   <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Current School Year</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">All Time Subjects</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">All Time Subjects Handled</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">

@@ -43,7 +43,8 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
         icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
+        cancelButtonText: 'Cancel',
+        
     }).then((result) => {
         if (result.value) {
             Swal.fire({ title: 'Please wait...', 

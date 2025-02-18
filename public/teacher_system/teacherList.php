@@ -36,7 +36,7 @@
               </button>
             </div>
             <div class="modal-body">
-            <form class="generic_form_trigger" data-url="teacher">
+            <form class="generic_form_trigger" data-title="New Teacher" data-message="You are almost done! Are you sure you want to add the new teacher?”" data-url="teacher">
                 <input type="hidden" name="action" value="teacherAdd">
                 <input type="hidden" name="region" id="true_region" value="">
                   <input type="hidden" name="province" id="true_province" value="">
@@ -45,7 +45,7 @@
                   <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
-                        <label for="exampleInputEmail1">First Name</label>
+                        <label for="exampleInputEmail1">First Name <span class="text-danger">*</span></label>
                         <input required value="" type="text" name="firstname" class="form-control" id="exampleInputEmail1" placeholder="First Name">
                       </div>
                     </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
-                        <label for="exampleInputEmail1">Last Name</label>
+                        <label for="exampleInputEmail1">Last Name <span class="text-danger">*</span></label>
                         <input required type="text" value="" name="lastname" class="form-control" id="exampleInputEmail1" placeholder="Last Name">
                       </div>
                     </div>
@@ -72,7 +72,7 @@
                   <div class="row">
                           <div class="col-md-3">
                             <div class="form-group">
-                              <label for="exampleInputEmail1">Region <span class="color_red">*</span></label>
+                              <label for="exampleInputEmail1">Region <span class="text-danger">*</span></label>
                               <select required class="form-control select2" id="region_select">
                                   <option  value=""></option>
                               </select>
@@ -80,7 +80,7 @@
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
-                              <label for="exampleInputEmail1">Province <span class="color_red">*</span></label>
+                              <label for="exampleInputEmail1">Province <span class="text-danger">*</span></label>
                               <select required class="form-control select2" id="province_select">
                                   <option  value=""></option>
                               </select>
@@ -88,7 +88,7 @@
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
-                              <label for="exampleInputEmail1">City | Municipality <span class="color_red">*</span></label>
+                              <label for="exampleInputEmail1">City | Municipality <span class="text-danger">*</span></label>
                               <select required class="form-control select2" id="city_mun_select">
                                   <option  value=""></option>
                               </select>
@@ -96,7 +96,7 @@
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
-                              <label for="exampleInputEmail1">Barangay <span class="color_red">*</span></label>
+                              <label for="exampleInputEmail1">Barangay <span class="text-danger">*</span></label>
                               <select required class="form-control select2" id="barangay_select">
                                   <option  value=""></option>
                               </select>
@@ -107,7 +107,7 @@
                       <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label>Street / House Number / Purok</label>
+                              <label>Street / House Number / Purok <span class="text-danger">*</span></label>
                               <input value="" name="address" required type="text" class="form-control"  placeholder="Street / House Number / Purok">
                             </div>
                           </div>
@@ -116,13 +116,13 @@
                       <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label>Birthdate</label>
+                              <label>Birthdate <span class="text-danger">*</span></label>
                               <input  max="<?php echo date('Y-m-d'); ?>" value="" name="birthDate" required type="date" class="form-control"  placeholder="Birthdate">
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label>Sex</label>
+                              <label>Sex <span class="text-danger">*</span></label>
                               <select required name="gender" class="form-control select2" >
                                 <option disabled selected value="">Please select Sex</option>
                                 <option value="Male">Male</option>
@@ -133,7 +133,7 @@
 
                           <div class="col-md-6">
                           <div class="form-group">
-                              <label>Contact Number:</label>
+                              <label>Contact Number <span class="text-danger">*</span></label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text"><i class="fas fa-phone"></i></span>
@@ -146,7 +146,7 @@
 
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label>Email Address (this will serve as username on the system)</label>
+                              <label>Email Address (this will serve as username on the system) <span class="text-danger">*</span></label>
                               <input value="" name="email" required type="email" class="form-control"  placeholder="---">
                             </div>
                           </div>
@@ -154,7 +154,7 @@
 
                           <div class="col-md-6">
                           <div class="form-group">
-                              <label>Undergraduate Course</label>
+                              <label>Undergraduate Course <span class="text-danger">*</span></label>
                               <input value="" name="undergrad_course" required type="text" class="form-control"  placeholder="Ex. BS in Eduation">
                             </div>
                           </div>
@@ -187,7 +187,9 @@
           <div class="col-12">
             <!-- Default box -->
             <div class="card">
-              <div class="card-header">
+              <div class="card-header bg-success">
+
+              <h3 class="card-title">Total Teachers : <b><?php $all_teacher = query("select count(teacher_id) as total from teacher"); echo($all_teacher[0]["total"]); ?></b></h3>
                 <!-- <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
