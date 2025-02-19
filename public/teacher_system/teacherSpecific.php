@@ -246,11 +246,9 @@ $teacher = $teacher[0];
                   <div class="row">
                     <div class="col-md-2 text-center">
                     <img style="width: 120px; height:120px;" class="profile-user-img img-fluid img-circle"
-     src="<?php echo !empty($teacher['teacher_profile']) ? $teacher['teacher_profile'] : 'resources/default.jpg'; ?>"
-     alt="User profile picture">
-
+                      src="<?php echo !empty($teacher['teacher_profile']) ? $teacher['teacher_profile'] : 'resources/default.jpg'; ?>"
+                      alt="User profile picture">
                     <a href="#" data-toggle="modal" data-target="#modalEditTeacher" class="btn btn-warning btn-sm btn-block mt-2">Edit Info</a>
-
                     </div>
                     <div class="col-md-10">
                     <table class="table" id="sectionTable">
