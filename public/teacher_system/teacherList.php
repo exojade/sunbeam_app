@@ -24,12 +24,10 @@
 
     <!-- Main content -->
     <section class="content">
-
-
     <div class="modal fade" id="addTeacher">
         <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary">
               <h4 class="modal-title">Add Teacher</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -166,6 +164,8 @@
                               <input value="" name="postgraduate_course" type="text" class="form-control"  placeholder="Ex. Masters in Education">
                             </div>
                           </div>
+
+                          
 
 
 

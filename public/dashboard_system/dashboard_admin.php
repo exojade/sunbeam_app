@@ -105,7 +105,7 @@ for ($i = 2; $i <= 11; $i++) {
       default => 'th'
   };
   if($payment_settings[0]["installment_number"] == $i):
-    $installment = $i.$suffix . " installment";
+    $installment = $i.$suffix;
   endif;
   // Display each option with numeric value and text
 }

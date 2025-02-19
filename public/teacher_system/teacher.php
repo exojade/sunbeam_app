@@ -190,7 +190,7 @@
 				// dump($days_string);
 
 
-				$data[$i]["action"] = '<a href="#" class="btn btn-block btn-sm btn-primary">Action</a>';
+				$data[$i]["action"] = '<a href="#" data-toggle="modal" data-target="#modalViewSchedule" data-schedule_id="'.$row["schedule_id"].'" data-subject_id="'.$row["subject_id"].'" class="btn btn-block btn-sm btn-primary">Details</a>';
 				$data[$i]["class"] = $row["grade_level"] . " - " . $row["section"];
 				$data[$i]["schedule"] = $row["from_time"] . " - " . $row["to_time"] . " | " .$days_string;
 
@@ -211,6 +211,160 @@
                 "aaData" => $data
             );
             echo json_encode($json_data);
+
+		elseif($_POST["action"] == "modalScheduleDetails"):
+			// dump($_POST);
+
+			$schedule = query($baseQuery = "select sched.*, sub.subject_id, sm.subject_head_name,
+			sub.subject_title, sec.section, sy.school_year, adv.grade_level,
+			concat(t1.teacher_lastname, ', ', t1.teacher_firstname) as adviser,
+			concat(t2.teacher_lastname, ', ', t2.teacher_firstname) as teacher
+								 from schedule sched
+							left join advisory adv on adv.advisory_id = sched.advisory_id
+							left join section sec on sec.section_id = adv.section_id
+							left join subjects sub on sub.subject_id = sched.subject_id
+							left join subject_main sm on sm.subject_head_id = sub.subject_head_id
+							left join school_year sy on sy.syid = sched.syid
+							left join teacher t1 on t1.teacher_id = adv.teacher_id
+							left join teacher t2 on t2.teacher_id = sched.teacher_id
+							where sched.schedule_id = ? and sched.subject_id = ?", $_POST["schedule_id"], $_POST["subject_id"]);
+			$schedule = $schedule[0];
+
+
+			$days_string = '';
+				if ($schedule["monday"] == 1) {
+				  $days_string .= 'M,';
+				}
+				if ($schedule["tuesday"] == 1) {
+				  $days_string .= 'T,';
+				}
+				if ($schedule["wednesday"] == 1) {
+				  $days_string .= 'W,';
+				}
+				if ($schedule["thursday"] == 1) {
+				  $days_string .= 'TH,';
+				}
+				if ($schedule["friday"] == 1) {
+				  $days_string .= 'F,';
+				}
+				// Remove the trailing comma
+				$days_string = rtrim($days_string, ',');
+			$html = '';
+			$html.='
+			<table class="table" id="sectionTable">
+                    <tbody><tr>
+                      <th>Section:</th>
+                      <td>'.$schedule["grade_level"] . ' - ' . $schedule["section"] .'</td>
+                      <th>Adviser:</th>
+                      <td>'.$schedule["adviser"].'</td>
+                    </tr>
+                    <tr>
+                      <th>Subject:</th>
+                      <td>'.$schedule["subject_head_name"] . ' - ' . $schedule["subject_title"] .'</td>
+                      <th>Teacher:</th>
+                      <td>'.$schedule["teacher"].'</td>
+                    </tr>
+                    <tr>
+                      <th>Time Schedule:</th>
+                      <td>'.$schedule["from_time"] . ' - ' . $schedule["to_time"] .'</td>
+                      <th>Day:</th>
+                      <td>'.$days_string.'</td>
+                    </tr>
+                  </tbody></table>
+			
+			';
+
+			$grades = query("select * from student_grades sg left join student s
+							on sg.student_id = s.student_id
+							where sg.schedule_id  = ? and sg.subject_id = ?
+							order by s.lastname, s.firstname", $schedule["schedule_id"], $schedule["subject_id"]);
+
+			$html.='
+			<table class="table table-bordered">
+				<thead>
+					<th>Student Name</th>
+					<th>Sex</th>
+					<th>1st</th>
+					<th>2nd</th>
+					<th>3rd</th>
+					<th>4th</th>
+					<th>Ave</th>
+					<th>Remarks</th>
+				</thead>
+				<tbody>';
+				foreach($grades as $row):
+					$html .='<tr>';
+						$html .='<td>'.$row["lastname"] . ", " . $row["firstname"].'</td>';
+						$html .='<td>'.$row["sex"].'</td>';
+						$html .='<td>'.$row["first_grading"].'</td>';
+						$html .='<td>'.$row["second_grading"].'</td>';
+						$html .='<td>'.$row["third_grading"].'</td>';
+						$html .='<td>'.$row["fourth_grading"].'</td>';
+						$html .='<td>'.$row["average"].'</td>';
+						$html .='<td>'.$row["remarks"].'</td>';
+					$html .='<tr>';
+				endforeach;
+				$html.='
+				</tbody>
+
+			</table>
+			
+			';
+
+			echo($html);
+
+
+		elseif($_POST["action"] == "teacherEdit"):
+
+			// dump($_POST);
+
+
+			query("update teacher set
+					teacher_firstname = '".$_POST["teacher_firstname"]."',
+					teacher_middlename = '".$_POST["teacher_middlename"]."',
+					teacher_lastname = '".$_POST["teacher_lastname"]."',
+					teacher_extension = '".$_POST["teacher_extension"]."',
+					teacher_address = '".$_POST["teacher_address"]."',
+					teacher_birthdate = '".$_POST["teacher_birthdate"]."',
+					teacher_gender = '".$_POST["teacher_gender"]."',
+					teacher_contactNumber = '".$_POST["teacher_contactNumber"]."',
+					teacher_emailaddress = '".$_POST["teacher_emailaddress"]."',
+					college_course = '".$_POST["college_course"]."',
+					post_graduate_course = '".$_POST["post_graduate_course"]."'
+						where teacher_id = ?", $_POST["teacher_id"]);
+
+				if(isset($_FILES["profileImage"])):
+					$target_pdf = "uploads/profile_images/".$_POST["teacher_id"]."/";
+					if (!file_exists($target_pdf )) {
+						mkdir($target_pdf , 0777, true);
+					}
+					if($_FILES["profileImage"]["size"] != 0){
+						
+						$path_parts = pathinfo($_FILES["profileImage"]["name"]);
+						$extension = $path_parts['extension'];
+						$target = $target_pdf . "profile_image" . "." . $extension;
+							if(!move_uploaded_file($_FILES['profileImage']['tmp_name'], $target)){
+								echo("FAMILY Do not have upload files");
+								exit();
+							}
+							query("update teacher set teacher_profile = '".$target."'
+							where teacher_id = '".$_POST["teacher_id"]."'");
+							// $_SESSION["dnsc_audit"]["img"] = $target;
+					}
+				endif;
+
+				$res_arr = [
+					"result" => "success",
+					"title" => "Submitted Successfully",
+					"message" => "Thank you! Teacher has been successfully updated!",
+					"link" => "refresh",
+					// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+					];
+					echo json_encode($res_arr); exit();
+
+
+
+
 		endif;
     }
 	else {
