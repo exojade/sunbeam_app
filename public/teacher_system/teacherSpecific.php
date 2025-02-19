@@ -31,7 +31,8 @@ $teacher = $teacher[0];
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
+        <div class="col-sm-6">
+            <h1>Teacher's Details</h1>
           </div>
      
         </div>
@@ -211,27 +212,16 @@ $teacher = $teacher[0];
                   
                   </tbody>
                 </table>
-
-             
-
-
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
           </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
       </div>
-
         <div class="row">
           <div class="col-md-12">
-
-            <!-- Profile Image -->
-         
-              <!-- /.card-header -->
               <div class="card card-info">
               <div class="card-header p-2">
               <h3 class="card-title">Teacher's Information</h3>
@@ -276,143 +266,78 @@ $teacher = $teacher[0];
                   </table>
                     </div>
                   </div>
-                
                 </div>
                 </div>
-
                   <hr>
-                  <br>
-              <!-- /.card-body -->
-        
-            <!-- /.card -->
-
-            <!-- About Me Box -->
-           
-     
-          <!-- /.col -->
-          <div class="col-md-12">
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Students</a></li> -->
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Current School Year</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">All Time Subjects Handled</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Class Handled</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Subjects Handled</a></li>
                 </ul>
-              </div><!-- /.card-header -->
+              </div>
               <div class="card-body">
                 <div class="tab-content">
                   <div class="active tab-pane" id="activity">
-                    <!-- Post -->
-                    <table id="" class="table exampleDatatable table-bordered table-striped">
+
+                  <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                  <?php $school_year = query("select * from school_year order by school_year desc"); ?>
+                  
+                  <select style="width:100%;" name="enrollment_id" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
+                    <option value="" selected disabled>Filter School Year</option>
+                    <?php foreach($school_year as $sy): ?>
+                      <option value="<?php echo($sy["syid"]); ?>"><?php echo($sy["school_year"]); ?></option>
+                    <?php endforeach;?>
+                  </select>
+                  </div>
+                    </div>
+                  </div>
+                    <table id="mySectionDatatable" class="table  table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Grade Sheet</th>
-                    <th>Code</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Level</th>
-                    <th>Schedule</th>
-                    <th>Q1</th>
-                    <th>Q2</th>
-                    <th>Q3</th>
-                    <th>Q4</th>
+                    <th>Action</th>
+                    <th>Class</th>
+                    <th>School Year</th>
+                    <th>Male</th>
+                    <th>Female</th>
                   </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td><a href="#" class="btn btn-primary btn-sm btn-block" 
-                      data-toggle="modal" data-target="#modalGrades">View</a></td>
-                      <td>SUB2010-501</td>
-                      <td>Math 1</td>
-                      <td>Introduction to Algebra</td>
-                      <td>2023-2024 Grade 1 | Section Apple</td>
-                      <td>07:30 - 08:30 AM</td>
-                      <td>ACCEPTED</td>
-                      <td>PENDING</td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-
-                    <tr>
-                      <td><a href="#" class="btn btn-primary btn-sm btn-block" 
-                      data-toggle="modal" data-target="#modalGrades">View</a></td>
-                      <td>SUB2010-502</td>
-                      <td>Math 4</td>
-                      <td>Introduction to Geometry</td>
-                      <td>2023-2024 Grade 1 | Section Orange</td>
-                      <td>01:30 - 02:30 PM</td>
-                      <td>ACCEPTED</td>
-                      <td>PENDING</td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  
-
-                   
-                  
-                
-                   
-                 
-                  </tbody>
-              
+                  <!-- <tbody></tbody> -->
                 </table>
-                    <!-- /.post -->
                   </div>
-                  <!-- /.tab-pane -->
                   <div class="tab-pane" id="profile">
-                    <!-- The timeline -->
                   </div>
-                  <!-- /.tab-pane -->
-
                   <div class="tab-pane" id="history">
-
-                
-                    
-                  <table id="" class="table exampleDatatable table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Grade Sheet</th>
-                    <th>Code</th>
-                    <th>Subject</th>
-                    <th>Description</th>
-                    <th>Level</th>
-                    <th>Schedule</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><a href="#" class="btn btn-primary btn-sm btn-block" 
-                      data-toggle="modal" data-target="#modalGradesHistory">View</a></td>
-                      <td>SUB2010-501</td>
-                      <td>Math 1</td>
-                      <td>Introduction to Algebra</td>
-                      <td>2022-2023 Grade 1 | Section Apple</td>
-                      <td>07:30 - 08:30 AM</td>
+                  <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                  <?php $school_year = query("select * from school_year order by school_year desc"); ?>
                   
-                    </tr>
-
-                    <tr>
-                      <td><a href="#" class="btn btn-primary btn-sm btn-block" 
-                      data-toggle="modal" data-target="#modalGrades">View</a></td>
-                      <td>SUB2010-502</td>
-                      <td>Math 4</td>
-                      <td>Introduction to Geometry</td>
-                      <td>2022-2023 Grade 1 | Section Orange</td>
-                      <td>01:30 - 02:30 PM</td>
-                    </tr>
-                  
-
-                   
-                  
-                
-                   
-                 
-                  </tbody>
-              
-                </table>
+                  <select style="width:100%;" name="enrollment_id" required id="enrollmentSelect2" class="form-control select2 selectFilter2">
+                    <option value="" selected disabled>Filter School Year</option>
+                    <?php foreach($school_year as $sy): ?>
+                      <option value="<?php echo($sy["syid"]); ?>"><?php echo($sy["school_year"]); ?></option>
+                    <?php endforeach;?>
+                  </select>
+                  </div>
+                    </div>
+                  </div>
+                  <table id="mySubjectsDatatable" style="width:100%;" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Action</th>
+                        <th>Subject</th>
+                        <th>Description</th>
+                        <th>Level</th>
+                        <th>School Year</th>
+                        <th>Schedule</th>
+                      </tr>
+                    </thead>
+                  </table>
                   </div>
                   <!-- /.tab-pane -->
-                </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
             </div>
@@ -453,4 +378,80 @@ $('.exampleDatatable').DataTable({
                 frame.src = "";
             }
         </script>
+
+<script>
+
+
+
+var datatable = 
+            $('#mySectionDatatable').DataTable({
+                "searching": false,
+                "pageLength": 9999,
+                language: {
+                    searchPlaceholder: "Search Teacher's Name"
+                },
+                "bLengthChange": false,
+                "ordering": false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                
+                'ajax': {
+                    'url':'teacher',
+                     'type': "POST",
+                     "data": function (data){
+                        data.action = "teacherClassList",
+                        data.teacher_id = '<?php echo($_GET["id"]) ?>'
+                     }
+                },
+                'columns': [
+                  { data: 'action', "orderable": false  },
+                  { data: 'class_section', "orderable": false  },
+                  { data: 'school_year', "orderable": false  },
+                  { data: 'male_count', "orderable": false  },
+                  { data: 'female_count', "orderable": false  },
+                ],
+                "footerCallback": function (row, data, start, end, display) {
+
+}
+            });
+
+
+            var datatable2 = 
+            $('#mySubjectsDatatable').DataTable({
+                "searching": false,
+                "pageLength": 10,
+                language: {
+                    searchPlaceholder: "Search Teacher's Name"
+                },
+                "bLengthChange": true,
+                "ordering": false,
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                
+                'ajax': {
+                    'url':'teacher',
+                     'type': "POST",
+                     "data": function (data){
+                        data.action = "teacherSubjectList",
+                        data.teacher_id = '<?php echo($_GET["id"]) ?>'
+                     }
+                },
+                'columns': [
+                  { data: 'action', "orderable": false  },
+                  { data: 'subject_head_name', "orderable": false  },
+                  { data: 'subject_title', "orderable": false  },
+                  { data: 'class', "orderable": false  },
+                  { data: 'school_year', "orderable": false  },
+                  { data: 'schedule', "orderable": false  },
+                ],
+                "footerCallback": function (row, data, start, end, display) {
+
+}
+            });
+
+</script>
+
+
   <?php require("layouts/footer.php") ?>

@@ -73,7 +73,144 @@
             );
             echo json_encode($json_data);
 
+		elseif($_POST["action"] == "teacherClassList"):
 
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+            $offset = $_POST["start"];
+            $limit = $_POST["length"];
+            $search = $_POST["search"]["value"];
+			$limitString = " limit " . $limit;
+			$offsetString = " offset " . $offset;
+			// dump($_POST);
+
+			$where = " where teacher_id = '".$_REQUEST["teacher_id"]."'";
+			$order_string = " order by sy.school_year desc";
+			if(isset($_REQUEST["syid"])):
+				if($_REQUEST["syid"] != ""):
+					$where.=" and school_year = '".$_REQUEST["syid"]."'";
+				endif;
+			endif;
+			$baseQuery = "select a.*, sy.school_year, sec.section from advisory a
+							left join school_year sy on sy.syid = a.school_year
+							left join section sec on sec.section_id = a.section_id
+							
+							" . $where . $order_string;
+			$data = query($baseQuery . $limitString . $offsetString);
+			$all_data = query($baseQuery);
+
+			$population = query("SELECT 
+                        e.advisory_id,
+                        SUM(CASE WHEN s.sex = 'Male' THEN 1 ELSE 0 END) AS male_count, 
+                        SUM(CASE WHEN s.sex = 'Female' THEN 1 ELSE 0 END) AS female_count
+                     FROM enrollment e
+                     LEFT JOIN student s ON s.student_id = e.student_id
+                     GROUP BY e.advisory_id");
+			// dump($population);
+
+			$Population = [];
+			foreach($population as $row):
+				$Population[$row["advisory_id"]] = $row;
+			endforeach;
+
+			$i = 0;
+			foreach($data as $row):
+				$data[$i]["action"] = '<a href="advisory?action=specific&id='.$row["advisory_id"].'" target="_blank" class="btn btn-primary btn-sm btn-block">View</a>';
+				$data[$i]["class_section"] = $row["grade_level"] . " - " . $row["section"];
+
+				$male = 0;
+				$female = 0;
+				// dump($Population);
+				if(isset($Population[$row["advisory_id"]])):
+					
+					$male = $Population[$row["advisory_id"]]["male_count"];
+					$female = $Population[$row["advisory_id"]]["male_count"];
+				endif;
+
+				$data[$i]["male_count"] = $male;
+				$data[$i]["female_count"] = $female;
+
+
+				$i++;
+			endforeach;
+
+			$json_data = array(
+                "draw" => $draw + 1,
+                "iTotalRecords" => count($all_data),
+                "iTotalDisplayRecords" => count($all_data),
+                "aaData" => $data
+            );
+            echo json_encode($json_data);
+
+		elseif($_POST["action"] == "teacherSubjectList"):
+			$draw = isset($_POST["draw"]) ? $_POST["draw"] : 1;
+            $offset = $_POST["start"];
+            $limit = $_POST["length"];
+            $search = $_POST["search"]["value"];
+			$limitString = " limit " . $limit;
+			$offsetString = " offset " . $offset;
+
+			$where = " where sched.teacher_id = '".$_REQUEST["teacher_id"]."'";
+			$order_string = " order by sy.school_year desc";
+
+			$baseQuery = "select sched.*, sub.subject_id, sm.subject_head_name,
+			sub.subject_title, sec.section, sy.school_year, adv.grade_level
+								 from schedule sched
+							left join advisory adv on adv.advisory_id = sched.advisory_id
+							left join section sec on sec.section_id = adv.section_id
+							left join subjects sub on sub.subject_id = sched.subject_id
+							left join subject_main sm on sm.subject_head_id = sub.subject_head_id
+							left join school_year sy on sy.syid = sched.syid
+			
+			" . $where . " group by sched.schedule_id, sched.subject_id " . $order_string ;
+			// dump($baseQuery);
+			$data = query($baseQuery . $limitString . $offsetString);
+			$all_data = query($baseQuery);
+			// dump($data);
+
+			$i=0;
+			foreach($data as $row):
+				$days_string = '';
+				if ($row["monday"] == 1) {
+				  $days_string .= 'M,';
+				}
+				if ($row["tuesday"] == 1) {
+				  $days_string .= 'T,';
+				}
+				if ($row["wednesday"] == 1) {
+				  $days_string .= 'W,';
+				}
+				if ($row["thursday"] == 1) {
+				  $days_string .= 'TH,';
+				}
+				if ($row["friday"] == 1) {
+				  $days_string .= 'F,';
+				}
+				// Remove the trailing comma
+				$days_string = rtrim($days_string, ',');
+				// dump($days_string);
+
+
+				$data[$i]["action"] = '<a href="#" class="btn btn-block btn-sm btn-primary">Action</a>';
+				$data[$i]["class"] = $row["grade_level"] . " - " . $row["section"];
+				$data[$i]["schedule"] = $row["from_time"] . " - " . $row["to_time"] . " | " .$days_string;
+
+				$i++;
+			endforeach;
+
+
+			// /schedule?action=gradeTeacher&id=SCHED6753F51304046&subject_id=SUBJ3E019105754A7
+
+
+
+
+
+			$json_data = array(
+                "draw" => $draw + 1,
+                "iTotalRecords" => count($all_data),
+                "iTotalDisplayRecords" => count($all_data),
+                "aaData" => $data
+            );
+            echo json_encode($json_data);
 		endif;
     }
 	else {

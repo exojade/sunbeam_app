@@ -84,8 +84,10 @@ GROUP BY
     ?>
 
 <?php $alltime_payment = query("select sum(amount_paid) as total from payment where or_number is not null"); ?>
-<?php $today_payment = query("select sum(amount_paid) as total from payment where or_number is not null
-                              and DATE(date_paid) = CURDATE()"); ?>
+<?php $today_payment = query("SELECT IFNULL(SUM(amount_paid), 0) AS total 
+                        FROM payment 
+                        WHERE or_number IS NOT NULL 
+                        AND DATE(date_paid) = CURDATE()");?>
 <?php $all_students = query("select count(student_id) as total from student"); ?>
 <?php $all_teacher = query("select count(teacher_id) as total from teacher"); ?>
 <?php $all_parents = query("select count(id) as total from users where role = 'parent'"); ?>
@@ -102,7 +104,6 @@ for ($i = 2; $i <= 11; $i++) {
       3 => 'rd',
       default => 'th'
   };
-
   if($payment_settings[0]["installment_number"] == $i):
     $installment = $i.$suffix . " installment";
   endif;
@@ -236,7 +237,7 @@ for ($i = 2; $i <= 11; $i++) {
         </div>
 
 
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-6">
 
           <div class="card card-danger">
@@ -336,7 +337,7 @@ for ($i = 2; $i <= 11; $i++) {
             </div>
            
           </div>
-        </div> -->
+        </div>
       </div>
     </section>
   </div>

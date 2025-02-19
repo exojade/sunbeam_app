@@ -40,7 +40,7 @@ $(document).on('submit', '.generic_form_trigger', function(e) {
     `
   },
         text: promptmessage,
-        icon: 'info',
+        icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Yes',
         cancelButtonText: 'Cancel',

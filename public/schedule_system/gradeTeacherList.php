@@ -57,7 +57,7 @@ $schedule = query("select a.grade_level,sched.*,s.section, sub.subject_code, sub
                           $days_string = rtrim($days_string, ',');
 
 
-$teacher = query("select * from teacher where teacher_id = ?", $_SESSION["sunbeam_app"]["userid"]);  
+$teacher = query("select * from teacher where teacher_id = ?", $schedule["teacher_id"]);  
 $teacher = $teacher[0];
 $grades = query("select g.*, concat(s.lastname, ', ', s.firstname) as student_name, sub.subject_type from student_grades g
                   left join student s

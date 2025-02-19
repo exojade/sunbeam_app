@@ -201,6 +201,7 @@
 
      
           <!-- /.col -->
+           <div class="row">
           <div class="col-md-12">
           <?php if(!empty($unenrolled)): ?>
           <form class="generic_form_trigger" data-url="advisory">
@@ -341,6 +342,7 @@
 
           
             <!-- /.card -->
+          </div>
           </div>
           <!-- /.col -->
         </div>
