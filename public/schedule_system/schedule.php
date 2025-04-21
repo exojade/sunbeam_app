@@ -147,15 +147,12 @@
 
 			$i = 0;
 			foreach($data as $row):
-				$data[$i]["action"] = '<div class="btn-group">
-				<button type="button" class="btn btn-sm btn-flat btn-warning">Update</button>
+				$data[$i]["action"] = '
 				<form class="generic_form_trigger" data-url="schedule" style="display:inline;">
 					<input type="hidden" name="action" value="deleteSchedule">
 					<input type="hidden" name="schedule_id" value="'.$row["schedule_id"].'">
-					<button type="submit" class="btn btn-sm btn-flat btn-danger">Delete</button>
-				</form>
-			
-			  </div>';
+					<button type="submit" class="btn btn-sm btn-danger btn-block">Delete</button>
+				</form>';
 			  $days_string = '';
 			if ($row["monday"] == 1) {
 				$days_string .= 'M,';
@@ -180,7 +177,7 @@
 			// $data[$i]["day"] = $days_string;
 
 
-				$data[$i]["school_year"] = $sy["syid"];
+				$data[$i]["school_year"] = $sy["school_year"];
 				$data[$i]["grade_level"] = $Advisory[$row["advisory_id"]]["grade_level"];
 				$data[$i]["section"] = $Section[$Advisory[$row["advisory_id"]]["section_id"]]["section"];
 				$data[$i]["subject"] = $Subjects[$row["subject_id"]]["subject_code"];

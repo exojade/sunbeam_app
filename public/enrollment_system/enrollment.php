@@ -24,9 +24,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 			$currSY = $currSY[0]["syid"];
 
 			$student_id = create_trackid("LRN405592-");
-			$nextId = query("show table status like 'student'");
-			$nextId = $nextId[0]["Auto_increment"];
-			$student_id = sprintf("LRN405592%08d", $nextId);
+			// $nextId = query("show table status like 'student'");
+			// $nextId = $nextId[0]["Auto_increment"];
+			// $student_id = sprintf("LRN405592%08d", $nextId);
+
+			$student_id = $_POST["student_id"];
 			// dump($nextId);
 
 				query("insert INTO student (

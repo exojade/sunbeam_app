@@ -84,6 +84,32 @@
 
 
 
+
+      <div class="modal fade" id="modalUpdateSection">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h4 class="modal-title">Update Section</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="generic_form_trigger" data-title="Update Section" data-message="Are you sure you want to submit this form?" role="form" enctype="multipart/form-data" data-url="section">
+              <input type="hidden" name="action" value="updateSection">
+              <div class="fetched-data"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
       <div class="container-fluid">
         <div class="row">
           <div class="col-8">
@@ -113,8 +139,7 @@
                       <td><?php echo($row["status"]); ?></td>
                       <td width="10%">
                       <div class="btn-group">
-                      <button type="button" class="btn btn-flat btn-sm btn-warning">Update</button>
-
+                        <a href="#" data-toggle="modal" data-target="#modalUpdateSection" data-id="<?php echo($row["section_id"]); ?>" class="btn btn-flat btn-sm btn-warning">Update</a>
                         <form class="generic_form_trigger" data-url="section" style="display:inline;">
                           <input type="hidden" name="action" value="deleteSection">
                           <input type="hidden" name="section_id" value="<?php echo($row["section_id"]); ?>">
@@ -183,6 +208,41 @@
   <script src="AdminLTE_new/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="AdminLTE_new/plugins/sweetalert2/sweetalert2.min.js"></script>
   <script>
+
+
+$('#modalUpdateSection').on('show.bs.modal', function (e) {
+    var rowid = $(e.relatedTarget).data('id');
+    Swal.fire({title: 'Please wait...', 
+      
+      showClass: {
+    popup: `
+      animate__animated
+      animate__bounceIn
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__bounceOut
+      animate__faster
+    `
+  },
+      imageUrl: 'AdminLTE_new/dist/img/loader.gif', showConfirmButton: false});
+    $.ajax({
+        type : 'post',
+        url : 'section', //Here you will fetch records 
+        data: {
+            section_id: rowid, action: "modalUpdateSection"
+        },
+        success : function(data){
+            $('#modalUpdateSection .fetched-data').html(data);
+            // checkSchedule();
+            Swal.close();
+            // $(".select2").select2();//Show fetched data from database
+        }
+    });
+  });
 
 $('#example1').DataTable({
      

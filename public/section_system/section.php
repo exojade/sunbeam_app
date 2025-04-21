@@ -42,6 +42,37 @@
 					echo json_encode($res_arr); exit();
 			endif;
 
+		elseif($_POST["action"] == "modalUpdateSection"):
+			// dump($_POST);
+
+			$section = query("select * from section where section_id = ?", $_POST["section_id"]);
+			$section=$section[0];
+			$html = '';
+
+			$html.='
+			<input type="hidden" name="section_id" value="'.$section["section_id"].'">
+			<div class="form-group">
+                <label for="exampleInputEmail1">Section Name</label>
+                <input required type="text" value="'.$section["section"].'" name="section" class="form-control" id="exampleInputEmail1" placeholder="---">
+              </div>';
+
+			  echo($html);
+
+		elseif($_POST["action"] == "updateSection"):
+			// dump($_POST);
+
+			query("update section set section = ? where section_id = ?", $_POST["section"], $_POST["section_id"]);
+			$res_arr = [
+				"result" => "success",
+				"title" => "Success",
+				"message" => "Success on updating section details!",
+				"link" => "refresh",
+				// "html" => '<a href="#">View or Print '.$transaction_id.'</a>'
+				];
+				echo json_encode($res_arr); exit();
+
+
+
 		endif;
     }
 	else {
