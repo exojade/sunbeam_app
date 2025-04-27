@@ -169,6 +169,7 @@
                       <th>Grade Level</th>
                       <th>Title</th>
                       <th>Type</th>
+                      <th>Priority</th>
                       <th>Amount</th>
                       <th>Status</th>
                     </tr>
@@ -247,6 +248,7 @@ var datatable =
                     { data: 'grade_level', "orderable": false  },
                     { data: 'fee_title', "orderable": false  },
                     { data: 'fee_type', "orderable": false },
+                    { data: 'priority', "orderable": false },
                     { 
                     data: 'fee_amount', 
                         "orderable": false,

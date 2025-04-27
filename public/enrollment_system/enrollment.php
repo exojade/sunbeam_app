@@ -485,16 +485,18 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						fee,
 						type,
 						amount,
-						status
+						status,
+						priority
 						) 
 					VALUES(
-						?,?,?,?,?
+						?,?,?,?,?,?
 						)", 
 					$_POST["enrollment_id"],
 					$row["fee_title"],
 					$row["fee_type"],
 					$row["fee_amount"],
-					"PAYMENT"
+					"PAYMENT",
+					$row["priority"]
 				);
 				endforeach;
 
@@ -708,7 +710,8 @@ $subjects = query("
     f.fee_title AS fee,
     f.fee_amount,
     f.fee_type,
-    f.fees_id AS fee_id
+    f.fees_id AS fee_id,
+	f.priority
 FROM 
     fees f
 WHERE 
@@ -722,7 +725,8 @@ SELECT
     f.fee_title AS fee,
     ef.amount AS  fee_amount,
     f.fee_type,
-    f.fees_id AS fee_id
+    f.fees_id AS fee_id,
+	f.priority
 FROM 
     fees f
 JOIN 
@@ -736,7 +740,7 @@ WHERE
 				// $data = query($baseQuery);
 				$all_data = $data;
 	
-
+				// dump($data);
 	
 	
 	

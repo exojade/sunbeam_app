@@ -115,6 +115,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 						<option value="OTHERS" >OTHERS</option>
 					</select>
 				</div>
+
+				<div class="form-group">
+					<label>Priority</label>
+					<select required class="form-control" name="priority">
+						<option value="'.$fee["priority"].'" selected>'.$fee["priority"].'</option>
+						<option value="YES">YES</option>
+						<option value="NO">NO</option>
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label>Status</label>
 					<select required class="form-control" name="status">
@@ -133,9 +143,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 					fee_title = '".$_POST["fee_title"]."',
 					fee_amount = '".$_POST["fee_amount"]."',
 					fee_type = '".$_POST["fee_type"]."',
-					status = '".$_POST["status"]."'
+					status = '".$_POST["status"]."',
+					priority = '".$_POST["priority"]."'
 					where fees_id = '".$_POST["fees_id"]."'
-			
 			");
 
 
